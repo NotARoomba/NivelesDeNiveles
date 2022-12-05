@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "browserify": "^17.0.0",
+    "csv": "^6.2.2",
+    "request": "^2.88.2"
+  }
+}
