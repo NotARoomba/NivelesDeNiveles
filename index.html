@@ -59,7 +59,7 @@
 
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
-        
+
         <!-- <img src="assets/img/logo.png" alt=""> -->
         <h1>Niveles de niveles<span>.</span></h1>
       </a>
@@ -85,13 +85,15 @@
           <h2>Niveles de <span>Niveles</span></h2>
           <p>Descubre si te encuentras en una zona propensa a inundaciones y mantente seguro a ti y a tu familia
           </p>
-          
+
           <div class="d-flex justify-content-center justify-content-lg-start">
             <p>Te encuentras en: </p>
-            <b><p class="status"></p></b>
+            <b>
+              <p class="status"></p>
+            </b>
           </div>
         </div>
-    
+
       </div>
     </div>
 
@@ -99,13 +101,13 @@
     <br>
     <div class="icon-boxes position-relative">
       <div class="container position-relative">
-<!-- determinar carita y zona-->
-            <div class="icon-box">
-              <div class="icon" id="carita"></div>
-              <h4 class="title"><a href="" class="stretched-link">Estas en una <i id="zona">Zona Segura</i></a></h4>
-            </div>
+        <!-- determinar carita y zona-->
+        <div class="icon-box">
+          <div class="icon" id="carita"></div>
+          <h4 class="title"><a href="" class="stretched-link">Estas en una <i id="zona">Zona Segura</i></a></h4>
+        </div>
 
-      
+
       </div>
     </div>
 
@@ -114,7 +116,7 @@
   <!-- End Hero Section -->
   <!-- END OF TRES COSITOS ORIGINAL-->
 
- 
+
 
 
   <section id="faq1" class="faq hidden" id="">
@@ -205,7 +207,7 @@
   <!--END OF ZONA SEGURA-->
 
   <!--ZONA DE RIESGO-->
- 
+
 
 
   <section id="faq2" class="faq hidden">
@@ -428,11 +430,11 @@
 <script>
   //empieza lo de zonas
 
-  
+
   window.onload = function exampleFunction() {
-  
-    findMyState()
-}
+
+    //findMyState()
+  }
 
   zona = 1
   var nombreZona = document.getElementById("zona")
@@ -442,34 +444,34 @@
   var faq2 = document.getElementById("faq2")
   var faq3 = document.getElementById("faq3")
 
-  
+
   function mostrarZona() {
     seguraIcon = '<img src="/assets/img/happyface.png">'
     riesgoIcon = '<img src="/assets/img/neutralface.png">'
     peligroIcon = '<img src="/assets/img/warningsign.png">'
-      
+
     if (zona == 1) {
-      mostrarIcon.innerHTML= seguraIcon
+      mostrarIcon.innerHTML = seguraIcon
       nombreZona.innerText = "Zona Segura";
       faq1.classList.remove('hidden');
     }
-    if (zona == 2){
-      mostrarIcon.innerHTML= riesgoIcon
+    if (zona == 2) {
+      mostrarIcon.innerHTML = riesgoIcon
       nombreZona.innerText = "Zona en Riesgo";
       faq2.classList.remove('hidden');
     }
-    if (zona == 3){
-      mostrarIcon.innerHTML= peligroIcon
+    if (zona == 3) {
+      mostrarIcon.innerHTML = peligroIcon
       nombreZona.innerText = "Zona en Peligro";
       faq3.classList.remove('hidden');
     }
-    else{
+    else {
       mostrarIcon.innterText = "Zona no registrada"
     }
-    
+
   }
 
   mostrarZona()
 
-  
+
 </script>
