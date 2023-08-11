@@ -1,6 +1,3 @@
-v/Thanks for downloading this template!
+# Niveles de Niveles 1.0
 
-Template Name: Impact
-Template URL: https://bootstrapmade.com/impact-bootstrap-business-website-template/
-Author: BootstrapMade.com
-License: https://bootstrapmade.com/license/
+Se puede mejorar...
