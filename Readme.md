@@ -1,3 +1,5 @@
-# Niveles de Niveles 1.0
+# Niveles de Niveles 2.0
 
-Se puede mejorar...
+Desarrollado por ```react-native```, ```express```, y ```MongoDB```.
+
+Incluso con Arduino y otro hardware.
