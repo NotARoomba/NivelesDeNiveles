@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {ScreenProp} from '../utils/DataTypes';
-import MapView from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Heatmap} from 'react-native-maps';
+import { check, PERMISSIONS } from 'react-native-permissions';
 
 export default function Home({fadeAnim, scale, isDarkMode}: ScreenProp) {
   useEffect(() => {
@@ -39,16 +40,29 @@ export default function Home({fadeAnim, scale, isDarkMode}: ScreenProp) {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
           <View className="flex justify-center align-middle text-center justify-items-center">
-            <Text className="text-neutral-200 bg-neutral-800 text-center">Hello</Text>
+            <Text className="text-neutral-200 bg-neutral-800 text-center text-4xl py-5">
+              Insert Logo here
+            </Text>
+            {check(PERMISSIONS.IOS.LOCATION_ALWAYS)}
             <MapView
-              className="w-screen h-96 bg-neutral-200 justify-center m-auto"
+              className="w-screen aspect-square bg-neutral-200 justify-center m-auto"
+              provider={PROVIDER_GOOGLE}
+              showsUserLocation
+              showsMyLocationButton
+              loadingEnabled
               initialRegion={{
                 latitude: 37.78825,
                 longitude: -122.4324,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
-              }}
-            />
+              }}>
+              <Heatmap
+                points={[
+                  {latitude: 37.78825, longitude: -122.4324, weight: 10000},
+                  {latitude: 37.78825, longitude: -122.44, weight: 10000},
+                ]}
+              />
+            </MapView>
           </View>
         </ScrollView>
       </SafeAreaView>

@@ -525,6 +525,8 @@ PODS:
     - React-perflogger (= 0.72.4)
   - RNCAsyncStorage (1.19.2):
     - React-Core
+  - RNPermissions (3.8.4):
+    - React-Core
   - RNScreens (3.24.0):
     - React-Core
     - React-RCTImage
@@ -603,6 +605,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -717,6 +720,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   Yoga:
@@ -786,6 +791,7 @@ SPEC CHECKSUMS:
   React-utils: b79f2411931f9d3ea5781404dcbb2fa8a837e13a
   ReactCommon: 4b2bdcb50a3543e1c2b2849ad44533686610826d
   RNCAsyncStorage: f57e929cd7757f2cb3dd8186d123c09e8281a1ad
+  RNPermissions: cd7f663c11d9a4673801faf2f57178e8dfadadb2
   RNScreens: b21dc57dfa2b710c30ec600786a3fc223b1b92e7
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
