@@ -38,7 +38,7 @@ export default function Home({fadeAnim, scale, isDarkMode}: ScreenProp) {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
           <View className="flex justify-center align-middle">
-            <Text>Hello</Text>
+            <Text className="text-neutral-200 bg-neutral-800">Hello</Text>
           </View>
         </ScrollView>
       </SafeAreaView>
