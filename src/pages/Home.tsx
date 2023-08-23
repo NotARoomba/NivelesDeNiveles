@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {ScreenProp} from '../utils/DataTypes';
+import MapView from 'react-native-maps';
 
 export default function Home({fadeAnim, scale, isDarkMode}: ScreenProp) {
   useEffect(() => {
@@ -37,8 +38,17 @@ export default function Home({fadeAnim, scale, isDarkMode}: ScreenProp) {
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
-          <View className="flex justify-center align-middle">
-            <Text className="text-neutral-200 bg-neutral-800">Hello</Text>
+          <View className="flex justify-center align-middle text-center justify-items-center">
+            <Text className="text-neutral-200 bg-neutral-800 text-center">Hello</Text>
+            <MapView
+              className="w-screen h-96 bg-neutral-200 justify-center m-auto"
+              initialRegion={{
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+            />
           </View>
         </ScrollView>
       </SafeAreaView>

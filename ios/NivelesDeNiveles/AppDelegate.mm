@@ -3,6 +3,8 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import "RNSplashScreen.h"  // here
+#import <GoogleMaps/GoogleMaps.h>
+#import "RNCConfig.h"
 
 @implementation AppDelegate
 
@@ -12,6 +14,8 @@
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
+  NSString *mapsApiKey = [RNCConfig envFor:@"GOOGLE_MAPS"];
+  [GMSServices provideAPIKey: mapsApiKey]; // add this line using the api key obtained from Google Console
 
   BOOL ret = [super application:application didFinishLaunchingWithOptions:launchOptions];
   if (ret == YES) {
