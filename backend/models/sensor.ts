@@ -1,7 +1,7 @@
 export default class Sensor {
   constructor(
-    public location: string,
-    public latitude: number,
-    public longitude: number,
+    public name: string,
+    public status: Number,
+    public location: {type: 'Point'; coordinates: Array<Number>},
   ) {}
 }
