@@ -3,8 +3,9 @@ import * as dotenv from 'ts-dotenv';
 
 const env = dotenv.load({
   MONGODB: String,
-  DATABASE: String,
+  USER_DATABASE: String,
   USER_COLLECTION: String,
+  SENSOR_DATABASE: String,
   SENSOR_COLLECTION: String,
 });
 
@@ -17,14 +18,16 @@ export async function connectToDatabase() {
   const client: mongoDB.MongoClient = new mongoDB.MongoClient(env.MONGODB);
   await client.connect();
 
-  const database: mongoDB.Db = client.db(env.DATABASE);
+  const userDB: mongoDB.Db = client.db(env.USER_DATABASE);
 
-  const usersCollection: mongoDB.Collection = database.collection(
+  const usersCollection: mongoDB.Collection = userDB.collection(
     env.USER_COLLECTION,
   );
   collections.users = usersCollection;
 
-  const sensorsCollection: mongoDB.Collection = database.collection(
+  const sensorDB: mongoDB.Db = client.db(env.USER_DATABASE);
+
+  const sensorsCollection: mongoDB.Collection = sensorDB.collection(
     env.SENSOR_COLLECTION,
   );
   collections.sensors = sensorsCollection;

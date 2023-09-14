@@ -17,6 +17,20 @@ usersRouter.get('/', async (req: Request, res: Response) => {
     res.status(500).send({error: true, msg: error});
   }
 });
+usersRouter.post('/updateloc', async (req: Request, res: Response) => {
+  const data: User = req.body;
+  try {
+    if (collections.users) {
+      await collections.users.findOneAndUpdate(
+        {number: data.number},
+        {location: data.location},
+      );
+    }
+    res.status(200).send({error: false, msg: 'Inserted User!'});
+  } catch (error) {
+    res.status(500).send({error: true, msg: error});
+  }
+});
 usersRouter.post('/add', async (req: Request, res: Response) => {
   const data: User = req.body;
   try {

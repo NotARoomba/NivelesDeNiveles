@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../ForoTIC-2023"
+		},
+		{
+			"path": "../Asteroids/backend"
+		}
+	],
+	"settings": {}
+}
