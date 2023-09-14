@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "splashcon": "react-native set-icon --path ./public/icon.png && react-native set-splash --path ./public/splash.png --background \"#171717\"",
+    "splashcon": "react-native set-icon --path ./public/icon.png && react-native set-splash --path ./public/splash.png --background \"#F1EEFF\"",
     "postinstall": "react-native setup-ios-permissions && pod-install"
   },
   "dependencies": {

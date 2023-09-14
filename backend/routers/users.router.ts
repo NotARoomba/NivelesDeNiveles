@@ -6,50 +6,35 @@ export const usersRouter = express.Router();
 
 usersRouter.use(express.json());
 
-usersRouter.get('/', async (req: Request, res: Response) => {
-  try {
-    let users: User[] = [];
-    if (collections.users) {
-      users = (await collections.users.find({}).toArray()) as unknown as User[];
-    }
-    res.status(200).send({users, error: false, msg: 'Users Exist!'});
-  } catch (error) {
-    res.status(500).send({error: true, msg: error});
-  }
-});
-usersRouter.post('/updateloc', async (req: Request, res: Response) => {
+usersRouter.post('/', async (req: Request, res: Response) => {
   const data: User = req.body;
   try {
     if (collections.users) {
-      await collections.users.findOneAndUpdate(
-        {number: data.number},
-        {location: data.location},
-      );
+      await collections.users.updateOne({number: data.number}, data, {
+        upsert: true,
+      });
     }
-    res.status(200).send({error: false, msg: 'Inserted User!'});
+    res.status(200).send({error: false, msg: 'Updated User!'});
   } catch (error) {
     res.status(500).send({error: true, msg: error});
   }
 });
-usersRouter.post('/add', async (req: Request, res: Response) => {
-  const data: User = req.body;
+
+usersRouter.get('/:number', async (req: Request, res: Response) => {
+  const id = req?.params?.number;
+
   try {
+    const query = {number: parseInt(id, 10)};
+    let user = null;
     if (collections.users) {
-      await collections.users.insertOne(data);
+      user = (await collections.users.findOne(query)) as unknown as User;
     }
-    res.status(200).send({error: false, msg: 'Inserted User!'});
-  } catch (error) {
-    res.status(500).send({error: true, msg: error});
-  }
-});
-usersRouter.post('/remove', async (req: Request, res: Response) => {
-  const number: string = req.body.number;
-  try {
-    if (collections.users) {
-      await collections.users.deleteOne({number});
+    if (user) {
+      res.status(200).send({user, error: false, msg: 'The user exists!'});
+    } else {
+      res.status(404).send({user: null, error: true, msg: 'User not found!'});
     }
-    res.status(200).send({error: false, msg: 'Removed User!'});
   } catch (error) {
-    res.status(500).send({error: true, msg: error});
+    res.status(404).send({user: null, error: true, msg: error});
   }
 });

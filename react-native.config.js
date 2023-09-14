@@ -9,6 +9,6 @@ module.exports = {
   },
   assets: [
     './node_modules/react-native-vector-icons/Fonts/Feather.ttf',
-    './public/inter',
+    './public/archivo',
   ],
 };

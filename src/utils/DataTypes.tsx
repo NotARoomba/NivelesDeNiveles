@@ -1,22 +1,32 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Animated} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 export interface User {
-  name: string;
   number: string;
+  location: {type: 'Point'; coordinates: Array<Number>};
 }
 
 export interface ScreenProp {
-  fadeAnim: Animated.Value;
-  scale: Animated.Value;
   isDarkMode: boolean;
 }
 export interface FunctionScreenProp {
-  fadeAnim: Animated.Value;
-  scale: Animated.Value;
   isDarkMode: boolean;
   updateFunction: Function[];
 }
+
+export const styles = StyleSheet.create({
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },
+});
 
 export const storeData = async (key: string, value: string) => {
   try {

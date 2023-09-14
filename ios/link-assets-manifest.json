@@ -6,40 +6,40 @@
       "sha1": "e6604258b1ced5efd51360875d782fca65381d47"
     },
     {
-      "path": "public/inter/Inter-Black.ttf",
-      "sha1": "283fa65b96dc1f2d71c6504afb9610447bdcdf1b"
+      "path": "public/archivo/Archivo-Black.ttf",
+      "sha1": "49cd46f1f23bfc8b0db2ad65825ecd00b4917627"
     },
     {
-      "path": "public/inter/Inter-Bold.ttf",
-      "sha1": "48747b7a60086f97af0d373febcbd1f1bee87f17"
+      "path": "public/archivo/Archivo-Bold.ttf",
+      "sha1": "f0ed42979a49d75fdecf08293f8e7eaeb5a2d8be"
     },
     {
-      "path": "public/inter/Inter-ExtraBold.ttf",
-      "sha1": "bff772be6bca9895c6fdcd57e5d5be9a47f2e058"
+      "path": "public/archivo/Archivo-ExtraBold.ttf",
+      "sha1": "3193ea6ee7d61d34780a4dfb72ebe1f590694e2e"
     },
     {
-      "path": "public/inter/Inter-ExtraLight.ttf",
-      "sha1": "421072aef8610cb0f79661b494442a4b9363b43f"
+      "path": "public/archivo/Archivo-ExtraLight.ttf",
+      "sha1": "6a339255a47331e93b9efcd8f9913b68d97f4773"
     },
     {
-      "path": "public/inter/Inter-Light.ttf",
-      "sha1": "dd9ec1ae67dd85143bacf7a3cb37e9f0ac979843"
+      "path": "public/archivo/Archivo-Light.ttf",
+      "sha1": "df6a2d8116d5a8ffa65385dfb4eab2e1fa7c60b9"
     },
     {
-      "path": "public/inter/Inter-Medium.ttf",
-      "sha1": "a418a8ba73bbcfa8c131c426ab836d78457afa9b"
+      "path": "public/archivo/Archivo-Medium.ttf",
+      "sha1": "e513ab6b10594cbbb749aa56d4d66391bd3a35c7"
     },
     {
-      "path": "public/inter/Inter-Regular.ttf",
-      "sha1": "7237d9cf55f177702066a28a4dde1e4c7e8ab576"
+      "path": "public/archivo/Archivo-Regular.ttf",
+      "sha1": "eb245bb578205a32c8b301a41adfff248ee73e53"
     },
     {
-      "path": "public/inter/Inter-SemiBold.ttf",
-      "sha1": "431007da316de60d85174aeec9b8389b5c73e7d6"
+      "path": "public/archivo/Archivo-SemiBold.ttf",
+      "sha1": "e1fd9e25f72d95830f0e341dccb9c651f36b57ec"
     },
     {
-      "path": "public/inter/Inter-Thin.ttf",
-      "sha1": "297919d59c9ba4fa17251cdb9f06c26ca906e593"
+      "path": "public/archivo/Archivo-Thin.ttf",
+      "sha1": "adffc2d3fdfcfb07ea49dafd1314bee9baf2fcd1"
     }
   ]
 }
