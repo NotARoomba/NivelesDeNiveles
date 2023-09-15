@@ -8,6 +8,7 @@ usersRouter.use(express.json());
 
 usersRouter.post('/', async (req: Request, res: Response) => {
   const data: User = req.body;
+  console.log(data);
   try {
     if (collections.users) {
       await collections.users.updateOne({number: data.number}, data, {
