@@ -53,10 +53,7 @@ verifyRouter.post('/send', async (req: Request, res: Response) => {
 });
 
 verifyRouter.post('/check', async (req: Request, res: Response) => {
-  const number: string =
-    req?.body?.number[0] === '+'
-      ? req?.body?.number
-      : (('+57' + req?.body?.number) as string);
+  const number: string = req?.body?.number;
   const code: string = req?.body?.code as string;
   let verification;
   try {

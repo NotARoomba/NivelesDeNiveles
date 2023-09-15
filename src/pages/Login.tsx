@@ -1,4 +1,5 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
+import {CountryPicker} from 'react-native-country-codes-picker';
 import {
   SafeAreaView,
   StatusBar,
@@ -26,10 +27,7 @@ async function checkLogin(
 ) {
   const check = await callAPI('/verify/check', 'POST', {number, code});
   if (!check.error) {
-    await storeData(
-      'number',
-      number[0] === '+' ? number.slice(3, number.length) : number,
-    );
+    await storeData('number', number);
     await callAPI('/users', 'POST', {
       number: parseInt(number, 10),
       location: {type: 'Point', coordinates: [0, 0]},
@@ -61,7 +59,9 @@ export default function Login({
   isDarkMode,
   updateFunction,
 }: FunctionScreenProp) {
-  const [number, onChangeNumber] = React.useState('');
+  const [number, onChangeNumber] = useState('');
+  const [show, setShow] = useState(false);
+  const [countryCode, setCountryCode] = useState('🇨🇴+57');
   useEffect(() => {
     SplashScreen.hide();
   }, []);
@@ -77,22 +77,46 @@ export default function Login({
           />
           <View className="justify-center pt-12 mt-16">
             <Text className="text-center text-lg text-dark">Celular</Text>
-            <TextInput
-              onChangeText={onChangeNumber}
-              value={number}
-              keyboardType="phone-pad"
-              placeholderTextColor={'#ffffff'}
-              className="flex justify-center align-middle m-auto h-auto p-1 pb-3 pl-3 text-xl border mt-3 w-9/12 text-center rounded-full bg-dark text-light font-bold"
-            />
+            <View className="flex flex-row justify-center m-auto align-middle">
+              <TouchableOpacity
+                onPress={() => setShow(!show)}
+                className=" bg-accent text-center align-middle p-1 h-12 mt-3 w-3/12 rounded-l-full">
+                <Text className="align-middle m-auto text-xl text-dark font-bold">
+                  {countryCode}
+                </Text>
+              </TouchableOpacity>
+              <TextInput
+                onChangeText={onChangeNumber}
+                value={number}
+                keyboardType="phone-pad"
+                placeholderTextColor={'#ffffff'}
+                className="flex justify-center align-middle my-auto ml-0 h-12 p-1 pb-2.5 pl-3 text-xl border mt-3 w-8/12 rounded-full rounded-l-none bg-dark text-light font-bold"
+              />
+            </View>
           </View>
           <TouchableOpacity
-            onPress={() => parseLogin(number, updateFunction[0])}
+            onPress={() =>
+              countryCode === ''
+                ? Alert.alert('Error', 'Selecciona tu código de país.')
+                : parseLogin(countryCode.slice(4) + number, updateFunction[0])
+            }
             style={styles.shadow}
             className="flex justify-center align-middle p-2 bg-highlight text-dark rounded-full m-auto mt-6 shadow-2xl">
             <Text className="flex align-middle m-auto text-xl text-dark px-8">
               Entrar
             </Text>
           </TouchableOpacity>
+          <CountryPicker
+            show={show}
+            // when picker button press you will get the country object with dial code
+            pickerButtonOnPress={item => {
+              setCountryCode(item.flag + item.dial_code);
+              setShow(!show);
+            }}
+            onBackdropPress={() => setShow(!show)}
+            lang={'es'}
+            style={{modal: {height: 500}}}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
