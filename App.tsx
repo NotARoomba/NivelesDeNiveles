@@ -17,7 +17,7 @@ export default function App() {
   // Appearance.setColorScheme(v ? 'light' : 'dark');
   useEffect(() => {
     // checks if user is valid in database and if not then kicks out
-    //AsyncStorage.removeItem('number');
+    AsyncStorage.removeItem('number');
     getData('number').then(res => {
       if (res !== null) {
         callAPI('/users/' + res, 'GET').then(userData => {

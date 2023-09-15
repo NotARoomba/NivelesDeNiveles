@@ -28,6 +28,7 @@ connectToDatabase()
     app.use('/users', usersRouter);
 
     app.use('/', async (_req: Request, res: Response) => {
+      console.log(_req);
       res.status(200).send('You arent supposed to be here');
     });
     app.use(

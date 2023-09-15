@@ -44,7 +44,6 @@ async function checkLogin(
 
 async function parseLogin(number: string, updateLogged: Function) {
   const res = await callAPI('/verify/send', 'POST', {number});
-  console.log(res, 'Aaaaa');
   if (!res.error) {
     return prompt(
       'Enter Code',

@@ -83,8 +83,8 @@ export async function callAPI(
             },
           });
     if (res.ok) {
-      console.log(res);
-      return res.json();
+      console.log(await res.text());
+      return await res.json();
     } else {
       return {
         error: true,
