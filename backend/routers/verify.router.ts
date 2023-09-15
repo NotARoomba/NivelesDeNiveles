@@ -24,7 +24,7 @@ verifyRouter.post('/send', async (req: Request, res: Response) => {
   }
   try {
     console.log(number.replace('+57', ''));
-    parseInt(number.replace('+57', ''), 10);
+    console.log(parseInt(number.replace('+57', ''), 10));
   } catch {
     return res.send({error: true, msg: 'Please add a number!'});
   }
