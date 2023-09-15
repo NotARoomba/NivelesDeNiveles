@@ -4,8 +4,8 @@ import Home from './src/pages/Home';
 import {Appearance} from 'react-native';
 // import {callAPI, getData} from './src/utils/DataTypes';
 import SplashScreen from 'react-native-splash-screen';
-import {getData, callAPI} from './src/utils/DataTypes';
 import Login from './src/pages/Login';
+import {callAPI, getData} from './src/utils/Functions';
 export default function App() {
   const [logged, setlLogged] = useState(false);
   const [isDarkMode, setDarkMode] = useState(

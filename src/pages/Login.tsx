@@ -12,13 +12,9 @@ import {
   ScrollView,
 } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
-import {
-  FunctionScreenProp,
-  callAPI,
-  storeData,
-  styles,
-} from '../utils/DataTypes';
+import {FunctionScreenProp, styles} from '../utils/Types';
 import prompt from '@powerdesigninc/react-native-prompt';
+import {callAPI, storeData} from '../utils/Functions';
 
 async function checkLogin(
   number: string,
@@ -29,11 +25,10 @@ async function checkLogin(
   if (!check.error) {
     await storeData('number', number);
     await callAPI('/users', 'POST', {
-      number: parseInt(number, 10),
+      number,
       location: {type: 'Point', coordinates: [0, 0]},
     });
     updateLogged(true);
-    Alert.alert('Success!');
   } else {
     return Alert.alert('Error', check.msg);
   }
