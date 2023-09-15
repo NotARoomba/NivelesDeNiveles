@@ -63,9 +63,9 @@ export async function callAPI(
   );
   const hmac = `HMAC ${time}:${digest}`;
   try {
-    const res =
-      method === 'POST'
-        ? await fetch(Config.API_URL + endpoint, {
+    return method === 'POST'
+      ? await (
+          await fetch(Config.API_URL + endpoint, {
             method: method,
             headers: {
               Accept: 'application/json',
@@ -74,23 +74,17 @@ export async function callAPI(
             },
             body: JSON.stringify(body),
           })
-        : await fetch(Config.API_URL + endpoint, {
+        ).json()
+      : await (
+          await fetch(Config.API_URL + endpoint, {
             method: method,
             headers: {
               Accept: 'application/json',
               'Content-Type': 'application/json',
               Authorization: hmac,
             },
-          });
-    if (res.ok) {
-      console.log(await res.text());
-      return await res.json();
-    } else {
-      return {
-        error: true,
-        msg: 'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.',
-      };
-    }
+          })
+        ).json();
   } catch (error) {
     console.log(error);
     return {
