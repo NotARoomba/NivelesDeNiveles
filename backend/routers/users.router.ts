@@ -11,9 +11,13 @@ usersRouter.post('/', async (req: Request, res: Response) => {
   console.log(data);
   try {
     if (collections.users) {
-      await collections.users.updateOne({number: data.number}, data, {
-        upsert: true,
-      });
+      await collections.users.updateOne(
+        {number: data.number},
+        {$set: data},
+        {
+          upsert: true,
+        },
+      );
     }
     res.send({error: false, msg: 'Updated User!'});
   } catch (error) {

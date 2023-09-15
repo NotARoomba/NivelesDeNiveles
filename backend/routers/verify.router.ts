@@ -36,7 +36,6 @@ verifyRouter.post('/send', async (req: Request, res: Response) => {
     if (verification.status === 'pending') {
       res.send({error: false, msg: 'The code has been sent!'});
     } else if (!verification.lookup.valid) {
-      console.log(verification);
       res.send({error: true, msg: 'The phone number does not exist!'});
     } else {
       res.send({error: true, msg: 'There was an error sending the code!'});
@@ -59,7 +58,6 @@ verifyRouter.post('/check', async (req: Request, res: Response) => {
       ? req?.body?.number
       : (('+57' + req?.body?.number) as string);
   const code: string = req?.body?.code as string;
-  console.log(number, code);
   let verification;
   try {
     verification = await twilio.verify.v2
