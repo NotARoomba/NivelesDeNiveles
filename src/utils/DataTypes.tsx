@@ -65,7 +65,7 @@ export async function callAPI(
   try {
     const res =
       method === 'POST'
-        ? await await fetch(Config.API_URL + endpoint, {
+        ? await fetch(Config.API_URL + endpoint, {
             method: method,
             headers: {
               Accept: 'application/json',
@@ -74,7 +74,7 @@ export async function callAPI(
             },
             body: JSON.stringify(body),
           })
-        : await await fetch(Config.API_URL + endpoint, {
+        : await fetch(Config.API_URL + endpoint, {
             method: method,
             headers: {
               Accept: 'application/json',
@@ -83,6 +83,7 @@ export async function callAPI(
             },
           });
     if (res.ok) {
+      console.log(res);
       return res.json();
     } else {
       return {

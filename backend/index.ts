@@ -22,7 +22,7 @@ const genSecret = async (req: Request) => {
 
 connectToDatabase()
   .then(() => {
-    app.use(cors(corsOptions));
+    // app.use(cors(corsOptions));
     app.use(express.json());
     app.use(HMAC(genSecret));
     app.use('/users', usersRouter);
