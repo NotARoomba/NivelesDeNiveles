@@ -31,7 +31,7 @@ async function checkLogin(
       number[0] === '+' ? number.slice(3, number.length) : number,
     );
     await callAPI('/users', 'POST', {
-      number,
+      number: parseInt(number, 10),
       location: {type: 'Point', coordinates: [0, 0]},
     });
     updateLogged(true);

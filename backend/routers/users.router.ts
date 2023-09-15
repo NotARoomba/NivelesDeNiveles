@@ -26,7 +26,6 @@ usersRouter.post('/', async (req: Request, res: Response) => {
 
 usersRouter.get('/:number', async (req: Request, res: Response) => {
   const id = req?.params?.number;
-  console.log(id);
   try {
     const query = {number: parseInt(id, 10)};
     let user = null;
