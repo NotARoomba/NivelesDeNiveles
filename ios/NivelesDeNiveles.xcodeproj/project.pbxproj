@@ -18,12 +18,12 @@
 		4B1F7D16693F4E6EAB4F0B56 /* Archivo-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B472EABDBCD4DF2833FF5F6 /* Archivo-SemiBold.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-NivelesDeNiveles-NivelesDeNivelesTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-NivelesDeNiveles-NivelesDeNivelesTests.a */; };
 		7BEB0C59F6D04B2BB13426A9 /* Archivo-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4F388C6A7C994C50A988AFD3 /* Archivo-ExtraLight.ttf */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B2A3524625474D6F83AE3675 /* Archivo-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 531B9B655DC04BB48182B051 /* Archivo-Light.ttf */; };
 		B4D1B57DFEA34293A66F27D8 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0C0F3F65E49643AFA73085E5 /* Feather.ttf */; };
 		CF421A4A6F184AF7A6C46020 /* Archivo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DDB4ED72C212447B8789C688 /* Archivo-Regular.ttf */; };
 		DC7B9C37C297463195DB237C /* Archivo-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DCBA0F44BC4247F2855EEBA9 /* Archivo-ExtraBold.ttf */; };
 		F43E5B6DA25442A292434CEA /* Archivo-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26BD9F53FD43486680A6C8F2 /* Archivo-Black.ttf */; };
+		FE653DA32AB34B7600FB36C7 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE653DA22AB34B7600FB36C7 /* SplashScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,13 +57,13 @@
 		5709B34CF0A7D63546082F79 /* Pods-NivelesDeNiveles.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NivelesDeNiveles.release.xcconfig"; path = "Target Support Files/Pods-NivelesDeNiveles/Pods-NivelesDeNiveles.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-NivelesDeNiveles-NivelesDeNivelesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NivelesDeNiveles-NivelesDeNivelesTests.debug.xcconfig"; path = "Target Support Files/Pods-NivelesDeNiveles-NivelesDeNivelesTests/Pods-NivelesDeNiveles-NivelesDeNivelesTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-NivelesDeNiveles.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NivelesDeNiveles.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = NivelesDeNiveles/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-NivelesDeNiveles-NivelesDeNivelesTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NivelesDeNiveles-NivelesDeNivelesTests.release.xcconfig"; path = "Target Support Files/Pods-NivelesDeNiveles-NivelesDeNivelesTests/Pods-NivelesDeNiveles-NivelesDeNivelesTests.release.xcconfig"; sourceTree = "<group>"; };
 		9B982527CAE8499987B4C1C5 /* Archivo-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Archivo-Bold.ttf"; path = "../public/archivo/Archivo-Bold.ttf"; sourceTree = "<group>"; };
 		B4898460F78C49038B0F3E1A /* Archivo-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Archivo-Thin.ttf"; path = "../public/archivo/Archivo-Thin.ttf"; sourceTree = "<group>"; };
 		DCBA0F44BC4247F2855EEBA9 /* Archivo-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Archivo-ExtraBold.ttf"; path = "../public/archivo/Archivo-ExtraBold.ttf"; sourceTree = "<group>"; };
 		DDB4ED72C212447B8789C688 /* Archivo-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Archivo-Regular.ttf"; path = "../public/archivo/Archivo-Regular.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		FE653DA22AB34B7600FB36C7 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,7 +110,7 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
+				FE653DA22AB34B7600FB36C7 /* SplashScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = NivelesDeNiveles;
@@ -280,8 +280,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				FE653DA32AB34B7600FB36C7 /* SplashScreen.storyboard in Resources */,
 				B4D1B57DFEA34293A66F27D8 /* Feather.ttf in Resources */,
 				F43E5B6DA25442A292434CEA /* Archivo-Black.ttf in Resources */,
 				30D4E5FCA5494BD3A64B8602 /* Archivo-Bold.ttf in Resources */,

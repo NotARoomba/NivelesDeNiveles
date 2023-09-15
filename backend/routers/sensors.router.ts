@@ -15,9 +15,9 @@ sensorsRouter.get('/', async (req: Request, res: Response) => {
         .find({})
         .toArray()) as unknown as Sensor[];
     }
-    res.status(200).send({sensors, error: false, msg: 'Got Sensor Data!'});
+    res.send({sensors, error: false, msg: 'Got Sensor Data!'});
   } catch (error) {
-    res.status(500).send({error: true, msg: error});
+    res.send({error: true, msg: error});
   }
 });
 sensorsRouter.post('/', async (req: Request, res: Response) => {
@@ -42,8 +42,8 @@ sensorsRouter.post('/', async (req: Request, res: Response) => {
         .toArray()) as unknown as Sensor[];
       console.log(sensors);
     }
-    res.status(200).send({sensors, error: false, msg: 'Got Risk!'});
+    res.send({sensors, error: false, msg: 'Got Risk!'});
   } catch (error) {
-    res.status(500).send({error: true, msg: error});
+    res.send({error: true, msg: error});
   }
 });

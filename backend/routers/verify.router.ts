@@ -20,7 +20,7 @@ verifyRouter.post('/send', async (req: Request, res: Response) => {
       ? req?.body?.number
       : (('+57' + req?.body?.number) as string);
   if (req?.body?.number === '') {
-    return res.status(404).send({error: true, msg: 'Please add a number!'});
+    return res.send({error: true, msg: 'Please add a number!'});
   }
   let verification;
   try {
@@ -31,25 +31,21 @@ verifyRouter.post('/send', async (req: Request, res: Response) => {
         channel: 'sms',
       });
     if (verification.status === 'pending') {
-      res.status(200).send({error: false, msg: 'The code has been sent!'});
+      res.send({error: false, msg: 'The code has been sent!'});
     } else if (!verification.lookup.valid) {
-      res
-        .status(404)
-        .send({error: true, msg: 'The phone number does not exist!'});
+      res.send({error: true, msg: 'The phone number does not exist!'});
     } else {
-      res
-        .status(404)
-        .send({error: true, msg: 'There was an error sending the code!'});
+      res.send({error: true, msg: 'There was an error sending the code!'});
     }
   } catch (error: any) {
     console.log(error);
     if (error.status === 429) {
-      return res.status(404).send({
+      return res.send({
         error: true,
         msg: 'Too many attempts, try again in 10 minutes!',
       });
     }
-    res.status(404).send({error: true, msg: 'Unable to send the Twilio code!'});
+    res.send({error: true, msg: 'Unable to send the Twilio code!'});
   }
 });
 
@@ -70,18 +66,19 @@ verifyRouter.post('/check', async (req: Request, res: Response) => {
       });
     console.log(verification);
     if (verification.status === 'approved') {
-      res.status(200).send({error: false, msg: 'The code has been approved!'});
+      res.send({error: false, msg: 'The code has been approved!'});
     } else {
-      res.status(404).send({error: true, msg: 'Incorrect code!'});
+      res.send({error: true, msg: 'Incorrect code!'});
     }
   } catch (error: any) {
     if (error.status === 400 && error.code === 60200) {
-      return res.status(404).send({error: true, msg: 'The code is too short!'});
+      return res.send({error: true, msg: 'The code is too short!'});
     } else if (error.status === 404 && error.code === 20404) {
-      return res
-        .status(404)
-        .send({error: true, msg: 'The code has expired, please try again!'});
+      return res.send({
+        error: true,
+        msg: 'The code has expired, please try again!',
+      });
     }
-    res.status(404).send({error: true, msg: 'Unable to check the code!'});
+    res.send({error: true, msg: 'Unable to check the code!'});
   }
 });

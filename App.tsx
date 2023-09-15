@@ -30,19 +30,15 @@ export default function App() {
       } else {
         setlLogged(false);
       }
+      // AsyncStorage.removeItem('number');
+      Appearance.addChangeListener(appearance => {
+        setDarkMode(appearance.colorScheme === 'dark');
+      });
       SplashScreen.hide();
     });
   }, []);
   // const updateDarkMode = (v: boolean) =>
   //   Appearance.setColorScheme(v ? 'light' : 'dark');
-  useEffect(() => {
-    // get map data from current location
-    AsyncStorage.removeItem('number');
-    //SplashScreen.hide();
-    Appearance.addChangeListener(appearance => {
-      setDarkMode(appearance.colorScheme === 'dark');
-    });
-  }, []);
   // const onNavigationReady = () => {
   //   //SplashScreen.hide(); // just hide the splash screen after navigation ready
   // };

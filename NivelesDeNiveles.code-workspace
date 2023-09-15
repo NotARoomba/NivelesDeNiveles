@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../Asteroids/backend"
+		},
+		{
+			"path": "../Asteroids"
 		}
 	],
 	"settings": {}

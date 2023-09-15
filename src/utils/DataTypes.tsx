@@ -1,4 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Config from 'react-native-config';
+import CryptoJS from 'crypto-es';
 import {StyleSheet} from 'react-native';
 
 export interface User {
@@ -46,31 +48,53 @@ export const getData = async (key: string) => {
   }
 };
 
-const API = 'https://foropec2023-api.notaroomba.xyz';
-
 export async function callAPI(
   endpoint: string,
   method: string,
-  body: Object = {},
+  body: object = {},
 ) {
-  return method === 'POST'
-    ? await (
-        await fetch(API + endpoint, {
-          method: method,
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        })
-      ).json()
-    : await (
-        await fetch(API + endpoint, {
-          method: method,
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        })
-      ).json();
+  const time = Date.now().toString();
+  const data = JSON.stringify(body);
+  const digest = CryptoJS.enc.Hex.stringify(
+    CryptoJS.HmacSHA256(
+      time + method + endpoint + CryptoJS.MD5(data).toString(),
+      Math.floor(Date.now() / (30 * 1000)).toString(),
+    ),
+  );
+  const hmac = `HMAC ${time}:${digest}`;
+  try {
+    const res =
+      method === 'POST'
+        ? await await fetch(Config.API_URL + endpoint, {
+            method: method,
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: hmac,
+            },
+            body: JSON.stringify(body),
+          })
+        : await await fetch(Config.API_URL + endpoint, {
+            method: method,
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: hmac,
+            },
+          });
+    if (res.ok) {
+      return res.json();
+    } else {
+      return {
+        error: true,
+        msg: 'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.',
+      };
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      error: true,
+      msg: 'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.',
+    };
+  }
 }

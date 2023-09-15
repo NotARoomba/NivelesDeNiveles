@@ -25,13 +25,13 @@ async function checkLogin(
   updateLogged: Function,
 ) {
   const check = await callAPI('/verify/check', 'POST', {number, code});
-  console.log(check);
+  console.log(check, 'a');
   if (!check.error) {
     await storeData(
       'number',
       number[0] === '+' ? number.slice(3, number.length) : number,
     );
-    await callAPI('/users/', 'POST', {
+    await callAPI('/users', 'POST', {
       number,
       location: {type: 'Point', coordinates: [0, 0]},
     });
@@ -43,10 +43,8 @@ async function checkLogin(
 }
 
 async function parseLogin(number: string, updateLogged: Function) {
-  console.log(
-    '/users/' + (number[0] === '+' ? number.slice(3, number.length) : number),
-  );
   const res = await callAPI('/verify/send', 'POST', {number});
+  console.log(res, 'Aaaaa');
   if (!res.error) {
     return prompt(
       'Enter Code',

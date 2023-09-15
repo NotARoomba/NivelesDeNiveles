@@ -14,9 +14,9 @@ usersRouter.post('/', async (req: Request, res: Response) => {
         upsert: true,
       });
     }
-    res.status(200).send({error: false, msg: 'Updated User!'});
+    res.send({error: false, msg: 'Updated User!'});
   } catch (error) {
-    res.status(500).send({error: true, msg: error});
+    res.send({error: true, msg: error});
   }
 });
 
@@ -29,12 +29,13 @@ usersRouter.get('/:number', async (req: Request, res: Response) => {
     if (collections.users) {
       user = (await collections.users.findOne(query)) as unknown as User;
     }
+    console.log(user);
     if (user) {
-      res.status(200).send({user, error: false, msg: 'The user exists!'});
+      res.send({user, error: false, msg: 'The user exists!'});
     } else {
-      res.status(404).send({user: null, error: true, msg: 'User not found!'});
+      res.send({user: null, error: true, msg: 'User not found!'});
     }
   } catch (error) {
-    res.status(404).send({user: null, error: true, msg: error});
+    res.send({user: null, error: true, msg: error});
   }
 });

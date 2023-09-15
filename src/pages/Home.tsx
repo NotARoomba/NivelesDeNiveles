@@ -16,7 +16,6 @@ import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 export default function Home({isDarkMode}: ScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
   useEffect(() => {
-    SplashScreen.show();
     async function updateMap() {
       const locationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
       console.log(locationStatus);
