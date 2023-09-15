@@ -22,11 +22,8 @@ verifyRouter.post('/send', async (req: Request, res: Response) => {
   if (req?.body?.number === '') {
     return res.send({error: true, msg: 'Please add a number!'});
   }
-  try {
-    console.log(number.replace('+57', ''));
-    console.log(parseInt(number.replace('+57', ''), 10));
-  } catch {
-    return res.send({error: true, msg: 'Please add a number!'});
+  if (isNaN(parseInt(number.replace('+57', ''), 10))) {
+    return res.send({error: true, msg: 'Please add a valid number!'});
   }
   let verification;
   try {
