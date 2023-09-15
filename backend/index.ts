@@ -3,6 +3,8 @@ import cors, {CorsOptions} from 'cors';
 import {connectToDatabase} from './services/database.service';
 import {usersRouter} from './routers/users.router';
 import {AuthError, HMAC} from 'hmac-auth-express';
+import {sensorsRouter} from './routers/sensors.router';
+import {verifyRouter} from './routers/verify.router';
 
 const app = express();
 const port = 3001;
@@ -22,13 +24,14 @@ const genSecret = async (req: Request) => {
 
 connectToDatabase()
   .then(() => {
-    // app.use(cors(corsOptions));
+    app.use(cors(corsOptions));
     app.use(express.json());
     app.use(HMAC(genSecret));
     app.use('/users', usersRouter);
+    app.use('/sensors', sensorsRouter);
+    app.use('/verify', verifyRouter);
 
     app.use('/', async (_req: Request, res: Response) => {
-      console.log(_req);
       res.status(200).send('You arent supposed to be here');
     });
     app.use(
