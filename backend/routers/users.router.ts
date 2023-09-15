@@ -8,7 +8,6 @@ usersRouter.use(express.json());
 
 usersRouter.post('/', async (req: Request, res: Response) => {
   const data: User = req.body;
-  console.log(data);
   try {
     if (collections.users) {
       await collections.users.updateOne(
@@ -27,14 +26,13 @@ usersRouter.post('/', async (req: Request, res: Response) => {
 
 usersRouter.get('/:number', async (req: Request, res: Response) => {
   const id = req?.params?.number;
-
+  console.log(id);
   try {
     const query = {number: parseInt(id, 10)};
     let user = null;
     if (collections.users) {
       user = (await collections.users.findOne(query)) as unknown as User;
     }
-    console.log(user);
     if (user) {
       res.send({user, error: false, msg: 'The user exists!'});
     } else {

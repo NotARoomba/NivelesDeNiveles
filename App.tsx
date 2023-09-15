@@ -6,7 +6,6 @@ import {Appearance} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {getData, callAPI} from './src/utils/DataTypes';
 import Login from './src/pages/Login';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function App() {
   const [logged, setlLogged] = useState(false);
   const [isDarkMode, setDarkMode] = useState(
@@ -18,24 +17,23 @@ export default function App() {
   useEffect(() => {
     // checks if user is valid in database and if not then kicks out
     // AsyncStorage.removeItem('number');
-    getData('number').then(res => {
-      if (res !== null) {
-        callAPI('/users/' + res, 'GET').then(userData => {
-          if (userData.user && !userData.error) {
-            setlLogged(true);
-          } else {
-            setlLogged(false);
-          }
-        });
+    const updateUser = async () => {
+      const res = await callAPI('/users/' + (await getData('number')), 'GET');
+      console.log(res, await getData('number'));
+      if (res == null) {
+        return setlLogged(false);
+      }
+      if (res.user && !res.error) {
+        setlLogged(true);
       } else {
         setlLogged(false);
       }
-      // AsyncStorage.removeItem('number');
       Appearance.addChangeListener(appearance => {
         setDarkMode(appearance.colorScheme === 'dark');
       });
       SplashScreen.hide();
-    });
+    };
+    updateUser();
   }, []);
   // const updateDarkMode = (v: boolean) =>
   //   Appearance.setColorScheme(v ? 'light' : 'dark');

@@ -66,7 +66,6 @@ verifyRouter.post('/check', async (req: Request, res: Response) => {
         code,
         to: number,
       });
-    console.log(verification);
     if (verification.status === 'approved') {
       res.send({error: false, msg: 'The code has been approved!'});
     } else {
