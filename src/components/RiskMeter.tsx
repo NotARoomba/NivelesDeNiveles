@@ -5,17 +5,17 @@ import {RiskMeterProps} from '../utils/Types';
 export default function RiskMeter({status, reportFunction}: RiskMeterProps) {
   return (
     <View className="flex flex-row my-auto justify-center mb-2">
-      <Text className="text-light text-lg font-medium max-w-[50%]">
-        Tu encuentras en una zona{' '}
+      <Text className="text-light text-lg font-bold max-w-[50%]">
+        Te encuentras en una zona:{' '}
         <Text className="font-bold">
           {status === 0 ? 'seguro' : status === 1 ? 'riesgo' : 'peligro'}
         </Text>
       </Text>
-      <View className="ml-20">
+      <View className="ml-24 -mt-1">
         <TouchableOpacity onPress={reportFunction}>
           <View
             className={
-              'p-2 pt-1 rounded-full ' +
+              'p-3 pt-2 rounded-full ' +
               (status === 0
                 ? 'bg-green-500'
                 : status === 1

@@ -12,6 +12,12 @@ export enum DangerLevel {
   DANGER = 2,
 }
 
+export interface AdviceProps {
+  status: DangerLevel;
+  isOpen: boolean;
+  setOpen: (open: boolean) => void;
+}
+
 export interface RiskMeterProps {
   status: DangerLevel;
   reportFunction: () => void;

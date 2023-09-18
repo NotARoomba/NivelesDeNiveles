@@ -10,7 +10,7 @@ export default function Panel() {
   const [report, setReport] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(1));
   const [locationData, _setLocationData] = useState<LocationData>({
-    status: DangerLevel.RISK,
+    status: DangerLevel.SAFE,
     sensors: [],
   });
   const panResponder = PanResponder.create({
@@ -28,11 +28,7 @@ export default function Panel() {
         if (showing) {
           animateTo(false);
           setShowing(false);
-        } else {
-          animateTo(showing);
         }
-      } else {
-        animateTo(showing);
       }
     },
   });
@@ -89,7 +85,12 @@ export default function Panel() {
       {report ? (
         <Report reportFunction={reportFunction} />
       ) : (
-        <Status reportFunction={reportFunction} status={locationData.status} />
+        <View>
+          <Status
+            reportFunction={reportFunction}
+            status={locationData.status}
+          />
+        </View>
       )}
     </Animated.View>
   );
