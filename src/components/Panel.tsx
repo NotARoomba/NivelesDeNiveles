@@ -1,13 +1,14 @@
 import {useRef, useState} from 'react';
-import React, {Animated, PanResponder, Text, View} from 'react-native';
+import React, {Animated, PanResponder, View} from 'react-native';
 import {DangerLevel, LocationData} from '../utils/Types';
-import RiskMeter from './RiskMeter';
 import Report from './Report';
+import Status from './Status';
 
 export default function Panel() {
   const pan = useRef(new Animated.ValueXY()).current;
   const [showing, setShowing] = useState(false);
   const [report, setReport] = useState(false);
+  const [fadeAnim] = useState(new Animated.Value(1));
   const [locationData, _setLocationData] = useState<LocationData>({
     status: DangerLevel.RISK,
     sensors: [],
@@ -46,12 +47,30 @@ export default function Panel() {
     }).start();
   };
   const reportFunction = () => {
-    setReport(!report);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 150,
+      useNativeDriver: true,
+    }).start(() => {
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }).start(() => {
+        setReport(!report);
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true,
+        }).start();
+      });
+    });
   };
   return (
     <Animated.View
       style={{
         transform: [{translateX: pan.x}, {translateY: pan.y}],
+        opacity: fadeAnim,
       }}
       {...panResponder.panHandlers}
       className={
@@ -69,23 +88,8 @@ export default function Panel() {
       </View>
       {report ? (
         <Report reportFunction={reportFunction} />
-      ) : !showing ? (
-        <View>
-          <RiskMeter
-            status={locationData.status}
-            reportFunction={reportFunction}
-          />
-        </View>
       ) : (
-        <View className="justify-end">
-          <RiskMeter
-            status={locationData.status}
-            reportFunction={reportFunction}
-          />
-          <Text className="text-light mx-auto mr-5 justify-start text-lg font-bold">
-            Reportar
-          </Text>
-        </View>
+        <Status reportFunction={reportFunction} status={locationData.status} />
       )}
     </Animated.View>
   );
