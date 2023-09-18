@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from 'react';
 
 import Home from './src/pages/Home';
-import {Appearance} from 'react-native';
 // import {callAPI, getData} from './src/utils/DataTypes';
-import SplashScreen from 'react-native-splash-screen';
 import Login from './src/pages/Login';
 import {callAPI, getData} from './src/utils/Functions';
+import SplashScreen from 'react-native-splash-screen';
 export default function App() {
   const [logged, setlLogged] = useState(false);
-  const [isDarkMode, setDarkMode] = useState(
+  const [isDarkMode, _setDarkMode] = useState(
     // Appearance.getColorScheme() === 'dark',
     false,
   );
@@ -16,24 +15,23 @@ export default function App() {
   // Appearance.setColorScheme(v ? 'light' : 'dark');
   useEffect(() => {
     // checks if user is valid in database and if not then kicks out
-    // AsyncStorage.removeItem('number');
-    const updateUser = async () => {
-      const res = await callAPI('/users/' + (await getData('number')), 'GET');
-      console.log(res, await getData('number'));
-      if (res == null) {
-        return setlLogged(false);
-      }
-      if (res.user && !res.error) {
-        setlLogged(true);
-      } else {
-        setlLogged(false);
-      }
-      Appearance.addChangeListener(appearance => {
-        setDarkMode(appearance.colorScheme === 'dark');
+    // storeData('number', '+573104250018');
+    getData('number').then(number => {
+      callAPI('/users/' + number, 'GET').then(res => {
+        if (res == null) {
+          setlLogged(false);
+        }
+        if (res.user && !res.error) {
+          setlLogged(true);
+        } else {
+          setlLogged(false);
+        }
+        SplashScreen.hide();
+        // Appearance.addChangeListener(appearance => {
+        //   setDarkMode(appearance.colorScheme === 'dark');
+        // });
       });
-      SplashScreen.hide();
-    };
-    updateUser();
+    });
   }, []);
   // const updateDarkMode = (v: boolean) =>
   //   Appearance.setColorScheme(v ? 'light' : 'dark');

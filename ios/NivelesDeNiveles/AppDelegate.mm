@@ -17,14 +17,14 @@
   NSString *mapsApiKey = [RNCConfig envFor:@"GOOGLE_MAPS_IOS"];
   [GMSServices provideAPIKey: mapsApiKey]; // add this line using the api key obtained from Google Console
 
-  [super application:application didFinishLaunchingWithOptions:launchOptions];
+  bool didFinish=[super application:application didFinishLaunchingWithOptions:launchOptions]; // added 
   [RNSplashScreen show];
   // BOOL ret = [super application:application didFinishLaunchingWithOptions:launchOptions];
   // if (ret == YES) {
   //   [RNSplashScreen show];
   // }
   // return ret;
-  return YES;
+  return didFinish;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge

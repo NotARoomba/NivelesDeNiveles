@@ -1,8 +1,29 @@
 import {StyleSheet} from 'react-native';
+import Sensor from '../../backend/models/sensor';
 
 export interface User {
   number: string;
   location: {type: 'Point'; coordinates: Array<Number>};
+}
+
+export enum DangerLevel {
+  SAFE = 0,
+  RISK = 1,
+  DANGER = 2,
+}
+
+export interface RiskMeterProps {
+  status: DangerLevel;
+  reportFunction: () => void;
+}
+
+export interface ReportProps {
+  reportFunction: () => void;
+}
+
+export interface LocationData {
+  status: DangerLevel;
+  sensors: Sensor[];
 }
 
 export interface ScreenProp {
@@ -11,6 +32,11 @@ export interface ScreenProp {
 export interface FunctionScreenProp {
   isDarkMode: boolean;
   updateFunction: Function[];
+}
+
+export enum PanelState {
+  CLOSED = 0,
+  OPEN = 1,
 }
 
 export const styles = StyleSheet.create({

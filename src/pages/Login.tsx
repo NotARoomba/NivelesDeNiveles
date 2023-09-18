@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {CountryPicker} from 'react-native-country-codes-picker';
 import {
   SafeAreaView,
@@ -11,7 +11,6 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
 import {FunctionScreenProp, styles} from '../utils/Types';
 import prompt from '@powerdesigninc/react-native-prompt';
 import {callAPI, storeData} from '../utils/Functions';
@@ -43,7 +42,7 @@ async function parseLogin(number: string, updateLogged: Function) {
       async input => await checkLogin(number, input, updateLogged),
       'plain-text',
       '',
-      'phone-pad',
+      'number-pad',
     );
   } else {
     return Alert.alert('Error', res.msg);
@@ -57,9 +56,7 @@ export default function Login({
   const [number, onChangeNumber] = useState('');
   const [show, setShow] = useState(false);
   const [countryCode, setCountryCode] = useState('🇨🇴+57');
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
+  const [disable, setDisable] = useState(false);
   return (
     <SafeAreaView className=" bg-light">
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -90,11 +87,20 @@ export default function Login({
             </View>
           </View>
           <TouchableOpacity
-            onPress={() =>
-              countryCode === ''
-                ? Alert.alert('Error', 'Selecciona tu código de país.')
-                : parseLogin(countryCode.slice(4) + number, updateFunction[0])
-            }
+            disabled={disable}
+            onPress={() => {
+              if (countryCode === '') {
+                Alert.alert('Error', 'Selecciona tu código de país.');
+              } else {
+                setDisable(true);
+                parseLogin(
+                  countryCode.slice(4) + number,
+                  updateFunction[0],
+                ).then(() => {
+                  setDisable(false);
+                });
+              }
+            }}
             style={styles.shadow}
             className="flex justify-center align-middle p-2 bg-highlight text-dark rounded-full m-auto mt-6 shadow-2xl">
             <Text className="flex align-middle m-auto text-xl text-dark px-8">
