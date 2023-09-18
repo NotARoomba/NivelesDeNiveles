@@ -20,6 +20,11 @@ export default function Status({reportFunction, status}: RiskMeterProps) {
         </Text>
         <Advice status={status} isOpen={isOpen} setOpen={setOpen} />
       </View>
+      <View className="mt-5">
+        <Text className="text-xl text-accent font-semibold ml-5">
+          Nuestros Sensores
+        </Text>
+      </View>
     </View>
   );
 }

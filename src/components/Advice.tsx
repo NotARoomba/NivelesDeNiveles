@@ -1,4 +1,4 @@
-import React, {View, Text, TouchableOpacity, Animated, Easing} from 'react-native';
+import React, {View, Text, TouchableOpacity, Animated} from 'react-native';
 import {AdviceProps} from '../utils/Types';
 import Icon from 'react-native-vector-icons/Feather';
 import {useRef} from 'react';
@@ -10,10 +10,10 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
     outputRange: ['0deg', '180deg'],
   });
   const growValue = useRef(new Animated.Value(0)).current;
-  const grow = growValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0%', '100%'],
-  });
+  //   const grow = growValue.interpolate({
+  //     inputRange: [0, 1],
+  //     outputRange: ['0%', '100%'],
+  //   });
   const changeOpen = () => {
     setOpen(!isOpen);
     Animated.timing(flipValue, {
@@ -23,12 +23,10 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
     }).start();
     Animated.timing(growValue, {
       // todo hae to set values for each text sadly
-      toValue: isOpen ? 0 : 1,
-      duration: 300,
-      easing: Easing.circle,
+      toValue: isOpen ? 0 : 64,
+      duration: 250,
       useNativeDriver: false,
     }).start();
-    console.log(growValue);
   };
   return (
     <TouchableOpacity className="mt-3" onPress={changeOpen}>
@@ -46,7 +44,7 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
           </Animated.View>
         </View>
         <Animated.View
-          style={{maxHeight: grow}}
+          style={{height: growValue /*, maxHeight: grow*/}}
           className="justify-center px-1">
           <Text className="text-dark text-left text-lg">
             Estas en una zona segura, no hay nada a preocuparte!
