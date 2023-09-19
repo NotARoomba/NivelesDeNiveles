@@ -7,15 +7,34 @@ export interface User {
 }
 
 export enum DangerLevel {
-  SAFE = 0,
-  RISK = 1,
-  DANGER = 2,
+  SAFE,
+  RISK,
+  DANGER,
+}
+
+export enum DangerType {
+  FLOOD,
+  FIRE,
+  AVALANCHE,
 }
 
 export interface AdviceProps {
   status: DangerLevel;
   isOpen: boolean;
   setOpen: (open: boolean) => void;
+}
+
+export interface DangerTypeButtonProps {
+  icon: string;
+  type: DangerType;
+  isSelected: boolean;
+  onPress: (type: DangerType) => void;
+}
+export interface DangerLevelButtonProps {
+  color: string;
+  level: DangerLevel;
+  isSelected: boolean;
+  onPress: (level: DangerLevel) => void;
 }
 
 export interface RiskMeterProps {

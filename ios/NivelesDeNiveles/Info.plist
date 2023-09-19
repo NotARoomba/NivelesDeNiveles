@@ -49,6 +49,8 @@
 		<string>Archivo-Regular.ttf</string>
 		<string>Archivo-SemiBold.ttf</string>
 		<string>Archivo-Thin.ttf</string>
+		<string>FontAwesome6_Regular.ttf</string>
+		<string>FontAwesome6_Solid.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen.storyboard</string>

@@ -6,6 +6,14 @@
       "sha1": "e6604258b1ced5efd51360875d782fca65381d47"
     },
     {
+      "path": "node_modules/react-native-vector-icons/Fonts/FontAwesome6_Regular.ttf",
+      "sha1": "dad3ad71b383789bb62c249742ef59e34685e7d0"
+    },
+    {
+      "path": "node_modules/react-native-vector-icons/Fonts/FontAwesome6_Solid.ttf",
+      "sha1": "3eb9b4b2ea22711b96e3b356196fd20b4f17fb0e"
+    },
+    {
       "path": "public/archivo/Archivo-Black.ttf",
       "sha1": "49cd46f1f23bfc8b0db2ad65825ecd00b4917627"
     },

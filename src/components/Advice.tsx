@@ -1,5 +1,5 @@
 import React, {View, Text, TouchableOpacity, Animated} from 'react-native';
-import {AdviceProps} from '../utils/Types';
+import {AdviceProps, DangerLevel} from '../utils/Types';
 import Icon from 'react-native-vector-icons/Feather';
 import {useRef} from 'react';
 
@@ -37,7 +37,11 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
               'text-dark text-lg' + (isOpen ? ' font-bold' : ' font-medium')
             }>
             Recomendaciones Zona{' '}
-            {status === 0 ? 'Segura' : status === 1 ? 'Riesgo' : 'Peligro'}
+            {status === DangerLevel.SAFE
+              ? 'Segura'
+              : status === DangerLevel.RISK
+              ? 'Riesgo'
+              : 'Peligro'}
           </Text>
           <Animated.View style={{transform: [{rotate: flip}]}}>
             <Icon name="chevron-down" size={30} />

@@ -1,6 +1,6 @@
 import React, {View, Text, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import {RiskMeterProps} from '../utils/Types';
+import {DangerLevel, RiskMeterProps} from '../utils/Types';
 
 export default function RiskMeter({status, reportFunction}: RiskMeterProps) {
   return (
@@ -16,9 +16,9 @@ export default function RiskMeter({status, reportFunction}: RiskMeterProps) {
           <View
             className={
               'p-3 pt-2 rounded-full ' +
-              (status === 0
+              (status === DangerLevel.SAFE
                 ? 'bg-green-500'
-                : status === 1
+                : status === DangerLevel.RISK
                 ? 'bg-yellow-500'
                 : 'bg-red-500')
             }>
