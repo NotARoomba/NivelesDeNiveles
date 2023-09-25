@@ -16,6 +16,7 @@ export default function App() {
   useEffect(() => {
     // checks if user is valid in database and if not then kicks out
     // storeData('number', '+573104250018');
+    
     getData('number').then(number => {
       callAPI('/users/' + number, 'GET').then(res => {
         if (res == null) {
