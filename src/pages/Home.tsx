@@ -32,11 +32,6 @@ export default function Home({isDarkMode}: ScreenProp) {
         'GET',
       );
       setUser(user);
-      const ws = new WebSocket(`ws://${Config.API_URL}`);
-      ws.onopen = () => {
-        // connection opened
-        ws.send('something'); // send a message
-      };
     }
     updateMap();
   }, []);

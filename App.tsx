@@ -5,6 +5,7 @@ import Home from './src/pages/Home';
 import Login from './src/pages/Login';
 import {callAPI, getData} from './src/utils/Functions';
 import SplashScreen from 'react-native-splash-screen';
+import Config from 'react-native-config';
 export default function App() {
   const [logged, setlLogged] = useState(false);
   const [isDarkMode, _setDarkMode] = useState(
@@ -16,7 +17,13 @@ export default function App() {
   useEffect(() => {
     // checks if user is valid in database and if not then kicks out
     // storeData('number', '+573104250018');
-    
+    const ws = new WebSocket('ws://nivelesdeniveles-api.notaroomba.xyz');
+    console.log('ws://nivelesdeniveles-api.notaroomba.xyz');
+    ws.onopen = () => {
+      // connection opened
+      console.log(ws.readyState);
+      ws.send('something'); // send a message
+    };
     getData('number').then(number => {
       callAPI('/users/' + number, 'GET').then(res => {
         if (res == null) {
