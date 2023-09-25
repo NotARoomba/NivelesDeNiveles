@@ -20,27 +20,20 @@ export default function App() {
     // checks if user is valid in database and if not then kicks out
     // storeData('number', '+573104250018');
     getData('number').then(number => {
-      const socket = io(Config.API_URL, {auth: {
-        token: Math.floor(Date.now() / (30 * 1000)).toString()
-      }});
-      socket.on("connect", () => {
-        console.log(socket.id); // x8WIv7-mJelg7on_ALbx
-        socket.emit(NivelesEvents.GET_USER, number)
+      callAPI('/users/' + number, 'GET').then(res => {
+        if (res == null) {
+          setlLogged(false);
+        }
+        if (res.user && !res.error) {
+          setlLogged(true);
+        } else {
+          setlLogged(false);
+        }
+        SplashScreen.hide();
+        // Appearance.addChangeListener(appearance => {
+        //   setDarkMode(appearance.colorScheme === 'dark');
+        // });
       });
-      // callAPI('/users/' + number, 'GET').then(res => {
-      //   if (res == null) {
-      //     setlLogged(false);
-      //   }
-      //   if (res.user && !res.error) {
-      //     setlLogged(true);
-      //   } else {
-      //     setlLogged(false);
-      //   }
-      //   SplashScreen.hide();
-      //   // Appearance.addChangeListener(appearance => {
-      //   //   setDarkMode(appearance.colorScheme === 'dark');
-      //   // });
-      // });
     });
   }, []);
   // const updateDarkMode = (v: boolean) =>

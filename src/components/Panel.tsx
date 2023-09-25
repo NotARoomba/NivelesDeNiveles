@@ -1,18 +1,29 @@
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import React, {Animated, PanResponder, View} from 'react-native';
 import {DangerLevel, LocationData} from '../utils/Types';
 import Report from './Report';
 import Status from './Status';
+import Config from 'react-native-config';
+import { io } from 'socket.io-client';
+import NivelesEvents from '../../backend/models/events';
+import Incident from '../../backend/models/incident';
+import Sensor from '../../backend/models/sensor';
 
 export default function Panel() {
   const pan = useRef(new Animated.ValueXY()).current;
   const [showing, setShowing] = useState(false);
   const [report, setReport] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(1));
-  const [locationData, _setLocationData] = useState<LocationData>({
+  const [locationData, setLocationData] = useState<LocationData>({
     status: DangerLevel.SAFE,
     sensors: [],
   });
+  useEffect(() => {
+    const socket = io(Config.API_URL);
+    socket.on(NivelesEvents.SAFETY_SENSOR_UPDATE, (locationData: LocationData) => {
+      setLocationData(locationData);
+    })
+  }, [])
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: (_evt, _gestureState) => true,
     onPanResponderRelease: (_evt, gestureState) => {

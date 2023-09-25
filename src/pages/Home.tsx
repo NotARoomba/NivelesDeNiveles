@@ -5,7 +5,6 @@ import MapView, {PROVIDER_GOOGLE, Heatmap} from 'react-native-maps';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {callAPI, getData} from '../utils/Functions';
 import Panel from '../components/Panel';
-import Config from 'react-native-config';
 
 export default function Home({isDarkMode}: ScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);

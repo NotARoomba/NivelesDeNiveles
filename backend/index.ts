@@ -30,29 +30,16 @@ const io = new Server(httpServer, { cors: corsOptions});
 
 connectToDatabase()
   .then(() => {
-    // app.use(cors(corsOptions));
-    // app.use(express.json());
-    // app.use(HMAC(genSecret));
-    // app.use('/users', usersRouter);
-    // app.use('/sensors', sensorsRouter);
-    // app.use('/verify', verifyRouter);
+    app.use(cors(corsOptions));
+    app.use(express.json());
+    app.use(HMAC(genSecret));
+    app.use('/users', usersRouter);
+    app.use('/sensors', sensorsRouter);
+    app.use('/verify', verifyRouter);
     //socket data
-
-  io.use((socket, next) => {
-    const token = socket.handshake.auth.token;
-    console.log(token);
-    if (token !== Math.floor(Date.now() / (30 * 1000)).toString()) return next(new Error('Not Authorized'))
-    next();
-  });
     
   io.on(NivelesEvents.CONNECT, (socket: Socket) => {
-    console.log(socket.id)
-    console.log('Connected client on port %s.', port);
-  
-    socket.on(NivelesEvents.GET_USER, (socket: Socket, number: string) => {
-      console.log('user_update: %s', number);
-    });
-  
+    console.log(`New client connected: ${socket.id}`)
     socket.on(NivelesEvents.DISCONNECT, () => {
       console.log('Client disconnected');
     });
