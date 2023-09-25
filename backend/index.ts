@@ -40,6 +40,7 @@ connectToDatabase()
 
   io.use((socket, next) => {
     const token = socket.handshake.auth.token;
+    console.log(token);
     if (token !== Math.floor(Date.now() / (30 * 1000)).toString()) return next(new Error('Not Authorized'))
     next();
   });
