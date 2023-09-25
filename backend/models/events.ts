@@ -1,5 +1,5 @@
 export enum NivelesEvents {
-    CONNECT = 'connect',
+    CONNECT = 'connection',
     CONNECT_ERROR = 'connect_error',
     DISCONNECT = 'disconnect',
     REPORT = 'report',

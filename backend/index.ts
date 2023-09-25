@@ -28,23 +28,6 @@ const genSecret = async (req: Request) => {
 
 const io = new Server(httpServer, { cors: corsOptions});
 
-io.use((socket, next) => {
-  const token = socket.handshake.auth.token;
-  if (token !== Math.floor(Date.now() / (30 * 1000)).toString()) new Error('Not Authorized')
-});
-    
-io.on(NivelesEvents.CONNECT, (socket: any) => {
-  console.log('Connected client on port %s.', port);
-
-  socket.on(NivelesEvents.USER_UPDATE, (m: User) => {
-    console.log('user_update: %s', JSON.stringify(m));
-  });
-
-  socket.on(NivelesEvents.DISCONNECT, () => {
-    console.log('Client disconnected');
-  });
-});
-
 connectToDatabase()
   .then(() => {
     app.use(cors(corsOptions));
@@ -83,4 +66,21 @@ connectToDatabase()
   .catch((error: Error) => {
     console.error('Database connection failed', error);
     process.exit();
+  });
+
+  io.use((socket, next) => {
+    const token = socket.handshake.auth.token;
+    if (token !== Math.floor(Date.now() / (30 * 1000)).toString()) new Error('Not Authorized')
+  });
+      
+  io.on(NivelesEvents.CONNECTION, (socket: any) => {
+    console.log('Connected client on port %s.', port);
+  
+    socket.on(NivelesEvents.USER_UPDATE, (m: User) => {
+      console.log('user_update: %s', JSON.stringify(m));
+    });
+  
+    socket.on(NivelesEvents.DISCONNECT, () => {
+      console.log('Client disconnected');
+    });
   });
