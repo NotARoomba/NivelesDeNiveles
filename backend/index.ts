@@ -5,7 +5,7 @@ import {usersRouter} from './routers/users.router';
 import {AuthError, HMAC} from 'hmac-auth-express';
 import {sensorsRouter} from './routers/sensors.router';
 import {verifyRouter} from './routers/verify.router';
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import NivelesEvents from './models/events';
 import User from './models/user';
 import { createServer } from 'http';
@@ -38,12 +38,13 @@ connectToDatabase()
     app.use('/verify', verifyRouter);
     //socket data
 
-  io.use((socket, next) => {
-    const token = socket.handshake.auth.token;
-    if (token !== Math.floor(Date.now() / (30 * 1000)).toString()) new Error('Not Authorized')
-  });
-      
-  io.on(NivelesEvents.CONNECTION, (socket: any) => {
+  // io.use((socket, next) => {
+  //   const token = socket.handshake.auth.token;
+  //   if (token !== Math.floor(Date.now() / (30 * 1000)).toString()) new Error('Not Authorized')
+  // });
+    
+  io.on(NivelesEvents.CONNECT, (socket: Socket) => {
+    console.log(socket.id)
     console.log('Connected client on port %s.', port);
   
     socket.on(NivelesEvents.USER_UPDATE, (m: User) => {
