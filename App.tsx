@@ -17,8 +17,8 @@ export default function App() {
   useEffect(() => {
     // checks if user is valid in database and if not then kicks out
     // storeData('number', '+573104250018');
-    const ws = new WebSocket('wss://echo.websocket.org');
-    console.log('wss://nivelesdeniveles-api.notaroomba.xyz');
+    const ws = new WebSocket('ws://echo.websocket.org');
+    console.log('ws://nivelesdeniveles-api.notaroomba.xyz');
     ws.onopen = () => {
       // connection opened
       console.log(ws.readyState);
