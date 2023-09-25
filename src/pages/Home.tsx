@@ -5,6 +5,7 @@ import MapView, {PROVIDER_GOOGLE, Heatmap} from 'react-native-maps';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {callAPI, getData} from '../utils/Functions';
 import Panel from '../components/Panel';
+import Config from 'react-native-config';
 
 export default function Home({isDarkMode}: ScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
@@ -31,6 +32,11 @@ export default function Home({isDarkMode}: ScreenProp) {
         'GET',
       );
       setUser(user);
+      const ws = new WebSocket(`ws://${Config.API_URL}`);
+      ws.onopen = () => {
+        // connection opened
+        ws.send('something'); // send a message
+      };
     }
     updateMap();
   }, []);

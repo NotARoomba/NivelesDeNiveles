@@ -74,9 +74,9 @@ connectToDatabase()
         next();
       },
     );
-    app.listen(port, () => {
-      console.log(`Server started at http://localhost:${port}`);
-    });
+    // app.listen(port, () => {
+    //   console.log(`Server started at http://localhost:${port}`);
+    // });
   })
   .catch((error: Error) => {
     console.error('Database connection failed', error);
