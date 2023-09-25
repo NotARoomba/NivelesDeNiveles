@@ -38,6 +38,23 @@ connectToDatabase()
     app.use('/verify', verifyRouter);
     //socket data
 
+  io.use((socket, next) => {
+    const token = socket.handshake.auth.token;
+    if (token !== Math.floor(Date.now() / (30 * 1000)).toString()) new Error('Not Authorized')
+  });
+      
+  io.on(NivelesEvents.CONNECTION, (socket: any) => {
+    console.log('Connected client on port %s.', port);
+  
+    socket.on(NivelesEvents.USER_UPDATE, (m: User) => {
+      console.log('user_update: %s', JSON.stringify(m));
+    });
+  
+    socket.on(NivelesEvents.DISCONNECT, () => {
+      console.log('Client disconnected');
+    });
+  });
+
     app.use('/', async (_req: Request, res: Response) => {
       res.status(200).send('You arent supposed to be here');
     });
@@ -62,25 +79,9 @@ connectToDatabase()
     //   console.log(`Server started at http://localhost:${port}`);
     // });
     httpServer.listen(port);
+    console.log('Server Started!');
   })
   .catch((error: Error) => {
     console.error('Database connection failed', error);
     process.exit();
-  });
-
-  io.use((socket, next) => {
-    const token = socket.handshake.auth.token;
-    if (token !== Math.floor(Date.now() / (30 * 1000)).toString()) new Error('Not Authorized')
-  });
-      
-  io.on(NivelesEvents.CONNECTION, (socket: any) => {
-    console.log('Connected client on port %s.', port);
-  
-    socket.on(NivelesEvents.USER_UPDATE, (m: User) => {
-      console.log('user_update: %s', JSON.stringify(m));
-    });
-  
-    socket.on(NivelesEvents.DISCONNECT, () => {
-      console.log('Client disconnected');
-    });
   });

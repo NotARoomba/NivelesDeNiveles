@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "build": "npm i",
-    "start": "nodemon index.ts"
+    "start": "ts-node index.ts"
   },
   "author": "",
   "license": "ISC",
