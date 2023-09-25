@@ -15,10 +15,7 @@ export const verifyRouter = express.Router();
 verifyRouter.use(express.json());
 
 verifyRouter.post('/send', async (req: Request, res: Response) => {
-  const number: string =
-    req?.body?.number[0] === '+'
-      ? req?.body?.number
-      : (('+57' + req?.body?.number) as string);
+  const number: string = req?.body?.number;
   if (req?.body?.number === '') {
     return res.send({error: true, msg: 'Please add a number!'});
   }

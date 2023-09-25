@@ -10,7 +10,7 @@ export default function Panel() {
   const [report, setReport] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(1));
   const [locationData, _setLocationData] = useState<LocationData>({
-    status: DangerLevel.SAFE,
+    status: DangerLevel.DANGER,
     sensors: [],
   });
   const panResponder = PanResponder.create({

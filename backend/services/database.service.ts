@@ -7,11 +7,15 @@ const env = dotenv.load({
   USER_COLLECTION: String,
   SENSOR_DATABASE: String,
   SENSOR_COLLECTION: String,
+  REPORT_COLLECTION: String,
+  INCIDENT_COLLECTION: String,
 });
 
 export const collections: {
   users?: mongoDB.Collection;
   sensors?: mongoDB.Collection;
+  incidents?: mongoDB.Collection;
+  reports?: mongoDB.Collection;
 } = {};
 
 export async function connectToDatabase() {
@@ -31,6 +35,14 @@ export async function connectToDatabase() {
     env.SENSOR_COLLECTION,
   );
   collections.sensors = sensorsCollection;
+
+  const reportsCollection: mongoDB.Collection = sensorDB.collection(
+    env.REPORT_COLLECTION,
+  );
+
+  const incidentsCollection: mongoDB.Collection = sensorDB.collection(
+    env.INCIDENT_COLLECTION,
+  );
 
   console.log('Successfully connected to database!');
 }
