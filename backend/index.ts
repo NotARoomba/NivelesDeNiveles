@@ -7,6 +7,7 @@ import {sensorsRouter} from './routers/sensors.router';
 import {verifyRouter} from './routers/verify.router';
 import { Server } from "socket.io";
 import NivelesEvents from './models/events';
+import User from './models/user';
 const app = express();
 const port = 3001;
 
@@ -29,8 +30,17 @@ io.use((socket, next) => {
   const token = socket.handshake.auth.token;
   if (token !== Math.floor(Date.now() / (30 * 1000)).toString()) new Error('Not Authorized')
 });
-io.on(NivelesEvents.CONNECT, (socket) => {
-  console.log(socket)
+    
+io.on(NivelesEvents.CONNECT, (socket: any) => {
+  console.log('Connected client on port %s.', port);
+
+  socket.on(NivelesEvents.USER_UPDATE, (m: User) => {
+    console.log('user_update: %s', JSON.stringify(m));
+  });
+
+  socket.on(NivelesEvents.DISCONNECT, () => {
+    console.log('Client disconnected');
+  });
 });
 io.listen(port);
 
@@ -43,22 +53,6 @@ connectToDatabase()
     app.use('/sensors', sensorsRouter);
     app.use('/verify', verifyRouter);
     //socket data
-    
-    this.io.on(ChatEvent.CONNECT, (socket: any) => {
-      console.log('Connected client on port %s.', this.port);
-
-      socket.on(ChatEvent.MESSAGE, (m: ChatMessage) => {
-        console.log('[server](message): %s', JSON.stringify(m));
-        this.io.emit('message', m);
-      });
-
-      socket.on(ChatEvent.DISCONNECT, () => {
-        console.log('Client disconnected');
-      });
-    });
-
-
-
 
     app.use('/', async (_req: Request, res: Response) => {
       res.status(200).send('You arent supposed to be here');
