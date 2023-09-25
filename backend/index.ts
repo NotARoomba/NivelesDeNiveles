@@ -42,7 +42,6 @@ io.on(NivelesEvents.CONNECT, (socket: any) => {
     console.log('Client disconnected');
   });
 });
-io.listen(port);
 
 connectToDatabase()
   .then(() => {
