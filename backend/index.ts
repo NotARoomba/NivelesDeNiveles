@@ -47,8 +47,8 @@ connectToDatabase()
     console.log(socket.id)
     console.log('Connected client on port %s.', port);
   
-    socket.on(NivelesEvents.USER_UPDATE, (m: User) => {
-      console.log('user_update: %s', JSON.stringify(m));
+    socket.on(NivelesEvents.GET_USER, (number: string) => {
+      console.log('user_update: %s', number);
     });
   
     socket.on(NivelesEvents.DISCONNECT, () => {
