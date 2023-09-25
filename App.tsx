@@ -17,28 +17,28 @@ export default function App() {
   useEffect(() => {
     // checks if user is valid in database and if not then kicks out
     // storeData('number', '+573104250018');
-    const ws = new WebSocket('ws://nivelesdeniveles-api.notaroomba.xyz');
-    console.log('ws://nivelesdeniveles-api.notaroomba.xyz');
+    const ws = new WebSocket('wss://echo.websocket.org');
+    console.log('wss://nivelesdeniveles-api.notaroomba.xyz');
     ws.onopen = () => {
       // connection opened
       console.log(ws.readyState);
       ws.send('something'); // send a message
     };
     getData('number').then(number => {
-      callAPI('/users/' + number, 'GET').then(res => {
-        if (res == null) {
-          setlLogged(false);
-        }
-        if (res.user && !res.error) {
-          setlLogged(true);
-        } else {
-          setlLogged(false);
-        }
-        SplashScreen.hide();
-        // Appearance.addChangeListener(appearance => {
-        //   setDarkMode(appearance.colorScheme === 'dark');
-        // });
-      });
+      // callAPI('/users/' + number, 'GET').then(res => {
+      //   if (res == null) {
+      //     setlLogged(false);
+      //   }
+      //   if (res.user && !res.error) {
+      //     setlLogged(true);
+      //   } else {
+      //     setlLogged(false);
+      //   }
+      //   SplashScreen.hide();
+      //   // Appearance.addChangeListener(appearance => {
+      //   //   setDarkMode(appearance.colorScheme === 'dark');
+      //   // });
+      // });
     });
   }, []);
   // const updateDarkMode = (v: boolean) =>

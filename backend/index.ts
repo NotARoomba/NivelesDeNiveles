@@ -17,6 +17,7 @@ export const corsOptions: CorsOptions = {
     'http://nivelesdeniveles-api.notaroomba.xyz',
     'http://localhost:5173',
     'http://localhost',
+    '*',
   ],
 };
 
