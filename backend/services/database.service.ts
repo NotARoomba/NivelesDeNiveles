@@ -57,7 +57,15 @@ export async function connectToDatabase(io: Server) {
     env.INCIDENT_COLLECTION,
   );
 
+
   collections.incidents = incidentsCollection
+
+  incidentsCollection.createIndex( { geometry : "2dsphere" } )
+  reportsCollection.createIndex( { geometry : "2dsphere" } )
+  sensorsCollection.createIndex( { geometry : "2dsphere" } )
+  usersCollection.createIndex( { geometry : "2dsphere" } )
+
+  
 
   console.log('Successfully connected to database!');
     //check if there is incident and if not then make an incident
