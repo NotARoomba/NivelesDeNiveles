@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, StatusBar, Alert} from 'react-native';
-import {DangerLevel, LocationData, ScreenProp, User} from '../utils/Types';
+import {DangerLevel, DangerType, LocationData, ScreenProp} from '../utils/Types';
 import MapView, {PROVIDER_GOOGLE, Heatmap} from 'react-native-maps';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {callAPI, getData} from '../utils/Functions';
@@ -9,6 +9,7 @@ import Config from 'react-native-config';
 import {io} from 'socket.io-client';
 import NivelesEvents from '../../backend/models/events';
 import Panel from '../components/Panel';
+import User from '../../backend/models/user';
 
 export default function Home({isDarkMode}: ScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
@@ -25,16 +26,19 @@ export default function Home({isDarkMode}: ScreenProp) {
       {
         name: 'Sensor 1',
         status: DangerLevel.SAFE,
+        type: DangerType.FLOOD,
         location: {coordinates: [37.7882, -122.4324], type: 'Point'},
       },
       {
         name: 'Sensor 2',
         status: DangerLevel.RISK,
+        type: DangerType.FLOOD,
         location: {coordinates: [37.7882, -122.4524], type: 'Point'},
       },
       {
         name: 'Sensor 3',
         status: DangerLevel.DANGER,
+        type: DangerType.FLOOD,
         location: {coordinates: [37.7882, -122.4524], type: 'Point'},
       },
     ],
@@ -82,14 +86,14 @@ export default function Home({isDarkMode}: ScreenProp) {
           );
         }
       }
-      setUser(
-        (await callAPI('/users/' + (await getData('number')), 'GET')).user,
-      );
+      const user = (await callAPI('/users/' + (await getData('number')), 'GET')).user
+      setUser(user);
       //get location and update database with location
       //then open a websocket connecton listening for updates around the location
       const socket = io(Config.API_URL);
+      // socket.emit(NivelesEvents.CONNECT)
       socket.on(
-        NivelesEvents.SAFETY_SENSOR_UPDATE,
+        NivelesEvents.LOCATION_DATA_UPDATE,
         (locationData: LocationData) => {
           setLocationData(locationData);
         },

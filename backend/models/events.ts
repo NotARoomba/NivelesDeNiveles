@@ -1,7 +1,8 @@
 export enum NivelesEvents {
   CONNECT = 'connect',
   DISCONNECT = 'disconnect',
-  SAFETY_SENSOR_UPDATE = 'safety_sensor_update',
+  REQUEST_LOCATION_DATA = 'request_location_data',
+  SEND_LOCATION_DATA = 'send_location_data',
 }
 
 export default NivelesEvents;

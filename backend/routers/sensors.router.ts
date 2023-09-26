@@ -20,7 +20,24 @@ sensorsRouter.get('/', async (req: Request, res: Response) => {
     res.send({error: true, msg: error});
   }
 });
+//for sensors to send data
 sensorsRouter.post('/', async (req: Request, res: Response) => {
+  const data: Sensor = req.body;
+  try {
+    if (collections.sensors) {
+      await collections.sensors.updateOne(
+        {number: data.name},
+        {$set: data},
+        {
+          upsert: true,
+        },
+      );
+    }
+  } catch (error) {
+    res.send({error: true, msg: error});
+  }
+});
+sensorsRouter.post('/nearby', async (req: Request, res: Response) => {
   const data: User = req.body;
   let sensors: Sensor[] = [];
   try {

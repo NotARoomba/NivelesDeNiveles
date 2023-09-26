@@ -12,6 +12,7 @@ import {useState} from 'react';
 import DangerLevelButton from './DangerLevelButton';
 import { callAPI, getData } from '../utils/Functions';
 import User from '../../backend/models/user';
+import ReportType from '../../backend/models/report';
 
 export default function Report({reportFunction}: ReportProps) {
   const [dangerSelected, setDangerSelected] = useState<DangerType>(
@@ -26,7 +27,7 @@ export default function Report({reportFunction}: ReportProps) {
       return Alert.alert('Falta Informacion', 'Por favor llena la evidencia');
     }
     const reporter: User = (await callAPI('/users/' + (await getData('number')), 'GET')).user
-    const res = await callAPI('/report/', 'POST', {reporter: reporter.number, location: reporter.location, type: dangerSelected, level: levelSelected})
+    const res = await callAPI('/report/', 'POST', new ReportType(reporter.number, dangerSelected, levelSelected, Date.now(), evidence, reporter.location))
     if (!res.error) return Alert.alert('Éxito!', res.msg)
     else return Alert.alert('Error!', res.msg)
   };

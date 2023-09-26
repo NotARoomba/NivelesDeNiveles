@@ -6,6 +6,7 @@ export default class Report {
     public type: DangerType,
     public level: DangerLevel,
     public timestamp: number,
-    public location: {type: 'Point'; coordinates: Array<Number>},
+    public desciption: string,
+    public location: {type: 'Point'; coordinates: Array<number>},
   ) {}
 }

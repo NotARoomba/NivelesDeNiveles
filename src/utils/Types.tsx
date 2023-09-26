@@ -1,11 +1,6 @@
 import {StyleSheet} from 'react-native';
 import Sensor from '../../backend/models/sensor';
 
-export interface User {
-  number: string;
-  location: {type: 'Point'; coordinates: Array<Number>};
-}
-
 export enum DangerLevel {
   SAFE,
   RISK,

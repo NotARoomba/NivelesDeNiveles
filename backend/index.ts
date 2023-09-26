@@ -10,6 +10,7 @@ import NivelesEvents from './models/events';
 import User from './models/user';
 import {createServer} from 'http';
 import { reportRouter } from './routers/report.router';
+import checkInfo from './services/checkInfo.service';
 const app = express();
 const httpServer = createServer(app);
 const port = 3001;
@@ -29,7 +30,7 @@ const genSecret = async (req: Request) => {
 
 const io = new Server(httpServer, {cors: corsOptions});
 
-connectToDatabase()
+connectToDatabase(io)
   .then(() => {
     app.use(cors(corsOptions));
     app.use(express.json());
@@ -70,6 +71,7 @@ connectToDatabase()
     // app.listen(port, () => {
     //   console.log(`Server started at http://localhost:${port}`);
     // });
+    // setInterval(() => checkInfo(io), 1000 * 10); // update data every so seconds
     httpServer.listen(port);
     console.log('Server Started!');
   })
