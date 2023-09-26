@@ -5,7 +5,7 @@ const env = dotenv.load({
   MONGODB: String,
   USER_DATABASE: String,
   USER_COLLECTION: String,
-  SENSOR_DATABASE: String,
+  INFO_DATABASE: String,
   SENSOR_COLLECTION: String,
   REPORT_COLLECTION: String,
   INCIDENT_COLLECTION: String,
@@ -29,20 +29,23 @@ export async function connectToDatabase() {
   );
   collections.users = usersCollection;
 
-  const sensorDB: mongoDB.Db = client.db(env.USER_DATABASE);
+  const infoDB: mongoDB.Db = client.db(env.INFO_DATABASE);
 
-  const sensorsCollection: mongoDB.Collection = sensorDB.collection(
+  const sensorsCollection: mongoDB.Collection = infoDB.collection(
     env.SENSOR_COLLECTION,
   );
   collections.sensors = sensorsCollection;
 
-  const reportsCollection: mongoDB.Collection = sensorDB.collection(
+  const reportsCollection: mongoDB.Collection = infoDB.collection(
     env.REPORT_COLLECTION,
   );
+  collections.reports = reportsCollection;
 
-  const incidentsCollection: mongoDB.Collection = sensorDB.collection(
+  const incidentsCollection: mongoDB.Collection = infoDB.collection(
     env.INCIDENT_COLLECTION,
   );
+
+  collections.incidents = incidentsCollection
 
   console.log('Successfully connected to database!');
 }

@@ -26,7 +26,9 @@ export default function Report({reportFunction}: ReportProps) {
       return Alert.alert('Falta Informacion', 'Por favor llena la evidencia');
     }
     const reporter: User = (await callAPI('/users/' + (await getData('number')), 'GET')).user
-    await callAPI('/report/', 'POST', {reporter: reporter.number, location: reporter.location, type: dangerSelected, level: levelSelected})
+    const res = await callAPI('/report/', 'POST', {reporter: reporter.number, location: reporter.location, type: dangerSelected, level: levelSelected})
+    if (!res.error) return Alert.alert('Éxito!', res.msg)
+    else return Alert.alert('Error!', res.msg)
   };
   return (
     <View className="bg-accent p-3 pt-0">
