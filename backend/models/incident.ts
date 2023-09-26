@@ -1,6 +1,4 @@
-import {DangerLevel, DangerType} from '../../src/utils/Types';
-import Sensor from './sensor';
-import User from './user';
+import {DangerLevel, DangerType} from './types';
 
 export default class Incident {
   constructor(

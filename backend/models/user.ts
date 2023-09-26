@@ -1,5 +1,3 @@
-import { DangerLevel } from "../../src/utils/Types";
-
 export default class User {
   constructor(
     public number: string,

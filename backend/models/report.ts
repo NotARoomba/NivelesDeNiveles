@@ -1,4 +1,4 @@
-import {DangerLevel, DangerType} from '../../src/utils/Types';
+import {DangerLevel, DangerType} from './types';
 
 export default class Report {
   constructor(

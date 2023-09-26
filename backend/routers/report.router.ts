@@ -1,7 +1,5 @@
 import express, {Request, Response} from 'express';
 import {collections} from '../services/database.service';
-import User from '../models/sensor';
-import Sensor from '../models/sensor';
 import Report from '../models/report';
 
 export const reportRouter = express.Router();

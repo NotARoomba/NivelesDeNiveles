@@ -93,7 +93,7 @@ export default function Home({isDarkMode}: ScreenProp) {
       const socket = io(Config.API_URL);
       // socket.emit(NivelesEvents.CONNECT)
       socket.on(
-        NivelesEvents.LOCATION_DATA_UPDATE,
+        NivelesEvents.SEND_LOCATION_DATA,
         (locationData: LocationData) => {
           setLocationData(locationData);
         },

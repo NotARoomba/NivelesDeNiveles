@@ -2,8 +2,7 @@ import * as mongoDB from 'mongodb';
 import { Server, Socket } from 'socket.io';
 import * as dotenv from 'ts-dotenv';
 import Sensor from '../models/sensor';
-import NivelesEvents from '../models/events';
-import { DangerLevel } from '../../src/utils/Types';
+import {DangerLevel, DangerType} from '../models/types';
 import Incident from '../models/incident';
 
 const env = dotenv.load({
