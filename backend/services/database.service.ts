@@ -4,6 +4,7 @@ import * as dotenv from 'ts-dotenv';
 import Sensor from '../models/sensor';
 import {DangerLevel, DangerType} from '../models/types';
 import Incident from '../models/incident';
+import Report from '../models/report';
 
 const env = dotenv.load({
   MONGODB: String,
@@ -66,8 +67,8 @@ export async function connectToDatabase(io: Server) {
       let updatedSensor = next.fullDocument?.updatedFields as Sensor
       let beforeSensor = next.fullDocumentBeforeChange?.updatedFields as Sensor
       console.log(updatedSensor)
-        //from inistal safe state to other danger states
-        if (updatedSensor.status > DangerLevel.SAFE && beforeSensor.status === DangerLevel.SAFE) {
+        //from inistal safe state to other danger states or danger stat to safe state
+        if (updatedSensor.status != beforeSensor.status) {
           //need to find an existing incident (user report) or make a new incident
           const incidentsNear: Incident[] = (await incidentsCollection.find({
               location: {
@@ -99,4 +100,31 @@ export async function connectToDatabase(io: Server) {
     })
     // also check when a report has been created and then check for a prevoius incident and then update the numebr of reports as needed
     // also need to check if the report has expired every so and so hours and then delete t so that the only report tat are there are th ones that are currently ging on
+    reportsCollection.watch().on('change', async (next) => {
+      if (next.operationType == 'insert') {
+        console.log('REPORT INSERTED')
+        const report: Report = next.fullDocument as Report;
+        const incidentsNear: Incident[] = (await incidentsCollection.find({
+          location: {
+            $near: {
+              $geometry: {
+                type: 'Point',
+                coordinates: report.location,
+              },
+              $maxDistance: 2000,
+            },
+          }, 
+          type: report.type,
+        })
+        .toArray()) as unknown as Incident[];
+        if (incidentsNear.length === 0) {
+          await incidentsCollection.insertOne(new Incident(report.type, report.level, 1, Date.now(), false, false, getRange(1), report.location))
+        }
+        for (let incident of incidentsNear) { 
+          // add oen to the report, note as the report does not change the status 'or level of the report as the sensors take priority/ are more trustworthy 
+          await incidentsCollection.updateOne({location: incident.location}, { $inc: { numberOfReports: 1 } })
+        }
+      }
+    });
+
 }

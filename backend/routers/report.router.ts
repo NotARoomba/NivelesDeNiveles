@@ -13,7 +13,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
      const pastReports: Report[] = (await collections.reports
       .find({reporter: report.reporter})
       .toArray()) as unknown as Report[];
-    if (pastReports.length >= 1) return res.send({error: true, msg: 'You have already reported too many times!'});
+    if (pastReports.length >= 1) return res.send({error: true, msg: 'You have already reported a disaster!'});
     await collections.reports.insertOne(report);
     res.send({error: false, msg: 'Mandamos tu reporta!'});
     } else {
