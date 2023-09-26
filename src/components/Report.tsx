@@ -10,6 +10,8 @@ import {DangerLevel, DangerType, ReportProps} from '../utils/Types';
 import DangerTypeButton from './DangerTypeButton';
 import {useState} from 'react';
 import DangerLevelButton from './DangerLevelButton';
+import { callAPI, getData } from '../utils/Functions';
+import User from '../../backend/models/user';
 
 export default function Report({reportFunction}: ReportProps) {
   const [dangerSelected, setDangerSelected] = useState<DangerType>(
@@ -19,10 +21,12 @@ export default function Report({reportFunction}: ReportProps) {
     DangerLevel.SAFE,
   );
   const [evidence, onChangeEvidence] = useState('');
-  const submitReport = () => {
+  const submitReport = async () => {
     if (evidence === '') {
       return Alert.alert('Falta Informacion', 'Por favor llena la evidencia');
     }
+    const reporter: User = (await callAPI('/users/' + (await getData('number')), 'GET')).user
+    await callAPI('/report/', 'POST', {reporter: reporter.number, location: reporter.location, type: dangerSelected, level: levelSelected})
   };
   return (
     <View className="bg-accent p-3 pt-0">

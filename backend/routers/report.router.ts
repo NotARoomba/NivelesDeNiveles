@@ -2,47 +2,23 @@ import express, {Request, Response} from 'express';
 import {collections} from '../services/database.service';
 import User from '../models/sensor';
 import Sensor from '../models/sensor';
+import Report from '../models/report';
 
-export const sensorsRouter = express.Router();
+export const reportRouter = express.Router();
 
-sensorsRouter.use(express.json());
+reportRouter.use(express.json());
 
-sensorsRouter.get('/', async (req: Request, res: Response) => {
+reportRouter.post('/', async (req: Request, res: Response) => {
+  const report: Report = req.body;
   try {
-    let sensors: Sensor[] = [];
-    if (collections.sensors) {
-      sensors = (await collections.sensors
-        .find({})
-        .toArray()) as unknown as Sensor[];
+    if (collections.reports) {
+     const pastReports: Report[] = (await collections.reports
+      .find({reporter: report.reporter})
+      .toArray()) as unknown as Report[];
+    if (pastReports.length > 1) return res.send({error: true, msg: 'You have already reported too many times!'});
+    await collections.reports.insertOne(report);
     }
-    res.send({sensors, error: false, msg: 'Got Sensor Data!'});
-  } catch (error) {
-    res.send({error: true, msg: error});
-  }
-});
-sensorsRouter.post('/', async (req: Request, res: Response) => {
-  const data: User = req.body;
-  let sensors: Sensor[] = [];
-  try {
-    if (collections.sensors) {
-      collections.sensors.createIndex({location: '2dsphere'});
-
-      sensors = (await collections.sensors
-        .find({
-          location: {
-            $near: {
-              $geometry: {
-                type: 'Point',
-                coordinates: data.location,
-              },
-              $maxDistance: 2000,
-            },
-          },
-        })
-        .toArray()) as unknown as Sensor[];
-      console.log(sensors);
-    }
-    res.send({sensors, error: false, msg: 'Got Risk!'});
+    res.send({error: false, msg: 'Report Sent!'});
   } catch (error) {
     res.send({error: true, msg: error});
   }

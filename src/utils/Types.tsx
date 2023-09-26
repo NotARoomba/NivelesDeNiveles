@@ -18,6 +18,10 @@ export enum DangerType {
   AVALANCHE,
 }
 
+export interface PanelProps {
+  locationData: LocationData;
+}
+
 export interface AdviceProps {
   status: DangerLevel;
   isOpen: boolean;
@@ -39,6 +43,11 @@ export interface DangerLevelButtonProps {
 
 export interface RiskMeterProps {
   status: DangerLevel;
+  reportFunction: () => void;
+}
+
+export interface StatusProps {
+  locationData: LocationData;
   reportFunction: () => void;
 }
 

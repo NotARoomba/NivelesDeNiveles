@@ -6,7 +6,7 @@ import Login from './src/pages/Login';
 import {callAPI, getData} from './src/utils/Functions';
 import SplashScreen from 'react-native-splash-screen';
 import Config from 'react-native-config';
-import { io } from "socket.io-client";
+import {io} from 'socket.io-client';
 import NivelesEvents from './backend/models/events';
 export default function App() {
   const [logged, setlLogged] = useState(false);

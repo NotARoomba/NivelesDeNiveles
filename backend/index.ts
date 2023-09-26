@@ -5,10 +5,11 @@ import {usersRouter} from './routers/users.router';
 import {AuthError, HMAC} from 'hmac-auth-express';
 import {sensorsRouter} from './routers/sensors.router';
 import {verifyRouter} from './routers/verify.router';
-import { Server, Socket } from "socket.io";
+import {Server, Socket} from 'socket.io';
 import NivelesEvents from './models/events';
 import User from './models/user';
-import { createServer } from 'http';
+import {createServer} from 'http';
+import { reportRouter } from './routers/report.router';
 const app = express();
 const httpServer = createServer(app);
 const port = 3001;
@@ -26,7 +27,7 @@ const genSecret = async (req: Request) => {
   return req ? Math.floor(Date.now() / (30 * 1000)).toString() : '';
 };
 
-const io = new Server(httpServer, { cors: corsOptions});
+const io = new Server(httpServer, {cors: corsOptions});
 
 connectToDatabase()
   .then(() => {
@@ -36,14 +37,15 @@ connectToDatabase()
     app.use('/users', usersRouter);
     app.use('/sensors', sensorsRouter);
     app.use('/verify', verifyRouter);
+    app.use('/report', reportRouter);
     //socket data
-    
-  io.on(NivelesEvents.CONNECT, (socket: Socket) => {
-    console.log(`New client connected: ${socket.id}`)
-    socket.on(NivelesEvents.DISCONNECT, () => {
-      console.log('Client disconnected');
+
+    io.on(NivelesEvents.CONNECT, (socket: Socket) => {
+      console.log(`New client connected: ${socket.id}`);
+      socket.on(NivelesEvents.DISCONNECT, () => {
+        console.log('Client disconnected');
+      });
     });
-  });
 
     app.use('/', async (_req: Request, res: Response) => {
       res.status(200).send('You arent supposed to be here');

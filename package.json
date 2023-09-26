@@ -51,6 +51,7 @@
     "metro-react-native-babel-preset": "0.77.0",
     "pod-install": "^0.1.39",
     "prettier": "^3.0.3",
+    "react-native-get-location": "^4.0.0",
     "react-test-renderer": "18.2.0",
     "typescript": "5.2.2"
   },
