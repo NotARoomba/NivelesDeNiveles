@@ -73,10 +73,7 @@ export async function connectToDatabase(io: Server) {
           const incidentsNear: Incident[] = (await incidentsCollection.find({
               location: {
                 $near: {
-                  $geometry: {
-                    type: 'Point',
-                    coordinates: updatedSensor.location,
-                  },
+                  $geometry: {...updatedSensor.location},
                   $maxDistance: 2000,
                 },
               }, 
@@ -108,10 +105,7 @@ export async function connectToDatabase(io: Server) {
         const incidentsNear: Incident[] = (await incidentsCollection.find({
           location: {
             $near: {
-              $geometry: {
-                type: 'Point',
-                coordinates: report.location,
-              },
+              $geometry: {...report.location},
               $maxDistance: 2000,
             },
           }, 
