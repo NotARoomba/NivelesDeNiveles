@@ -60,10 +60,10 @@ export async function connectToDatabase(io: Server) {
 
   collections.incidents = incidentsCollection
 
-  incidentsCollection.createIndex( { geometry : "2dsphere" } )
-  reportsCollection.createIndex( { geometry : "2dsphere" } )
-  sensorsCollection.createIndex( { geometry : "2dsphere" } )
-  usersCollection.createIndex( { geometry : "2dsphere" } )
+  incidentsCollection.createIndex( { location : "2dsphere" } )
+  reportsCollection.createIndex( { location : "2dsphere" } )
+  sensorsCollection.createIndex( { location : "2dsphere" } )
+  usersCollection.createIndex( { location : "2dsphere" } )
 
   
 
