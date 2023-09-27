@@ -23,8 +23,10 @@
   <a href="#related">Related</a> •
   <a href="#license">License</a>
 </p>
-
-![screenshot](https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/app/img/markdownify.gif)
+<div align="center">
+  
+![screenshot](https://raw.githubusercontent.com/NotARoomba/NivelesDeNiveles/master/public/demo.gif)
+</div>
 
 ## Key Features
 
