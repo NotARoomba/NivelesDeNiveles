@@ -1,10 +1,10 @@
-<h1 align="center">
+<div align="center">
   <br>
   <img src="https://raw.githubusercontent.com/NotARoomba/NivelesDeNiveles/master/public/icon.png" alt="Niveles" width="200">
   <br>
-  🌊Niveles De Niveles🌊
+  <h1>a</h1>🌊Niveles De Niveles🌊
   <br>
-</h1>
+</div>
 
 <h4 align="center">An early warning application made with <a href="https://reactnative.dev/" target="_blank">React Native</a>.</h4>
 
