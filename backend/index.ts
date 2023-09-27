@@ -47,7 +47,7 @@ connectToDatabase(io)
     io.on(NivelesEvents.CONNECT, (socket: Socket) => {
       console.log(`New client connected: ${socket.id}`);
       socket.on(NivelesEvents.REQUEST_LOCATION_DATA, async (user: User, callback) => {
-        console.log(user.location)
+        console.log(user.location, user)
         const incidentsNear: Incident[] = (await collections.incidents?.find({
           location: {
             $near: {
