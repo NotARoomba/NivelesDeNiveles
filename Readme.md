@@ -5,7 +5,6 @@
   <h1>🌊Niveles De Niveles🌊</h1>
   <br>
 </div>
-
 <h4 align="center">An early warning application made with <a href="https://reactnative.dev/" target="_blank">React Native</a>.</h4>
 
 <div align="center">
