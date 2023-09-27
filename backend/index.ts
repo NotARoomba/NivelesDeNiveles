@@ -54,7 +54,7 @@ connectToDatabase(io)
           location: {
             $near: {
               $geometry: {...user.location},
-              distanceField: 'distance',
+              distanceField: 'dist',
             },
           },
           over: false,
