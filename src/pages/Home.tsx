@@ -93,7 +93,7 @@ export default function Home({isDarkMode}: ScreenProp) {
       //then open a websocket connecton listening for updates around the location
       const socket = io(Config.API_URL);
       // socket.emit(NivelesEvents.CONNECT)
-      console.log(user)
+      // console.log(user)
       socket.on(NivelesEvents.UPDATE_LOCATION_DATA, () => {
         socket.emit(NivelesEvents.REQUEST_LOCATION_DATA, user,
           (locationData: LocationData) => {

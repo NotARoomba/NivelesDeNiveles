@@ -10,7 +10,7 @@ import NivelesEvents from './models/events';
 import User from './models/user';
 import {createServer} from 'http';
 import { reportRouter } from './routers/report.router';
-import checkInfo from './services/checkInfo.service';
+import prune from './services/prune.service';
 import Incident from './models/incident';
 import { DangerLevel } from './models/types';
 import Sensor from './models/sensor';
@@ -101,7 +101,7 @@ connectToDatabase(io)
     // app.listen(port, () => {
     //   console.log(`Server started at http://localhost:${port}`);
     // });
-    // setInterval(() => checkInfo(io), 1000 * 10); // update data every so seconds
+    setInterval(() => prune(), 1000 * 3600 * 2); // update data every so seconds
     httpServer.listen(port);
     console.log('Server Started!');
   })

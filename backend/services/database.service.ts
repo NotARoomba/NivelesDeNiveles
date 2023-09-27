@@ -79,16 +79,27 @@ export async function connectToDatabase(io: Server) {
         //from inistal safe state to other danger states or danger stat to safe state
         if (updatedSensor.status != beforeSensor.status) {
           //need to find an existing incident (user report) or make a new incident
-          const incidentsNear: Incident[] = (await incidentsCollection.find({
-              location: {
-                $near: {
-                  $geometry: {...updatedSensor.location},
-                  $maxDistance: 2000,
-                },
-              }, 
-              type: updatedSensor.type,
-            })
-            .toArray()) as unknown as Incident[];
+          const incidentsNear: Incident[] = (await incidentsCollection.aggregate([{
+            location: {
+              $near: {
+                $geometry: {...updatedSensor.location},
+                $maxDistance: 'distCalculated',
+              },
+            }, 
+            type: updatedSensor.type,
+            over: false,
+          },
+          {
+            "$match": {
+              $expr: {
+                $lte: [
+                  "$distCalculated",
+                  "$distance"
+                ]
+              }
+            }
+          }])
+          .toArray()) as unknown as Incident[];
             //make a new incident
             if (incidentsNear.length === 0) {
               await incidentsCollection.insertOne(new Incident(updatedSensor.type, updatedSensor.status, 3, Date.now(), false, false, getRange(3), updatedSensor.location))
@@ -96,9 +107,9 @@ export async function connectToDatabase(io: Server) {
             for (let incident of incidentsNear) { 
               //then check if the incident inferior and then update the incident
               if (incident.level !== updatedSensor.status) {
-                await incidentsCollection.updateOne({location: incident.location}, {level: updatedSensor.status})
+                await incidentsCollection.updateOne({location: incident.location}, {level: updatedSensor.status, timestamp: Date.now()})
               } else {
-                await incidentsCollection.updateOne({location: incident.location}, { $inc: { numberOfReports: 3 } })
+                await incidentsCollection.updateOne({location: incident.location}, { $inc: { numberOfReports: 3 }, timestamp: Date.now() })
               } 
             }
         }
@@ -111,15 +122,26 @@ export async function connectToDatabase(io: Server) {
         console.log('REPORT INSERTED')
         const report: Report = next.fullDocument as Report;
         console.log(report)
-        const incidentsNear: Incident[] = (await incidentsCollection.find({
+        const incidentsNear: Incident[] = (await incidentsCollection.aggregate([{
           location: {
             $near: {
               $geometry: {...report.location},
-              $maxDistance: 2000,
+              $maxDistance: 'distCalculated',
             },
           }, 
           type: report.type,
-        })
+          over: false,
+        },
+        {
+          $match: {
+            $expr: {
+              $lte: [
+                "$distCalculated",
+                "$distance"
+              ]
+            }
+          }
+        }])
         .toArray()) as unknown as Incident[];
         if (incidentsNear.length === 0) {
           await incidentsCollection.insertOne(new Incident(report.type, DangerLevel.SAFE, 1, Date.now(), false, false, getRange(1), report.location))
@@ -131,8 +153,13 @@ export async function connectToDatabase(io: Server) {
       }
     });
     incidentsCollection.watch().on('change',  async (next) => {
-      //need to emit SEND_LOCATION_DATA to all the clients that the incident affects
-      // need to somehow get the client websocket id
-        io.emit(NivelesEvents.UPDATE_LOCATION_DATA)
+      // updates all the location data for all the users using a hacky hack 
+      //update range of incident
+      if (next.operationType === 'update' && !next.fullDocument?.over) {
+        await incidentsCollection.updateOne({location: next.fullDocument?.location}, { range: getRange(next.fullDocument?.numberOfReports) })
+        io.emit(NivelesEvents.UPDATE_LOCATION_DATA);  
+      } else {
+        io.emit(NivelesEvents.UPDATE_LOCATION_DATA); 
+      } 
     })
 }
