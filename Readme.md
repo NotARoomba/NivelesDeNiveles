@@ -23,8 +23,10 @@
   <a href="#related">Related</a> •
   <a href="#license">License</a>
 </p>
-
+<div align="center">
+  
 ![screenshot](https://raw.githubusercontent.com/NotARoomba/NivelesDeNiveles/master/public/demo.gif)
+</div>
 
 ## Key Features
 
