@@ -53,8 +53,8 @@ connectToDatabase(io)
         console.log(user)
         const incidentsNear: Incident[] = (await collections.incidents?.aggregate([{
           location: {
-            $near: {
-              $geometry: {...user.location},
+            $geoNear: {
+              $near: {...user.location},
               distanceField: 'distance',
               spherical: true,
             },
