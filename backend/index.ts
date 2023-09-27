@@ -1,6 +1,6 @@
 import express, {Request, Response} from 'express';
 import cors, {CorsOptions} from 'cors';
-import {connectToDatabase} from './services/database.service';
+import {collections, connectToDatabase} from './services/database.service';
 import {usersRouter} from './routers/users.router';
 import {AuthError, HMAC} from 'hmac-auth-express';
 import {sensorsRouter} from './routers/sensors.router';
@@ -11,6 +11,9 @@ import User from './models/user';
 import {createServer} from 'http';
 import { reportRouter } from './routers/report.router';
 import checkInfo from './services/checkInfo.service';
+import Incident from './models/incident';
+import { DangerLevel } from './models/types';
+import Sensor from './models/sensor';
 const app = express();
 const httpServer = createServer(app);
 const port = 3001;
@@ -43,9 +46,29 @@ connectToDatabase(io)
 
     io.on(NivelesEvents.CONNECT, (socket: Socket) => {
       console.log(`New client connected: ${socket.id}`);
-      socket.on(NivelesEvents.REQUEST_LOCATION_DATA, (data, callback) => {
-        console.log(data);
-        callback(data);
+      socket.on(NivelesEvents.REQUEST_LOCATION_DATA, async (user, callback) => {
+        const incidentsNear: Incident[] = (await collections.incidents?.find({
+          location: {
+            $near: {
+              $geometry: {...user.location},
+              $maxDistance: 2000,
+            },
+          },
+        })
+        .toArray()) as unknown as Incident[];
+        let status = DangerLevel.SAFE;
+        for (let incident of incidentsNear) {
+          if (incident.level > status) status = incident.level;
+        }
+        const sensors: Sensor[] = (await collections.sensors?.find({
+          location: {
+            $near: {
+              $geometry: {...user.location},
+              $maxDistance: 2000,
+            },
+          },
+        }).toArray()) as unknown as Sensor[];
+        callback({status, sensors});
       })
       socket.on(NivelesEvents.DISCONNECT, () => {
         console.log('Client disconnected');

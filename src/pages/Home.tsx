@@ -94,9 +94,11 @@ export default function Home({isDarkMode}: ScreenProp) {
       // socket.emit(NivelesEvents.CONNECT)
       socket.emit(NivelesEvents.REQUEST_LOCATION_DATA, { payload: user},
         (locationData: LocationData) => {
-          console.log(locationData);
           setLocationData(locationData);
         });
+      socket.on(NivelesEvents.SEND_LOCATION_DATA, (locationData: LocationData) => {
+        setLocationData(locationData);
+      })
     }
     updateMap();
   }, []);
