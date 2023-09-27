@@ -74,25 +74,15 @@ connectToDatabase(io)
         for (let incident of incidentsNear) {
           if (incident.level > status) status = incident.level;
         }
-        const sensors: Sensor[] = (await collections.sensors?.aggregate([{
+        const sensors: Sensor[] = (await collections.sensors?.find({
           location: {
             $near: {
               $geometry: {...user.location},
-              distanceField: 'dist',
+              $maxDistance: 2000,
             },
           },
           over: false,
-        },
-        {
-          $match: {
-            $expr: {
-              $lte: [
-                "$dist",
-                "$range"
-              ]
-            }
-          }
-        }]).toArray()) as unknown as Sensor[];
+        }).toArray()) as unknown as Sensor[];
         callback({status, sensors});
       })
       socket.on(NivelesEvents.DISCONNECT, () => {
