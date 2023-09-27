@@ -3,8 +3,6 @@
   <img src="https://raw.githubusercontent.com/NotARoomba/NivelesDeNiveles/master/public/icon.png" alt="Niveles" width="200">
   <br>
   <h1>🌊Niveles De Niveles🌊</h1>
-  <br>
-  <br>
 </div>
 
 <h4 align="center">An early warning application made with <a href="https://reactnative.dev/" target="_blank">React Native</a>.</h4>
