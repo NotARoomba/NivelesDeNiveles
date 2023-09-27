@@ -94,7 +94,7 @@ export async function connectToDatabase(io: Server) {
               $expr: {
                 $lte: [
                   "$distCalculated",
-                  "$distance"
+                  "$range"
                 ]
               }
             }
@@ -137,7 +137,7 @@ export async function connectToDatabase(io: Server) {
             $expr: {
               $lte: [
                 "$distCalculated",
-                "$distance"
+                "$range"
               ]
             }
           }
