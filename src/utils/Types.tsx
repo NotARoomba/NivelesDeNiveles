@@ -13,6 +13,11 @@ export enum DangerType {
   AVALANCHE,
 }
 
+export interface EvidenceProps {
+  evidence: string;
+  onChangeEvidence: (nev: string) => void;
+}
+
 export interface PanelProps {
   locationData: LocationData;
 }

@@ -13,6 +13,8 @@ import DangerLevelButton from './DangerLevelButton';
 import { callAPI, getData } from '../utils/Functions';
 import User from '../../backend/models/user';
 import ReportType from '../../backend/models/report';
+import { Camera, useCameraDevice } from 'react-native-vision-camera';
+import Evidence from './Evidence';
 
 export default function Report({reportFunction}: ReportProps) {
   const [dangerSelected, setDangerSelected] = useState<DangerType>(
@@ -31,6 +33,7 @@ export default function Report({reportFunction}: ReportProps) {
     if (!res.error) return Alert.alert('Éxito!', res.msg)
     else return Alert.alert('Error!', res.msg)
   };
+
   return (
     <View className="bg-accent p-3 pt-0">
       <View className="flex flex-row my-auto mt-2.5">
@@ -89,14 +92,7 @@ export default function Report({reportFunction}: ReportProps) {
       </View>
       <View className="justify-center p-1">
         <Text className="text-2xl text-center mt-4">Evidencia</Text>
-        <TextInput
-          onChangeText={onChangeEvidence}
-          value={evidence}
-          keyboardType="default"
-          placeholderTextColor={'#ffffff'}
-          multiline
-          className="flex justify-center align-middle my-auto h-10 pl-3 py-0 text-lg border mt-3 w-12/12 rounded-full bg-main text-light font-bold"
-        />
+        <Evidence />
       </View>
       <View className="justify-center p-1 mt-2">
         <TouchableOpacity

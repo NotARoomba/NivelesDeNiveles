@@ -54,21 +54,18 @@ connectToDatabase(io)
           location: {
             $near: {
               $geometry: {...user.location},
-              $maxDistance: 'distCalculated',
+              $maxDistance: 'distance',
             },
           },
           over: false,
         },
-        {
-          "$match": {
-            $expr: {
-              $lte: [
-                "$distCalculated",
-                "$range"
-              ]
-            }
+        { "$redact": {
+          "$cond": {
+            "if": { "$lte": [ "$distance", "$range" ] },
+            "then": "$$KEEP",
+            "else": "$$PRUNE"
           }
-        }])
+        }}])
         .toArray()) as unknown as Incident[];
         let status = DangerLevel.SAFE;
         for (let incident of incidentsNear) {
@@ -78,21 +75,18 @@ connectToDatabase(io)
           location: {
             $near: {
               $geometry: {...user.location},
-              $maxDistance: 'distCalculated',
+              $maxDistance: 'distance',
             },
           },
           over: false,
         },
-        {
-          "$match": {
-            $expr: {
-              $lte: [
-                "$distCalculated",
-                "$range"
-              ]
-            }
+        { "$redact": {
+          "$cond": {
+            "if": { "$lte": [ "$distance", "$range" ] },
+            "then": "$$KEEP",
+            "else": "$$PRUNE"
           }
-        }]).toArray()) as unknown as Sensor[];
+        }}]).toArray()) as unknown as Sensor[];
         callback({status, sensors});
       })
       socket.on(NivelesEvents.DISCONNECT, () => {
