@@ -83,19 +83,22 @@ export async function connectToDatabase(io: Server) {
             location: {
               $near: {
                 $geometry: {...updatedSensor.location},
-                $maxDistance: 'distance',
+                $maxDistance: 'dist',
               },
             }, 
             type: updatedSensor.type,
             over: false,
           },
-          { "$redact": {
-            "$cond": {
-              "if": { "$lte": [ "$distance", "$range" ] },
-              "then": "$$KEEP",
-              "else": "$$PRUNE"
+          {
+            $match: {
+              $expr: {
+                lte: [
+                  "$dist",
+                  "$range"
+                ]
+              }
             }
-          }}])
+          }])
           .toArray()) as unknown as Incident[];
             //make a new incident
             if (incidentsNear.length === 0) {
@@ -123,19 +126,22 @@ export async function connectToDatabase(io: Server) {
           location: {
             $near: {
               $geometry: {...report.location},
-              $maxDistance: 'distance',
+              $maxDistance: 'dist',
             },
           }, 
           type: report.type,
           over: false,
         },
-        { "$redact": {
-          "$cond": {
-            "if": { "$lte": [ "$distance", "$range" ] },
-            "then": "$$KEEP",
-            "else": "$$PRUNE"
+        {
+          $match: {
+            $expr: {
+              lte: [
+                "$dist",
+                "$range"
+              ]
+            }
           }
-        }}])
+        }])
         .toArray()) as unknown as Incident[];
         if (incidentsNear.length === 0) {
           await incidentsCollection.insertOne(new Incident(report.type, DangerLevel.SAFE, 1, Date.now(), false, false, getRange(1), report.location))
