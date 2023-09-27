@@ -4,6 +4,7 @@ import Home from './src/pages/Home';
 // import {callAPI, getData} from './src/utils/DataTypes';
 import Login from './src/pages/Login';
 import {callAPI, getData} from './src/utils/Functions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function App() {
   const [logged, setlLogged] = useState(false);
   const [isDarkMode, _setDarkMode] = useState(
@@ -15,6 +16,8 @@ export default function App() {
   useEffect(() => {
     // checks if user is valid in database and if not then kicks out
     // storeData('number', '+573104250018');
+    // AsyncStorage.removeItem('number');
+
     getData('number').then(number => {
       callAPI('/users/' + number, 'GET').then(res => {
         if (res == null) {

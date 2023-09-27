@@ -92,7 +92,7 @@ export default function Report({reportFunction}: ReportProps) {
       </View>
       <View className="justify-center p-1">
         <Text className="text-2xl text-center mt-4">Evidencia</Text>
-        <Evidence />
+        <Evidence evidence={evidence} onChangeEvidence={onChangeEvidence} />
       </View>
       <View className="justify-center p-1 mt-2">
         <TouchableOpacity
