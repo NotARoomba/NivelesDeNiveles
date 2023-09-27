@@ -43,6 +43,10 @@ connectToDatabase(io)
 
     io.on(NivelesEvents.CONNECT, (socket: Socket) => {
       console.log(`New client connected: ${socket.id}`);
+      socket.on(NivelesEvents.REQUEST_LOCATION_DATA, (data, callback) => {
+        console.log(data);
+        callback(data);
+      })
       socket.on(NivelesEvents.DISCONNECT, () => {
         console.log('Client disconnected');
       });

@@ -121,7 +121,7 @@ export async function connectToDatabase(io: Server) {
         })
         .toArray()) as unknown as Incident[];
         if (incidentsNear.length === 0) {
-          await incidentsCollection.insertOne(new Incident(report.type, report.level, 1, Date.now(), false, false, getRange(1), report.location))
+          await incidentsCollection.insertOne(new Incident(report.type, DangerLevel.SAFE, 1, Date.now(), false, false, getRange(1), report.location))
         }
         for (let incident of incidentsNear) { 
           // add oen to the report, note as the report does not change the status 'or level of the report as the sensors take priority/ are more trustworthy 
