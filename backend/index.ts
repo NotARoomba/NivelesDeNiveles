@@ -78,21 +78,12 @@ connectToDatabase(io)
           location: {
             $near: {
               $geometry: {...user.location},
-              $maxDistance: 'dist',
+              $maxDistance: 2000,
             },
           },
           over: false,
         },
-        {
-          $match: {
-            $expr: {
-              lte: [
-                "$dist",
-                "$range"
-              ]
-            }
-          }
-        }]).toArray()) as unknown as Sensor[];
+        ]).toArray()) as unknown as Sensor[];
         callback({status, sensors});
       })
       socket.on(NivelesEvents.DISCONNECT, () => {
