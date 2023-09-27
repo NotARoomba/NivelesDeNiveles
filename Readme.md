@@ -8,13 +8,13 @@
 
 <h4 align="center">An early warning application made with <a href="https://reactnative.dev/" target="_blank">React Native</a>.</h4>
 
-<h1 align="center">
+<p align="center">
   
 ![React Native](https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 
-</h1>
+</p>
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
