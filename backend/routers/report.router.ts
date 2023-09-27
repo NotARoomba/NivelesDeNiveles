@@ -1,6 +1,7 @@
 import express, {Request, Response} from 'express';
 import {collections} from '../services/database.service';
 import Report from '../models/report';
+import { DangerType } from '../models/types';
 
 export const reportRouter = express.Router();
 
@@ -14,6 +15,10 @@ reportRouter.post('/', async (req: Request, res: Response) => {
       .find({reporter: report.reporter})
       .toArray()) as unknown as Report[];
     if (pastReports.length >= 1) return res.send({error: true, msg: 'You have already reported a disaster!'});
+    //fire and water checks
+    if (report.type === DangerType.FIRE) {
+      console.log(report.image)
+    }
     await collections.reports.insertOne(report);
     res.send({error: false, msg: 'Mandamos tu reporta!'});
     } else {

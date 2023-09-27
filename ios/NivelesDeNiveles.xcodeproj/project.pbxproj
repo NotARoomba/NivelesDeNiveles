@@ -50,7 +50,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = NivelesDeNiveles/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = NivelesDeNiveles/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-NivelesDeNiveles-NivelesDeNivelesTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NivelesDeNiveles-NivelesDeNivelesTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		25ECCB66135144DCB9E7E57F /* FontAwesome6_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome6_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome6_Solid.ttf"; sourceTree = "<group>"; };
+		25ECCB66135144DCB9E7E57F /* FontAwesome6_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome6_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome6_Solid.ttf"; sourceTree = "<group>"; };
 		26BD9F53FD43486680A6C8F2 /* Archivo-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Archivo-Black.ttf"; path = "../public/archivo/Archivo-Black.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-NivelesDeNiveles.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NivelesDeNiveles.debug.xcconfig"; path = "Target Support Files/Pods-NivelesDeNiveles/Pods-NivelesDeNiveles.debug.xcconfig"; sourceTree = "<group>"; };
 		3E768D08EFE243B6A97AA7B1 /* Archivo-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Archivo-Medium.ttf"; path = "../public/archivo/Archivo-Medium.ttf"; sourceTree = "<group>"; };
@@ -62,7 +62,7 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-NivelesDeNiveles.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NivelesDeNiveles.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-NivelesDeNiveles-NivelesDeNivelesTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NivelesDeNiveles-NivelesDeNivelesTests.release.xcconfig"; path = "Target Support Files/Pods-NivelesDeNiveles-NivelesDeNivelesTests/Pods-NivelesDeNiveles-NivelesDeNivelesTests.release.xcconfig"; sourceTree = "<group>"; };
 		9B982527CAE8499987B4C1C5 /* Archivo-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Archivo-Bold.ttf"; path = "../public/archivo/Archivo-Bold.ttf"; sourceTree = "<group>"; };
-		A7EDDA6999DB43C3B4ADCE48 /* FontAwesome6_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome6_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome6_Regular.ttf"; sourceTree = "<group>"; };
+		A7EDDA6999DB43C3B4ADCE48 /* FontAwesome6_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome6_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome6_Regular.ttf"; sourceTree = "<group>"; };
 		B4898460F78C49038B0F3E1A /* Archivo-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Archivo-Thin.ttf"; path = "../public/archivo/Archivo-Thin.ttf"; sourceTree = "<group>"; };
 		DCBA0F44BC4247F2855EEBA9 /* Archivo-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Archivo-ExtraBold.ttf"; path = "../public/archivo/Archivo-ExtraBold.ttf"; sourceTree = "<group>"; };
 		DDB4ED72C212447B8789C688 /* Archivo-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Archivo-Regular.ttf"; path = "../public/archivo/Archivo-Regular.ttf"; sourceTree = "<group>"; };
@@ -544,6 +544,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2499QNG3JJ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = NivelesDeNiveles/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NivelesDeNiveles;
@@ -558,7 +559,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.notaroomba.NivelesDeNiveles;
 				PRODUCT_NAME = NivelesDeNiveles;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -573,6 +574,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2499QNG3JJ;
 				INFOPLIST_FILE = NivelesDeNiveles/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NivelesDeNiveles;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -586,7 +588,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.notaroomba.NivelesDeNiveles;
 				PRODUCT_NAME = NivelesDeNiveles;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

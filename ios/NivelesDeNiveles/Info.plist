@@ -35,10 +35,10 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) nessecita tu ubicacion para automaticamente buscar si estas en riesgo.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) nessecita tu camara para tomar foto del incidente.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>$(PRODUCT_NAME) nessecita tu ubicacion para automaticamente buscar si estas en riesgo.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Feather.ttf</string>
