@@ -29,7 +29,7 @@ export default function App() {
         } else {
           setlLogged(false);
         }
-        SplashScreen.hide();
+        // SplashScreen.hide();
         // Appearance.addChangeListener(appearance => {
         //   setDarkMode(appearance.colorScheme === 'dark');
         // });

@@ -10,6 +10,7 @@ import {io} from 'socket.io-client';
 import NivelesEvents from '../../backend/models/events';
 import Panel from '../components/Panel';
 import User from '../../backend/models/user';
+import SplashScreen from 'react-native-splash-screen';
 
 export default function Home({isDarkMode}: ScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
@@ -93,13 +94,13 @@ export default function Home({isDarkMode}: ScreenProp) {
       const socket = io(Config.API_URL);
       // socket.emit(NivelesEvents.CONNECT)
       console.log(user)
-      socket.emit(NivelesEvents.REQUEST_LOCATION_DATA, { payload: user},
-        (locationData: LocationData) => {
-          setLocationData(locationData);
-        });
-      socket.on(NivelesEvents.SEND_LOCATION_DATA, (locationData: LocationData) => {
-        setLocationData(locationData);
+      socket.on(NivelesEvents.UPDATE_LOCATION_DATA, () => {
+        socket.emit(NivelesEvents.REQUEST_LOCATION_DATA, user,
+          (locationData: LocationData) => {
+            setLocationData(locationData);
+          });
       })
+      SplashScreen.hide();
     }
     updateMap();
   }, []);

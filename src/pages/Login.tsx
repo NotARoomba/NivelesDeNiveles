@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {CountryPicker} from 'react-native-country-codes-picker';
 import {
   SafeAreaView,
@@ -14,6 +14,7 @@ import {
 import {FunctionScreenProp, styles} from '../utils/Types';
 import prompt from '@powerdesigninc/react-native-prompt';
 import {callAPI, storeData} from '../utils/Functions';
+import SplashScreen from 'react-native-splash-screen';
 
 async function checkLogin(
   number: string,
@@ -57,6 +58,9 @@ export default function Login({
   const [show, setShow] = useState(false);
   const [countryCode, setCountryCode] = useState('🇨🇴+57');
   const [disable, setDisable] = useState(false);
+  useEffect(() => {
+    SplashScreen.hide();
+  }, [])
   return (
     <SafeAreaView className=" bg-light">
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />

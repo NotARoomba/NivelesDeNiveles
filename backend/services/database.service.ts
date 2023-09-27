@@ -5,6 +5,7 @@ import Sensor from '../models/sensor';
 import {DangerLevel, DangerType} from '../models/types';
 import Incident from '../models/incident';
 import Report from '../models/report';
+import NivelesEvents from '../models/events';
 
 const env = dotenv.load({
   MONGODB: String,
@@ -129,5 +130,9 @@ export async function connectToDatabase(io: Server) {
         }
       }
     });
-
+    incidentsCollection.watch().on('change',  async (next) => {
+      //need to emit SEND_LOCATION_DATA to all the clients that the incident affects
+      // need to somehow get the client websocket id
+        io.emit(NivelesEvents.UPDATE_LOCATION_DATA)
+    })
 }
