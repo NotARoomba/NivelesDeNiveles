@@ -2,7 +2,7 @@
   <br>
   <img src="https://raw.githubusercontent.com/NotARoomba/NivelesDeNiveles/master/public/icon.png" alt="Niveles" width="200">
   <br>
-  🌊Niveles De Niveles
+  🌊Niveles De Niveles🌊
   <br>
 </h1>
 
