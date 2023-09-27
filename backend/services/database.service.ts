@@ -79,26 +79,16 @@ export async function connectToDatabase(io: Server) {
         //from inistal safe state to other danger states or danger stat to safe state
         if (updatedSensor.status != beforeSensor.status) {
           //need to find an existing incident (user report) or make a new incident
-          const incidentsNear: Incident[] = (await incidentsCollection.aggregate([{
+          const incidentsNear: Incident[] = (await incidentsCollection.find({
             location: {
               $near: {
                 $geometry: {...updatedSensor.location},
-                $maxDistance: 'dist',
+                $maxDistance: 2000,
               },
             }, 
             type: updatedSensor.type,
             over: false,
-          },
-          {
-            $match: {
-              $expr: {
-                lte: [
-                  "$dist",
-                  "$range"
-                ]
-              }
-            }
-          }])
+          })
           .toArray()) as unknown as Incident[];
             //make a new incident
             if (incidentsNear.length === 0) {
@@ -122,26 +112,16 @@ export async function connectToDatabase(io: Server) {
         console.log('REPORT INSERTED')
         const report: Report = next.fullDocument as Report;
         console.log(report)
-        const incidentsNear: Incident[] = (await incidentsCollection.aggregate([{
+        const incidentsNear: Incident[] = (await incidentsCollection.find({
           location: {
             $near: {
               $geometry: {...report.location},
-              $maxDistance: 'dist',
+              $maxDistance: 2000,
             },
           }, 
           type: report.type,
           over: false,
-        },
-        {
-          $match: {
-            $expr: {
-              lte: [
-                "$dist",
-                "$range"
-              ]
-            }
-          }
-        }])
+        })
         .toArray()) as unknown as Incident[];
         if (incidentsNear.length === 0) {
           await incidentsCollection.insertOne(new Incident(report.type, DangerLevel.SAFE, 1, Date.now(), false, false, getRange(1), report.location))

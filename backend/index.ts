@@ -53,8 +53,9 @@ connectToDatabase(io)
         console.log(user)
         const incidentsNear: Incident[] = (await collections.incidents?.find({
           location: {
-            $geoWithin: {
-              $centerSphere: [user.location.coordinates, '$range'],
+            $near: {
+              $geometry: {...user.location},
+              $maxDistance: 2000,
             },
           },
           over: false,
