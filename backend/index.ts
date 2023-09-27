@@ -51,34 +51,14 @@ connectToDatabase(io)
       socket.on(NivelesEvents.REQUEST_LOCATION_DATA, async (user: User, callback) => {
         // console.log(user.location, user)
         console.log(user)
-        const incidentsNear: Incident[] = (await collections.incidents?.aggregate([{
+        const incidentsNear: Incident[] = (await collections.incidents?.find({
           location: {
-            $geoNear: {
-              $near: {...user.location.coordinates},
-              distanceField: 'distance',
-              spherical: true,
+            $$geoWithin: {
+              $centerSphere: [user.location.coordinates, '$range'],
             },
           },
           over: false,
-        },
-        {
-          '$project' : {
-            name : 1,
-            location : 1,
-            range : 1,
-            delta : {
-              '$subtract' : [
-                '$range', 
-                '$distance'
-              ]
-            }
-          }
-        }, 
-        {
-          '$match' : {
-            delta : { '$gte' : 0 }
-          }
-        }])
+        })
         .toArray()) as unknown as Incident[];
         let status = DangerLevel.SAFE;
         for (let incident of incidentsNear) {
