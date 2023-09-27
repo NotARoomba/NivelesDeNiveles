@@ -1,11 +1,3 @@
-# 🌊Niveles de Niveles🌊 2.0
-
-Desarrollado por `react-native`, `express`, y `MongoDB`.
-
-Incluso con Arduino y otro hardware.
-
-
-
 <h1 align="center">
   <br>
   <img src="https://raw.githubusercontent.com/NotARoomba/NivelesDeNiveles/master/public/icon.png" alt="Niveles" width="200">
