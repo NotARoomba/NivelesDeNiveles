@@ -23,7 +23,12 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
     }).start();
     Animated.timing(growValue, {
       // todo hae to set values for each text sadly
-      toValue: isOpen ? 0 : 64,
+      // LOOK HERE FROM THE WARNING BELOW
+      toValue: isOpen ? 0 : status === DangerLevel.SAFE
+        ? 64
+        : status === DangerLevel.RISK
+        ? 64
+        : 64,
       duration: 250,
       useNativeDriver: false,
     }).start();
@@ -51,7 +56,11 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
           style={{height: growValue /*, maxHeight: grow*/}}
           className="justify-center px-1">
           <Text className="text-dark text-left text-lg">
-            Estas en una zona segura, no hay nada a preocuparte!
+          {status === DangerLevel.SAFE
+              ? 'Estas en una zona segura, no hay nada a preocuparte!'
+              : status === DangerLevel.RISK
+              ? 'INSERT RISK TEXT HERE AND THEN UPDATE THE HEIGHT VARIABLE IN THE ANIMATION SECTION UP ABOVE WITH THE DANGER LEVEL CHECKS OR THE TEXT WILL BE CUT OFF LIKE THIS'
+              : 'INSERT DANGER TEXT HERE'}
           </Text>
         </Animated.View>
       </View>
