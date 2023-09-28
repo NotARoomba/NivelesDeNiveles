@@ -59,7 +59,7 @@ export default function Home({isDarkMode}: ScreenProp) {
           enableHighAccuracy: true,
           timeout: 60000,
         });
-        if (u) callAPI('/users/', 'POST', {
+        if (location && u) callAPI('/users/', 'POST', {
           number: u.number,
           location: {
             coordinates: [location.longitude, location.latitude],
@@ -80,7 +80,7 @@ export default function Home({isDarkMode}: ScreenProp) {
             enableHighAccuracy: true,
             timeout: 60000,
           });
-          if (u) callAPI('/users/', 'POST', {
+          if (location && u) callAPI('/users/', 'POST', {
             number: u.number,
             location: {
               coordinates: [location.longitude, location.latitude],
@@ -145,7 +145,7 @@ export default function Home({isDarkMode}: ScreenProp) {
             <Marker coordinate={{
               latitude: 0,
               longitude: 0
-            }}  />
+            }} />
           </MapView>
         ) : (
           <></>

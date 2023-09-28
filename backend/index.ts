@@ -50,7 +50,7 @@ connectToDatabase(io)
       socket.emit(NivelesEvents.UPDATE_LOCATION_DATA);
       socket.on(NivelesEvents.REQUEST_LOCATION_DATA, async (user: User, callback) => {
         // console.log(user.location, user)
-        // console.log(user)
+        console.log(user)
         const incidents: Incident[] = (await collections.incidents?.find({
           location: {
             $near: {
