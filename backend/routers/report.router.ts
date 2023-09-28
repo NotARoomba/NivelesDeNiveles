@@ -2,9 +2,13 @@ import express, {Request, Response} from 'express';
 import {collections} from '../services/database.service';
 import Report from '../models/report';
 import { DangerType } from '../models/types';
-import Config from 'react-native-config';
+import * as dotenv from 'ts-dotenv';
 
 export const reportRouter = express.Router();
+
+const env = dotenv.load({
+  AI_AUTH: String
+})
 
 reportRouter.use(express.json());
 
@@ -24,9 +28,9 @@ reportRouter.post('/', async (req: Request, res: Response) => {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: Config.AI_AUTH,
+          Authorization: env.AI_AUTH,
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify(report.image),
       })).json()
       console.log(json)
     }
