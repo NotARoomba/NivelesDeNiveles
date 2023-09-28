@@ -60,7 +60,7 @@ export default function Login({
   const [disable, setDisable] = useState(false);
   useEffect(() => {
     SplashScreen.hide();
-  }, [])
+  }, []);
   return (
     <SafeAreaView className=" bg-light">
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />

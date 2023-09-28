@@ -10,10 +10,10 @@ import {DangerLevel, DangerType, ReportProps} from '../utils/Types';
 import DangerTypeButton from './DangerTypeButton';
 import {useState} from 'react';
 import DangerLevelButton from './DangerLevelButton';
-import { callAPI, getData } from '../utils/Functions';
+import {callAPI, getData} from '../utils/Functions';
 import User from '../../backend/models/user';
 import ReportType from '../../backend/models/report';
-import { Camera, useCameraDevice } from 'react-native-vision-camera';
+import {Camera, useCameraDevice} from 'react-native-vision-camera';
 import Evidence from './Evidence';
 
 export default function Report({reportFunction}: ReportProps) {
@@ -28,10 +28,23 @@ export default function Report({reportFunction}: ReportProps) {
     if (evidence === '') {
       return Alert.alert('Falta Informacion', 'Por favor llena la evidencia');
     }
-    const reporter: User = (await callAPI('/users/' + (await getData('number')), 'GET')).user
-    const res = await callAPI('/report/', 'POST', new ReportType(reporter.number, dangerSelected, levelSelected, Date.now(), evidence, reporter.location))
-    if (!res.error) return Alert.alert('Éxito!', res.msg)
-    else return Alert.alert('Error!', res.msg)
+    const reporter: User = (
+      await callAPI('/users/' + (await getData('number')), 'GET')
+    ).user;
+    const res = await callAPI(
+      '/report/',
+      'POST',
+      new ReportType(
+        reporter.number,
+        dangerSelected,
+        levelSelected,
+        Date.now(),
+        evidence,
+        reporter.location,
+      ),
+    );
+    if (!res.error) return Alert.alert('Éxito!', res.msg);
+    else return Alert.alert('Error!', res.msg);
   };
 
   return (

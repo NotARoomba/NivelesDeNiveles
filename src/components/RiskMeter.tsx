@@ -8,7 +8,11 @@ export default function RiskMeter({status, reportFunction}: RiskMeterProps) {
       <Text className="text-light text-lg font-bold max-w-[50%]">
         Te encuentras en una zona:{' '}
         <Text className="font-bold">
-          {status === DangerLevel.SAFE ? 'seguro' : status === DangerLevel.RISK ? 'riesgo' : 'peligro'}
+          {status === DangerLevel.SAFE
+            ? 'seguro'
+            : status === DangerLevel.RISK
+            ? 'riesgo'
+            : 'peligro'}
         </Text>
       </Text>
       <View className="ml-24 -mt-1">

@@ -1,6 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {View, StatusBar, Alert, Platform} from 'react-native';
-import {DangerLevel, DangerType, LocationData, ScreenProp} from '../utils/Types';
+import {
+  DangerLevel,
+  DangerType,
+  LocationData,
+  ScreenProp,
+} from '../utils/Types';
 import MapView, {PROVIDER_GOOGLE, Heatmap, Marker} from 'react-native-maps';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {callAPI, getData} from '../utils/Functions';
@@ -15,12 +20,12 @@ import SplashScreen from 'react-native-splash-screen';
 export default function Home({isDarkMode}: ScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
   const [u, setUser] = useState<User | null>(null);
-  const [region,setRegion] = useState({
+  const [region, setRegion] = useState({
     latitude: 0,
     longitude: 0,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0922,
- });
+  });
   const [locationData, setLocationData] = useState<LocationData>({
     status: DangerLevel.SAFE,
     incidents: [],
@@ -51,42 +56,46 @@ export default function Home({isDarkMode}: ScreenProp) {
         (await callAPI('/users/' + (await getData('number')), 'GET')).user,
       );
       let locationStatus = null;
-      if (Platform.OS == 'ios') locationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-      else if (Platform.OS == 'android') locationStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+      if (Platform.OS == 'ios')
+        locationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+      else if (Platform.OS == 'android')
+        locationStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
       if (locationStatus === RESULTS.GRANTED) {
         setLocationPerms(true);
         const location = await GetLocation.getCurrentPosition({
           enableHighAccuracy: true,
           timeout: 60000,
         });
-        if (location && u) callAPI('/users/', 'POST', {
-          number: u.number,
-          location: {
-            coordinates: [location.longitude, location.latitude],
-            type: 'Point',
-          },
-        });
-      } else if (locationStatus === RESULTS.DENIED) {
-        let requestLocation = null;
-        if (Platform.OS == 'ios') requestLocation = await request(
-          PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
-        )
-        else if (Platform.OS == 'android') requestLocation = await request(
-          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-        );
-        if (requestLocation === RESULTS.GRANTED) {
-          setLocationPerms(true);
-          const location = await GetLocation.getCurrentPosition({
-            enableHighAccuracy: true,
-            timeout: 60000,
-          });
-          if (location && u) callAPI('/users/', 'POST', {
+        if (location && u)
+          callAPI('/users/', 'POST', {
             number: u.number,
             location: {
               coordinates: [location.longitude, location.latitude],
               type: 'Point',
             },
           });
+      } else if (locationStatus === RESULTS.DENIED) {
+        let requestLocation = null;
+        if (Platform.OS == 'ios')
+          requestLocation = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+        else if (Platform.OS == 'android')
+          requestLocation = await request(
+            PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+          );
+        if (requestLocation === RESULTS.GRANTED) {
+          setLocationPerms(true);
+          const location = await GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 60000,
+          });
+          if (location && u)
+            callAPI('/users/', 'POST', {
+              number: u.number,
+              location: {
+                coordinates: [location.longitude, location.latitude],
+                type: 'Point',
+              },
+            });
         } else {
           Alert.alert(
             'Activa Ubicacion',
@@ -94,7 +103,9 @@ export default function Home({isDarkMode}: ScreenProp) {
           );
         }
       }
-      const user: User = (await callAPI('/users/' + (await getData('number')), 'GET')).user
+      const user: User = (
+        await callAPI('/users/' + (await getData('number')), 'GET')
+      ).user;
       setUser(user);
       //get location and update database with location
       //then open a websocket connecton listening for updates around the location
@@ -102,19 +113,27 @@ export default function Home({isDarkMode}: ScreenProp) {
       // socket.emit(NivelesEvents.CONNECT)
       // console.log(user)
       socket.on(NivelesEvents.UPDATE_LOCATION_DATA, () => {
-        console.log(user, u)
-        socket.emit(NivelesEvents.REQUEST_LOCATION_DATA, user ? user : u,
+        socket.emit(
+          NivelesEvents.REQUEST_LOCATION_DATA,
+          user,
           (locationData: LocationData) => {
             setLocationData(locationData);
-          });
-      })
+          },
+        );
+      });
       SplashScreen.hide();
     }
     updateMap();
   }, []);
   useEffect(() => {
-    if (u) setRegion({latitude: u.location.coordinates[0], longitude: u.location.coordinates[1], latitudeDelta: 0.1922, longitudeDelta: 0.1922})
-  }, [u])
+    if (u)
+      setRegion({
+        latitude: u.location.coordinates[0],
+        longitude: u.location.coordinates[1],
+        latitudeDelta: 0.1922,
+        longitudeDelta: 0.1922,
+      });
+  }, [u]);
   return (
     <View className=" bg-light">
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -127,15 +146,18 @@ export default function Home({isDarkMode}: ScreenProp) {
             showsMyLocationButton
             loadingEnabled
             initialRegion={region}
-            onRegionChange={(r) => console.log(r)}
             region={region}>
             <Heatmap
-              points={locationData.incidents.length > 0 ? [
-                ...locationData.incidents.map(v => ({
-                  latitude: v.location.coordinates[1],
-                  longitude: v.location.coordinates[0],
-                })),
-              ]: []}
+              points={
+                locationData.incidents.length > 0
+                  ? [
+                      ...locationData.incidents.map(v => ({
+                        latitude: v.location.coordinates[1],
+                        longitude: v.location.coordinates[0],
+                      })),
+                    ]
+                  : []
+              }
               // points={[{latitude: 37.7882, longitude: -122.4324}, {latitude: 37.7882, longitude: -122.4524}]}
               radius={50}
               gradient={{
@@ -144,11 +166,31 @@ export default function Home({isDarkMode}: ScreenProp) {
                 colors: ['#008000', '#FFA500', '#FF0000'],
               }}
             />
-            {locationData.sensors.map((s, i) => (<Marker key={i} coordinate={{latitude: s.location.coordinates[1], longitude: s.location.coordinates[0]}} title={s.name} description={`Status: ${s.status === DangerLevel.SAFE ? 'seguro' : s.status === DangerLevel.RISK ? 'riesgo' : 'peligro'}`} pinColor={s.status === DangerLevel.SAFE
-                ? '#22c55e'
-                : s.status === DangerLevel.RISK
-                ? '#f59e0b'
-                : '#ef4444'} style={{justifyContent: 'center', margin: 'auto'}} />))}
+            {locationData.sensors.map((s, i) => (
+              <Marker
+                key={i}
+                coordinate={{
+                  latitude: s.location.coordinates[1],
+                  longitude: s.location.coordinates[0],
+                }}
+                title={s.name}
+                description={`Status: ${
+                  s.status === DangerLevel.SAFE
+                    ? 'seguro'
+                    : s.status === DangerLevel.RISK
+                    ? 'riesgo'
+                    : 'peligro'
+                }`}
+                pinColor={
+                  s.status === DangerLevel.SAFE
+                    ? '#22c55e'
+                    : s.status === DangerLevel.RISK
+                    ? '#f59e0b'
+                    : '#ef4444'
+                }
+                style={{justifyContent: 'center', margin: 'auto'}}
+              />
+            ))}
           </MapView>
         ) : (
           <></>

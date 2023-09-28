@@ -9,10 +9,10 @@ import {Server, Socket} from 'socket.io';
 import NivelesEvents from './models/events';
 import User from './models/user';
 import {createServer} from 'http';
-import { reportRouter } from './routers/report.router';
+import {reportRouter} from './routers/report.router';
 import prune from './services/prune.service';
 import Incident from './models/incident';
-import { DangerLevel } from './models/types';
+import {DangerLevel} from './models/types';
 import Sensor from './models/sensor';
 const app = express();
 const httpServer = createServer(app);
@@ -48,34 +48,40 @@ connectToDatabase(io)
       console.log(`New client connected: ${socket.id}`);
       //start the cycle
       socket.emit(NivelesEvents.UPDATE_LOCATION_DATA);
-      socket.on(NivelesEvents.REQUEST_LOCATION_DATA, async (user: User, callback) => {
-        // console.log(user.location, user)
-        console.log(user, 2)
-        const incidents: Incident[] = (await collections.incidents?.find({
-          location: {
-            $near: {
-              $geometry: {...user.location},
-              $maxDistance: 2000,
-            },
-          },
-          over: false,
-        })
-        .toArray()) as unknown as Incident[];
-        let status = DangerLevel.SAFE;
-        for (let incident of incidents) {
-          if (incident.level > status) status = incident.level;
-        }
-        const sensors: Sensor[] = (await collections.sensors?.find({
-          location: {
-            $near: {
-              $geometry: {...user.location},
-              $maxDistance: 2000,
-            },
-          },
-          over: false,
-        }).toArray()) as unknown as Sensor[];
-        callback({status, sensors, incidents});
-      })
+      socket.on(
+        NivelesEvents.REQUEST_LOCATION_DATA,
+        async (user: User, callback) => {
+          // console.log(user.location, user)
+          console.log(user, 2);
+          const incidents: Incident[] = (await collections.incidents
+            ?.find({
+              location: {
+                $near: {
+                  $geometry: {...user.location},
+                  $maxDistance: 2000,
+                },
+              },
+              over: false,
+            })
+            .toArray()) as unknown as Incident[];
+          let status = DangerLevel.SAFE;
+          for (let incident of incidents) {
+            if (incident.level > status) status = incident.level;
+          }
+          const sensors: Sensor[] = (await collections.sensors
+            ?.find({
+              location: {
+                $near: {
+                  $geometry: {...user.location},
+                  $maxDistance: 2000,
+                },
+              },
+              over: false,
+            })
+            .toArray()) as unknown as Sensor[];
+          callback({status, sensors, incidents});
+        },
+      );
       socket.on(NivelesEvents.DISCONNECT, () => {
         console.log('Client disconnected');
       });

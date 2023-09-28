@@ -4,7 +4,7 @@ import Home from './src/pages/Home';
 // import {callAPI, getData} from './src/utils/DataTypes';
 import Login from './src/pages/Login';
 import {callAPI, getData} from './src/utils/Functions';
-import { Alert } from 'react-native';
+import {Alert} from 'react-native';
 export default function App() {
   const [logged, setlLogged] = useState(false);
   const [isDarkMode, _setDarkMode] = useState(
@@ -19,22 +19,27 @@ export default function App() {
     // AsyncStorage.removeItem('number');
 
     getData('number').then(number => {
-      callAPI('/users/' + number, 'GET').then(res => {
-        if (res == null) {
-          setlLogged(false);
-        }
-        if (res.user && !res.error) {
-          setlLogged(true);
-        } else {
-          setlLogged(false);
-        }
-        // SplashScreen.hide();
-        // Appearance.addChangeListener(appearance => {
-        //   setDarkMode(appearance.colorScheme === 'dark');
-        // });
-      }).catch(() => {
-        Alert.alert('Error!', 'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.')
-      })
+      callAPI('/users/' + number, 'GET')
+        .then(res => {
+          if (res == null) {
+            setlLogged(false);
+          }
+          if (res.user && !res.error) {
+            setlLogged(true);
+          } else {
+            setlLogged(false);
+          }
+          // SplashScreen.hide();
+          // Appearance.addChangeListener(appearance => {
+          //   setDarkMode(appearance.colorScheme === 'dark');
+          // });
+        })
+        .catch(() => {
+          Alert.alert(
+            'Error!',
+            'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.',
+          );
+        });
     });
   }, []);
   // const updateDarkMode = (v: boolean) =>

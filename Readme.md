@@ -30,10 +30,10 @@
 
 ## Key Features
 
-* Fast login
-* Live updates
-* Ability to report disasters
-* Use of AI to verify reports
+- Fast login
+- Live updates
+- Ability to report disasters
+- Use of AI to verify reports
 
 ## How To Use
 
@@ -79,4 +79,3 @@ MIT
 
 > Website [notaroomba.xyz](https://notaroomba.xyz) &nbsp;&middot;&nbsp;
 > GitHub [@NotARoomba](https://github.com/NotARoomba) &nbsp;&middot;&nbsp;
-

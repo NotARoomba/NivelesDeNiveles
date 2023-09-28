@@ -24,7 +24,9 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
     Animated.timing(growValue, {
       // todo hae to set values for each text sadly
       // LOOK HERE FROM THE WARNING BELOW
-      toValue: isOpen ? 0 : status === DangerLevel.SAFE
+      toValue: isOpen
+        ? 0
+        : status === DangerLevel.SAFE
         ? 64
         : status === DangerLevel.RISK
         ? 64
@@ -56,7 +58,7 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
           style={{height: growValue /*, maxHeight: grow*/}}
           className="justify-center px-1">
           <Text className="text-dark text-left text-lg">
-          {status === DangerLevel.SAFE
+            {status === DangerLevel.SAFE
               ? 'Estas en una zona segura, no hay nada a preocuparte!'
               : status === DangerLevel.RISK
               ? 'INSERT RISK TEXT HERE AND THEN UPDATE THE HEIGHT VARIABLE IN THE ANIMATION SECTION UP ABOVE WITH THE DANGER LEVEL CHECKS OR THE TEXT WILL BE CUT OFF LIKE THIS'
