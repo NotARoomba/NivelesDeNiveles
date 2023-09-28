@@ -41,7 +41,7 @@ export default function Home({isDarkMode}: ScreenProp) {
         name: 'Sensor 3',
         status: DangerLevel.DANGER,
         type: DangerType.FLOOD,
-        location: {coordinates: [37.7882, -122.4524], type: 'Point'},
+        location: {coordinates: [37.7882, -122.4624], type: 'Point'},
       },
     ],
   });
@@ -94,7 +94,7 @@ export default function Home({isDarkMode}: ScreenProp) {
           );
         }
       }
-      const user = (await callAPI('/users/' + (await getData('number')), 'GET')).user
+      const user: User = (await callAPI('/users/' + (await getData('number')), 'GET')).user
       setUser(user);
       //get location and update database with location
       //then open a websocket connecton listening for updates around the location
@@ -102,7 +102,8 @@ export default function Home({isDarkMode}: ScreenProp) {
       // socket.emit(NivelesEvents.CONNECT)
       // console.log(user)
       socket.on(NivelesEvents.UPDATE_LOCATION_DATA, () => {
-        socket.emit(NivelesEvents.REQUEST_LOCATION_DATA, user,
+        console.log(user, u)
+        socket.emit(NivelesEvents.REQUEST_LOCATION_DATA, user ? user : u,
           (locationData: LocationData) => {
             setLocationData(locationData);
           });
@@ -112,7 +113,7 @@ export default function Home({isDarkMode}: ScreenProp) {
     updateMap();
   }, []);
   useEffect(() => {
-    if (u) setRegion({...region, latitude: u.location.coordinates[0], longitude: u.location.coordinates[1]})
+    if (u) setRegion({latitude: u.location.coordinates[0], longitude: u.location.coordinates[1], latitudeDelta: 0.1922, longitudeDelta: 0.1922})
   }, [u])
   return (
     <View className=" bg-light">
@@ -126,12 +127,13 @@ export default function Home({isDarkMode}: ScreenProp) {
             showsMyLocationButton
             loadingEnabled
             initialRegion={region}
+            onRegionChange={(r) => console.log(r)}
             region={region}>
             <Heatmap
               points={locationData.incidents.length > 0 ? [
                 ...locationData.incidents.map(v => ({
-                  latitude: v.location.coordinates[0],
-                  longitude: v.location.coordinates[1],
+                  latitude: v.location.coordinates[1],
+                  longitude: v.location.coordinates[0],
                 })),
               ]: []}
               // points={[{latitude: 37.7882, longitude: -122.4324}, {latitude: 37.7882, longitude: -122.4524}]}
@@ -142,10 +144,11 @@ export default function Home({isDarkMode}: ScreenProp) {
                 colors: ['#008000', '#FFA500', '#FF0000'],
               }}
             />
-            <Marker coordinate={{
-              latitude: 0,
-              longitude: 0
-            }} />
+            {locationData.sensors.map((s, i) => (<Marker key={i} coordinate={{latitude: s.location.coordinates[1], longitude: s.location.coordinates[0]}} title={s.name} description={`Status: ${s.status === DangerLevel.SAFE ? 'seguro' : s.status === DangerLevel.RISK ? 'riesgo' : 'peligro'}`} pinColor={s.status === DangerLevel.SAFE
+                ? '#22c55e'
+                : s.status === DangerLevel.RISK
+                ? '#f59e0b'
+                : '#ef4444'} style={{justifyContent: 'center', margin: 'auto'}} />))}
           </MapView>
         ) : (
           <></>
