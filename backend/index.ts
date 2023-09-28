@@ -50,8 +50,8 @@ connectToDatabase(io)
       socket.emit(NivelesEvents.UPDATE_LOCATION_DATA);
       socket.on(NivelesEvents.REQUEST_LOCATION_DATA, async (user: User, callback) => {
         // console.log(user.location, user)
-        console.log(user)
-        const incidentsNear: Incident[] = (await collections.incidents?.find({
+        // console.log(user)
+        const incidents: Incident[] = (await collections.incidents?.find({
           location: {
             $near: {
               $geometry: {...user.location},
@@ -62,7 +62,7 @@ connectToDatabase(io)
         })
         .toArray()) as unknown as Incident[];
         let status = DangerLevel.SAFE;
-        for (let incident of incidentsNear) {
+        for (let incident of incidents) {
           if (incident.level > status) status = incident.level;
         }
         const sensors: Sensor[] = (await collections.sensors?.find({
@@ -74,7 +74,7 @@ connectToDatabase(io)
           },
           over: false,
         }).toArray()) as unknown as Sensor[];
-        callback({status, sensors});
+        callback({status, sensors, incidents});
       })
       socket.on(NivelesEvents.DISCONNECT, () => {
         console.log('Client disconnected');

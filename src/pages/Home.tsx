@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, StatusBar, Alert, Platform} from 'react-native';
 import {DangerLevel, DangerType, LocationData, ScreenProp} from '../utils/Types';
-import MapView, {PROVIDER_GOOGLE, Heatmap} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Heatmap, Marker} from 'react-native-maps';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {callAPI, getData} from '../utils/Functions';
 import GetLocation from 'react-native-get-location';
@@ -16,13 +16,14 @@ export default function Home({isDarkMode}: ScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
   const [u, setUser] = useState<User | null>(null);
   const [region,setRegion] = useState({
-    latitude: 0.0,
-    longitude: 0.0,
+    latitude: 0,
+    longitude: 0,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0922,
  });
   const [locationData, setLocationData] = useState<LocationData>({
     status: DangerLevel.SAFE,
+    incidents: [],
     sensors: [
       {
         name: 'Sensor 1',
@@ -127,12 +128,12 @@ export default function Home({isDarkMode}: ScreenProp) {
             initialRegion={region}
             region={region}>
             <Heatmap
-              points={locationData.sensors.length > 0 ? [
-                ...locationData.sensors.map(v => ({
+              points={locationData.incidents.length > 0 ? [
+                ...locationData.incidents.map(v => ({
                   latitude: v.location.coordinates[0],
                   longitude: v.location.coordinates[1],
                 })),
-              ]: [{latitude: 0, longitude: 0}]}
+              ]: []}
               // points={[{latitude: 37.7882, longitude: -122.4324}, {latitude: 37.7882, longitude: -122.4524}]}
               radius={50}
               gradient={{
@@ -141,6 +142,10 @@ export default function Home({isDarkMode}: ScreenProp) {
                 colors: ['#008000', '#FFA500', '#FF0000'],
               }}
             />
+            <Marker coordinate={{
+              latitude: 0,
+              longitude: 0
+            }}  />
           </MapView>
         ) : (
           <></>

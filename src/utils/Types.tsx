@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import Sensor from '../../backend/models/sensor';
+import Incident from '../../backend/models/incident';
 
 export enum DangerLevel {
   SAFE,
@@ -58,6 +59,7 @@ export interface ReportProps {
 export interface LocationData {
   status: DangerLevel;
   sensors: Sensor[];
+  incidents: Incident[];
 }
 
 export interface ScreenProp {

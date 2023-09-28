@@ -4,7 +4,6 @@ import Home from './src/pages/Home';
 // import {callAPI, getData} from './src/utils/DataTypes';
 import Login from './src/pages/Login';
 import {callAPI, getData} from './src/utils/Functions';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 export default function App() {
   const [logged, setlLogged] = useState(false);
@@ -28,7 +27,6 @@ export default function App() {
           setlLogged(true);
         } else {
           setlLogged(false);
-          Alert.alert('Error!', res.msg)
         }
         // SplashScreen.hide();
         // Appearance.addChangeListener(appearance => {
