@@ -14,13 +14,13 @@ import SplashScreen from 'react-native-splash-screen';
 
 export default function Home({isDarkMode}: ScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
-  const [u, setUser] = useState<User>({
-    number: '',
-    location: {
-      coordinates: [0, 0],
-      type: 'Point',
-    },
-  });
+  const [u, setUser] = useState<User | null>(null);
+  const [region,setRegion] = useState({
+    latitude: 0.0,
+    longitude: 0.0,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0922,
+ });
   const [locationData, setLocationData] = useState<LocationData>({
     status: DangerLevel.SAFE,
     sensors: [
@@ -58,7 +58,7 @@ export default function Home({isDarkMode}: ScreenProp) {
           enableHighAccuracy: true,
           timeout: 60000,
         });
-        if (u.number !== '') callAPI('/users/', 'POST', {
+        if (u) callAPI('/users/', 'POST', {
           number: u.number,
           location: {
             coordinates: [location.longitude, location.latitude],
@@ -79,7 +79,7 @@ export default function Home({isDarkMode}: ScreenProp) {
             enableHighAccuracy: true,
             timeout: 60000,
           });
-          if (u.number !== '') callAPI('/users/', 'POST', {
+          if (u) callAPI('/users/', 'POST', {
             number: u.number,
             location: {
               coordinates: [location.longitude, location.latitude],
@@ -109,25 +109,23 @@ export default function Home({isDarkMode}: ScreenProp) {
       SplashScreen.hide();
     }
     updateMap();
-    console.log(u.location.coordinates)
   }, []);
+  useEffect(() => {
+    if (u) setRegion({...region, latitude: u.location.coordinates[0], longitude: u.location.coordinates[1]})
+  }, [u])
   return (
     <View className=" bg-light">
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <View className="flex justify-center align-middle text-center justify-items-center">
-        {locationPerms && u.location !== undefined ? (
+        {locationPerms ? (
           <MapView
             className="w-screen h-screen aspect-square bg-neutral-200 justify-center m-auto"
             provider={PROVIDER_GOOGLE}
             showsUserLocation
             showsMyLocationButton
             loadingEnabled
-            initialRegion={{
-              latitude: u.location.coordinates[0] == 0 ? 37.78825 : u.location.coordinates[0],
-              longitude: u.location.coordinates[1] == 0 ? -122.4324 : u.location.coordinates[1],
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}>
+            initialRegion={region}
+            region={region}>
             <Heatmap
               points={locationData.sensors.length > 0 ? [
                 ...locationData.sensors.map(v => ({

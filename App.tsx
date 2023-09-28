@@ -5,6 +5,7 @@ import Home from './src/pages/Home';
 import Login from './src/pages/Login';
 import {callAPI, getData} from './src/utils/Functions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
 export default function App() {
   const [logged, setlLogged] = useState(false);
   const [isDarkMode, _setDarkMode] = useState(
@@ -27,12 +28,15 @@ export default function App() {
           setlLogged(true);
         } else {
           setlLogged(false);
+          Alert.alert('Error!', res.msg)
         }
         // SplashScreen.hide();
         // Appearance.addChangeListener(appearance => {
         //   setDarkMode(appearance.colorScheme === 'dark');
         // });
-      });
+      }).catch(() => {
+        Alert.alert('Error!', 'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.')
+      })
     });
   }, []);
   // const updateDarkMode = (v: boolean) =>

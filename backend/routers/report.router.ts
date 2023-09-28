@@ -23,16 +23,20 @@ reportRouter.post('/', async (req: Request, res: Response) => {
     //fire and water checks
     if (report.type === DangerType.FIRE) {
       console.log(report.image)
-      const json = (await fetch('https://www.de-vis-software.ro/ignisdet.aspx', {
+      const response = await (await fetch('https://www.de-vis-software.ro/ignisdet.aspx', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: env.AI_AUTH,
+          Authorization: `Basic ${Buffer.from(env.AI_AUTH).toString('base64')}`,
         },
-        body: JSON.stringify(report.image),
+        body: JSON.stringify({
+          base64_Photo_String: report.image,
+          photo_url: "NO"
+        }),
       })).json()
-      console.log(json)
+      console.log(response)
+      if (response.predictions[0].probability < 0.75) return res.send({error: true, msg: 'Fuego no fue detectado en ese imagen!'});;
     }
     await collections.reports.insertOne(report);
     res.send({error: false, msg: 'Mandamos tu reporta!'});
