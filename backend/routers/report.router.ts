@@ -2,6 +2,7 @@ import express, {Request, Response} from 'express';
 import {collections} from '../services/database.service';
 import Report from '../models/report';
 import { DangerType } from '../models/types';
+import axios from 'axios';
 import * as dotenv from 'ts-dotenv';
 
 export const reportRouter = express.Router();
@@ -23,7 +24,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
     //fire and water checks
     if (report.type === DangerType.FIRE) {
       console.log(report.image)
-      const response = await (await fetch('https://www.de-vis-software.ro/ignisdet.aspx', {
+      const response = await axios.post<{predictions: {probability: number}[]}>('https://www.de-vis-software.ro/ignisdet.aspx', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -34,9 +35,9 @@ reportRouter.post('/', async (req: Request, res: Response) => {
           base64_Photo_String: report.image,
           photo_url: "NO"
         }),
-      })).json()
+      })
       console.log(response)
-      if (response.predictions[0].probability < 0.75) return res.send({error: true, msg: 'Fuego no fue detectado en ese imagen!'});;
+      if (response.data.predictions[0].probability < 0.75) return res.send({error: true, msg: 'Fuego no fue detectado en ese imagen!'});;
     }
     await collections.reports.insertOne(report);
     res.send({error: false, msg: 'Mandamos tu reporta!'});
