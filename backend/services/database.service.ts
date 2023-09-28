@@ -15,6 +15,7 @@ const env = dotenv.load({
   SENSOR_COLLECTION: String,
   REPORT_COLLECTION: String,
   INCIDENT_COLLECTION: String,
+  AI_AUTH: String,
 });
 
 export const collections: {

@@ -2,6 +2,7 @@ import express, {Request, Response} from 'express';
 import {collections} from '../services/database.service';
 import Report from '../models/report';
 import { DangerType } from '../models/types';
+import Config from 'react-native-config';
 
 export const reportRouter = express.Router();
 
@@ -18,6 +19,16 @@ reportRouter.post('/', async (req: Request, res: Response) => {
     //fire and water checks
     if (report.type === DangerType.FIRE) {
       console.log(report.image)
+      const json = (await fetch('https://www.de-vis-software.ro/ignisdet.aspx', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: Config.AI_AUTH,
+        },
+        body: JSON.stringify(body),
+      })).json()
+      console.log(json)
     }
     await collections.reports.insertOne(report);
     res.send({error: false, msg: 'Mandamos tu reporta!'});

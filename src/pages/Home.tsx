@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StatusBar, Alert} from 'react-native';
+import {View, StatusBar, Alert, Platform} from 'react-native';
 import {DangerLevel, DangerType, LocationData, ScreenProp} from '../utils/Types';
 import MapView, {PROVIDER_GOOGLE, Heatmap} from 'react-native-maps';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
@@ -49,14 +49,16 @@ export default function Home({isDarkMode}: ScreenProp) {
       setUser(
         (await callAPI('/users/' + (await getData('number')), 'GET')).user,
       );
-      const locationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+      let locationStatus = null;
+      if (Platform.OS == 'ios') locationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+      else if (Platform.OS == 'android') locationStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
       if (locationStatus === RESULTS.GRANTED) {
         setLocationPerms(true);
         const location = await GetLocation.getCurrentPosition({
           enableHighAccuracy: true,
           timeout: 60000,
         });
-        callAPI('/users/', 'POST', {
+        if (u.number !== '') callAPI('/users/', 'POST', {
           number: u.number,
           location: {
             coordinates: [location.longitude, location.latitude],
@@ -64,8 +66,12 @@ export default function Home({isDarkMode}: ScreenProp) {
           },
         });
       } else if (locationStatus === RESULTS.DENIED) {
-        const requestLocation = await request(
+        let requestLocation = null;
+        if (Platform.OS == 'ios') requestLocation = await request(
           PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
+        )
+        else if (Platform.OS == 'android') requestLocation = await request(
+          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
         );
         if (requestLocation === RESULTS.GRANTED) {
           setLocationPerms(true);
@@ -73,7 +79,7 @@ export default function Home({isDarkMode}: ScreenProp) {
             enableHighAccuracy: true,
             timeout: 60000,
           });
-          callAPI('/users/', 'POST', {
+          if (u.number !== '') callAPI('/users/', 'POST', {
             number: u.number,
             location: {
               coordinates: [location.longitude, location.latitude],
@@ -103,12 +109,13 @@ export default function Home({isDarkMode}: ScreenProp) {
       SplashScreen.hide();
     }
     updateMap();
+    console.log(u.location.coordinates)
   }, []);
   return (
     <View className=" bg-light">
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <View className="flex justify-center align-middle text-center justify-items-center">
-        {locationPerms ? (
+        {locationPerms && u.location !== undefined ? (
           <MapView
             className="w-screen h-screen aspect-square bg-neutral-200 justify-center m-auto"
             provider={PROVIDER_GOOGLE}
@@ -116,20 +123,20 @@ export default function Home({isDarkMode}: ScreenProp) {
             showsMyLocationButton
             loadingEnabled
             initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
+              latitude: u.location.coordinates[0] == 0 ? 37.78825 : u.location.coordinates[0],
+              longitude: u.location.coordinates[1] == 0 ? -122.4324 : u.location.coordinates[1],
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }}>
             <Heatmap
-              points={[
+              points={locationData.sensors.length > 0 ? [
                 ...locationData.sensors.map(v => ({
                   latitude: v.location.coordinates[0],
                   longitude: v.location.coordinates[1],
                 })),
-              ]}
+              ]: [{latitude: 0, longitude: 0}]}
               // points={[{latitude: 37.7882, longitude: -122.4324}, {latitude: 37.7882, longitude: -122.4524}]}
-              radius={300}
+              radius={50}
               gradient={{
                 colorMapSize: 1000,
                 startPoints: [0.1, 0.6, 1],
