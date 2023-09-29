@@ -11,6 +11,8 @@ const env = dotenv.load({
   AI_AUTH: String,
 });
 
+const isBase64 = (value: string) => /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$/.test(value);
+
 reportRouter.use(express.json());
 
 reportRouter.post('/', async (req: Request, res: Response) => {
@@ -28,6 +30,20 @@ reportRouter.post('/', async (req: Request, res: Response) => {
       //fire and water checks
       if (report.type === DangerType.FIRE) {
         console.log(report.image);
+        if (isBase64(report.image)) {
+          const response = await axios({
+            method: "POST",
+            url: "https://detect.roboflow.com/firedetector/1",
+            params: {
+                api_key: env.AI_AUTH
+            },
+            data: report.image,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        })
+        console.log(response.data);
+        } 
       }
       await collections.reports.insertOne(report);
       res.send({error: false, msg: 'Mandamos tu reporta!'});

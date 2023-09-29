@@ -127,7 +127,7 @@ export async function connectToDatabase(io: Server) {
     if (next.operationType == 'insert') {
       console.log('REPORT INSERTED');
       const report: Report = next.fullDocument as Report;
-      console.log(report);
+      // console.log(report);
       const incidentsNear: Incident[] = (await incidentsCollection
         .find({
           location: {

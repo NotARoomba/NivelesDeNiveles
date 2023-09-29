@@ -28,7 +28,6 @@ export const corsOptions: CorsOptions = {
 };
 
 const genSecret = async (req: Request) => {
-  console.log(req);
   return req ? Math.floor(Date.now() / (30 * 1000)).toString() : '';
 };
 

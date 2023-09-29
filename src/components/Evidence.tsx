@@ -14,9 +14,6 @@ import {
 } from 'react-native-vision-camera';
 import {EvidenceProps} from '../utils/Types';
 import {useCallback, useEffect, useRef, useState} from 'react';
-import GetLocation from 'react-native-get-location';
-import {check, PERMISSIONS, RESULTS, request} from 'react-native-permissions';
-import {callAPI} from '../utils/Functions';
 import CameraPanel from './CameraPanel';
 
 export default function Evidence({evidence, onChangeEvidence, setCameraOpen, cameraOpen}: EvidenceProps) {
