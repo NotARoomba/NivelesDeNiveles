@@ -107,7 +107,7 @@ export default function Report({reportFunction}: ReportProps) {
         <Text className="text-2xl text-center mt-4">Evidencia</Text>
         <Evidence evidence={evidence} onChangeEvidence={onChangeEvidence} />
       </View>
-      <View className="justify-center p-1 mt-2">
+      <View className="justify-center p-1 mt-2 -z-10">
         <TouchableOpacity
           className="p-3 bg-main w-3/5 m-auto rounded-full"
           onPress={submitReport}>

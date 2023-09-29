@@ -3,7 +3,6 @@ import React, {Animated, PanResponder, View} from 'react-native';
 import {DangerLevel, LocationData, PanelProps} from '../utils/Types';
 import Report from './Report';
 import Status from './Status';
-import Sensors from './Sensors';
 
 export default function Panel({locationData}: PanelProps) {
   const pan = useRef(new Animated.ValueXY()).current;

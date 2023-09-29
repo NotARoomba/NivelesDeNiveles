@@ -66,9 +66,9 @@ export default function Home({isDarkMode}: ScreenProp) {
           enableHighAccuracy: true,
           timeout: 60000,
         });
-        if (location && u)
+        if (location)
           callAPI('/users/', 'POST', {
-            number: u.number,
+            number: await getData('number'),
             location: {
               coordinates: [location.longitude, location.latitude],
               type: 'Point',
@@ -88,9 +88,9 @@ export default function Home({isDarkMode}: ScreenProp) {
             enableHighAccuracy: true,
             timeout: 60000,
           });
-          if (location && u)
+          if (location)
             callAPI('/users/', 'POST', {
-              number: u.number,
+              number: await getData('number'),
               location: {
                 coordinates: [location.longitude, location.latitude],
                 type: 'Point',
@@ -128,9 +128,9 @@ export default function Home({isDarkMode}: ScreenProp) {
   useEffect(() => {
     if (u)
       setRegion({
-        latitude: u.location.coordinates[0],
-        longitude: u.location.coordinates[1],
-        latitudeDelta: 0.1922,
+        latitude: u.location.coordinates[1],
+        longitude: u.location.coordinates[0],
+        latitudeDelta: 0.0922,
         longitudeDelta: 0.1922,
       });
   }, [u]);
@@ -140,24 +140,20 @@ export default function Home({isDarkMode}: ScreenProp) {
       <View className="flex justify-center align-middle text-center justify-items-center">
         {locationPerms ? (
           <MapView
-            className="w-screen h-screen aspect-square bg-neutral-200 justify-center m-auto"
+            className="w-screen h-screen bg-neutral-200 justify-center m-auto"
             provider={PROVIDER_GOOGLE}
             showsUserLocation
             showsMyLocationButton
             loadingEnabled
             initialRegion={region}
             region={region}>
-            <Heatmap
-              points={
-                locationData.incidents.length > 0
-                  ? [
+            {locationData.incidents.length > 0 ? <Heatmap
+              points={[
                       ...locationData.incidents.map(v => ({
                         latitude: v.location.coordinates[1],
                         longitude: v.location.coordinates[0],
                       })),
-                    ]
-                  : []
-              }
+                    ]}
               // points={[{latitude: 37.7882, longitude: -122.4324}, {latitude: 37.7882, longitude: -122.4524}]}
               radius={50}
               gradient={{
@@ -165,7 +161,7 @@ export default function Home({isDarkMode}: ScreenProp) {
                 startPoints: [0.1, 0.6, 1],
                 colors: ['#008000', '#FFA500', '#FF0000'],
               }}
-            />
+            /> : <></>}
             {locationData.sensors.map((s, i) => (
               <Marker
                 key={i}

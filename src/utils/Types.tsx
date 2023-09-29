@@ -14,6 +14,12 @@ export enum DangerType {
   AVALANCHE,
 }
 
+export interface CameraPanelProps {
+  isOpen: boolean;
+  onChangeEvidence: (nev: string) => void;
+  setIsOpen: (io: boolean) => void;
+}
+
 export interface EvidenceProps {
   evidence: string;
   onChangeEvidence: (nev: string) => void;
