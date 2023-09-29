@@ -44,6 +44,7 @@ export default function Report({reportFunction, cameraOpen, setCameraOpen}: Repo
         reporter.location,
       ),
     );
+    console.log(res)
     if (!res.error) return Alert.alert('Éxito!', res.msg);
     else return Alert.alert('Error!', res.msg);
   };

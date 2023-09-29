@@ -31,6 +31,9 @@ reportRouter.post('/', async (req: Request, res: Response) => {
       )}`)
       if (report.type === DangerType.FIRE) {
         console.log(report.image);
+        console.log(`Basic ${Buffer.from(env.AI_AUTH).toString(
+          'base64',
+        )}`)
         const response = await axios.post<{
           predictions: {probability: number}[];
         }>('https://www.de-vis-software.ro/ignisdet.aspx', {
@@ -60,6 +63,6 @@ reportRouter.post('/', async (req: Request, res: Response) => {
       res.send({error: true, msg: 'Un error ha ocurrido!'});
     }
   } catch (error) {
-    res.send({error: true, msg: error});
+    res.send({error: true, msg: 'Un error ha ocurrido!'});
   }
 });
