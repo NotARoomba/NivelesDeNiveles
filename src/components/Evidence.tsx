@@ -69,7 +69,7 @@ export default function Evidence({evidence, onChangeEvidence, setCameraOpen, cam
           </TouchableOpacity>
           {evidence.length !== 0 ? (
             <Text className="text-dark/80 text-lg m-auto">
-              Photo: {evidence.length} bytes
+              Photo: {(evidence.length/1000).toFixed(2)} KB
             </Text>
           ) : (
             <></>
