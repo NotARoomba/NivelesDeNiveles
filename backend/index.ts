@@ -37,7 +37,7 @@ const io = new Server(httpServer, {cors: corsOptions});
 connectToDatabase(io)
   .then(() => {
     app.use(cors(corsOptions));
-    app.use(express.json());
+    app.use(express.json({limit: '500mb'}));
     app.use(HMAC(genSecret));
     app.use('/users', usersRouter);
     app.use('/sensors', sensorsRouter);
