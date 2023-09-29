@@ -31,9 +31,9 @@ reportRouter.post('/', async (req: Request, res: Response) => {
       )}`)
       if (report.type === DangerType.FIRE) {
         console.log(report.image);
-        console.log(`Basic ${Buffer.from(env.AI_AUTH).toString(
+        const auth = 'Basic ' + Buffer.from(env.AI_AUTH).toString(
           'base64',
-        )}`)
+        )
         const response = await axios.post<{
           predictions: {probability: number}[];
         }>('https://www.de-vis-software.ro/ignisdet.aspx', {
@@ -41,9 +41,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Basic ${Buffer.from(env.AI_AUTH).toString(
-              'base64',
-            )}`,
+            Authorization: auth,
           },
           body: JSON.stringify({
             base64_Photo_String: report.image,
