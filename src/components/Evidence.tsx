@@ -49,7 +49,7 @@ export default function Evidence({evidence, onChangeEvidence, setCameraOpen, cam
   
   return (
     <View className="justify-around">
-      {cameraPerms ? (
+      {!cameraPerms ? (
         <TextInput
           onChangeText={onChangeEvidence}
           value={evidence}
