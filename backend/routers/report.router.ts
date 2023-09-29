@@ -15,7 +15,6 @@ reportRouter.use(express.json());
 
 reportRouter.post('/', async (req: Request, res: Response) => {
   const report: Report = req.body;
-  console.log(report)
   try {
     if (collections.reports) {
       const pastReports: Report[] = (await collections.reports
@@ -27,6 +26,9 @@ reportRouter.post('/', async (req: Request, res: Response) => {
           msg: 'You have already reported a disaster!',
         });
       //fire and water checks
+      console.log(`Basic ${Buffer.from(env.AI_AUTH).toString(
+        'base64',
+      )}`)
       if (report.type === DangerType.FIRE) {
         console.log(report.image);
         const response = await axios.post<{
