@@ -58,9 +58,6 @@ export default function Login({
   const [show, setShow] = useState(false);
   const [countryCode, setCountryCode] = useState('🇨🇴+57');
   const [disable, setDisable] = useState(false);
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
   return (
     <SafeAreaView className=" bg-light">
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />

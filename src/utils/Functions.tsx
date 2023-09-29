@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Config from 'react-native-config';
+import axios from 'axios';
 import CryptoJS from 'crypto-es';
 
 export const storeData = async (key: string, value: string) => {
@@ -24,6 +25,7 @@ export async function callAPI(
   endpoint: string,
   method: string,
   body: object = {},
+  image?: string,
 ) {
   const time = Date.now().toString();
   const data = JSON.stringify(body);
@@ -34,29 +36,18 @@ export async function callAPI(
     ),
   );
   const hmac = `HMAC ${time}:${digest}`;
+  // console.log(Config.API_URL + endpoint)
   try {
-    return method === 'POST'
-      ? await (
-          await fetch(Config.API_URL + endpoint, {
+    return (await axios(Config.API_URL + endpoint, {
             method: method,
             headers: {
               Accept: 'application/json',
               'Content-Type': 'application/json',
               Authorization: hmac,
             },
-            body: JSON.stringify(body),
-          })
-        ).json()
-      : await (
-          await fetch(Config.API_URL + endpoint, {
-            method: method,
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-              Authorization: hmac,
-            },
-          })
-        ).json();
+            data: JSON.stringify(body),
+            maxBodyLength: 20000000
+          })).data
   } catch (error) {
     console.log(error);
     return {

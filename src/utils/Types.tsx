@@ -15,14 +15,16 @@ export enum DangerType {
 }
 
 export interface CameraPanelProps {
-  isOpen: boolean;
+  cameraOpen: boolean;
   onChangeEvidence: (nev: string) => void;
-  setIsOpen: (io: boolean) => void;
+  setCameraOpen: (open: boolean) => void;
 }
 
 export interface EvidenceProps {
   evidence: string;
   onChangeEvidence: (nev: string) => void;
+  cameraOpen: boolean;
+  setCameraOpen: (open: boolean) => void;
 }
 
 export interface PanelProps {
@@ -60,6 +62,8 @@ export interface StatusProps {
 
 export interface ReportProps {
   reportFunction: () => void;
+  cameraOpen: boolean;
+  setCameraOpen: (open: boolean) => void;
 }
 
 export interface LocationData {

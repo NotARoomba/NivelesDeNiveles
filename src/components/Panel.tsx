@@ -9,9 +9,10 @@ export default function Panel({locationData}: PanelProps) {
   const [showing, setShowing] = useState(false);
   const [report, setReport] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(1));
+  const [cameraOpen, setCameraOpen] = useState(false);
 
   const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: (_evt, _gestureState) => true,
+    onStartShouldSetPanResponder: (_evt, _gestureState) => !cameraOpen,
     onPanResponderRelease: (_evt, gestureState) => {
       pan.flattenOffset();
       if (gestureState.dy === 0) {
@@ -80,7 +81,7 @@ export default function Panel({locationData}: PanelProps) {
         />
       </View>
       {report ? (
-        <Report reportFunction={reportFunction} />
+        <Report reportFunction={reportFunction} cameraOpen={cameraOpen} setCameraOpen={setCameraOpen} />
       ) : (
         <Status reportFunction={reportFunction} locationData={locationData} />
       )}

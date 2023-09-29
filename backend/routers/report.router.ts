@@ -15,6 +15,7 @@ reportRouter.use(express.json());
 
 reportRouter.post('/', async (req: Request, res: Response) => {
   const report: Report = req.body;
+  console.log(report)
   try {
     if (collections.reports) {
       const pastReports: Report[] = (await collections.reports

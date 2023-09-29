@@ -19,9 +19,8 @@ import {check, PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 import {callAPI} from '../utils/Functions';
 import CameraPanel from './CameraPanel';
 
-export default function Evidence({evidence, onChangeEvidence}: EvidenceProps) {
+export default function Evidence({evidence, onChangeEvidence, setCameraOpen, cameraOpen}: EvidenceProps) {
   const [cameraPerms, setCameraPerms] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
 
   const {hasPermission, requestPermission} = useCameraPermission();
   useEffect(() => {
@@ -50,7 +49,7 @@ export default function Evidence({evidence, onChangeEvidence}: EvidenceProps) {
   
   return (
     <View className="justify-around">
-      {!cameraPerms ? (
+      {cameraPerms ? (
         <TextInput
           onChangeText={onChangeEvidence}
           value={evidence}
@@ -60,25 +59,25 @@ export default function Evidence({evidence, onChangeEvidence}: EvidenceProps) {
           className="flex justify-center align-middle my-auto h-10 pl-3 py-0 text-lg border mt-3 w-12/12 rounded-full bg-main text-light font-bold"
         />
       ) : (
-        <View className="flex justify-center flex-row mt-5">
+        <View className="flex justify-around flex-row mt-5">
           <TouchableOpacity
             className=" px-3 rounded-full bg-dark w-4/12 m-auto"
             onPress={e => {
               e.preventDefault();
-                setIsOpen(!isOpen);
+                setCameraOpen(!cameraOpen);
             }}>
             <Text className="text-light text-lg font-semibold text-center">
               Toma Foto
             </Text>
           </TouchableOpacity>
           {evidence.length !== 0 ? (
-            <Text className="text-dark/80 text-lg">
+            <Text className="text-dark/80 text-lg m-auto">
               Photo: {evidence.length} bytes
             </Text>
           ) : (
             <></>
           )}
-         {!isOpen ? <CameraPanel isOpen={isOpen} onChangeEvidence={onChangeEvidence} setIsOpen={setIsOpen} /> : <></>}
+         {cameraOpen ? <CameraPanel cameraOpen={cameraOpen} onChangeEvidence={onChangeEvidence} setCameraOpen={setCameraOpen} /> : <></>}
         </View>
       )}
     </View>

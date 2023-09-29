@@ -5,6 +5,7 @@ import Home from './src/pages/Home';
 import Login from './src/pages/Login';
 import {callAPI, getData} from './src/utils/Functions';
 import {Alert} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 export default function App() {
   const [logged, setlLogged] = useState(false);
   const [isDarkMode, _setDarkMode] = useState(
@@ -29,7 +30,7 @@ export default function App() {
           } else {
             setlLogged(false);
           }
-          // SplashScreen.hide();
+          SplashScreen.hide();
           // Appearance.addChangeListener(appearance => {
           //   setDarkMode(appearance.colorScheme === 'dark');
           // });

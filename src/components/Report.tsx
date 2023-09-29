@@ -16,7 +16,7 @@ import ReportType from '../../backend/models/report';
 import {Camera, useCameraDevice} from 'react-native-vision-camera';
 import Evidence from './Evidence';
 
-export default function Report({reportFunction}: ReportProps) {
+export default function Report({reportFunction, cameraOpen, setCameraOpen}: ReportProps) {
   const [dangerSelected, setDangerSelected] = useState<DangerType>(
     DangerType.FLOOD,
   );
@@ -31,6 +31,7 @@ export default function Report({reportFunction}: ReportProps) {
     const reporter: User = (
       await callAPI('/users/' + (await getData('number')), 'GET')
     ).user;
+    console.log(evidence)
     const res = await callAPI(
       '/report/',
       'POST',
@@ -105,7 +106,7 @@ export default function Report({reportFunction}: ReportProps) {
       </View>
       <View className="justify-center p-1">
         <Text className="text-2xl text-center mt-4">Evidencia</Text>
-        <Evidence evidence={evidence} onChangeEvidence={onChangeEvidence} />
+        <Evidence evidence={evidence} onChangeEvidence={onChangeEvidence} cameraOpen={cameraOpen} setCameraOpen={setCameraOpen} />
       </View>
       <View className="justify-center p-1 mt-2 -z-10">
         <TouchableOpacity

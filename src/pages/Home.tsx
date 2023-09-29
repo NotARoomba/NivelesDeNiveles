@@ -52,9 +52,6 @@ export default function Home({isDarkMode}: ScreenProp) {
   });
   useEffect(() => {
     async function updateMap() {
-      setUser(
-        (await callAPI('/users/' + (await getData('number')), 'GET')).user,
-      );
       let locationStatus = null;
       if (Platform.OS == 'ios')
         locationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
@@ -121,7 +118,7 @@ export default function Home({isDarkMode}: ScreenProp) {
           },
         );
       });
-      SplashScreen.hide();
+      // SplashScreen.hide();
     }
     updateMap();
   }, []);
