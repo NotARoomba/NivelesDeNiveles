@@ -28,22 +28,31 @@ reportRouter.post('/', async (req: Request, res: Response) => {
           msg: 'You have already reported a disaster!',
         });
       //fire and water checks
-      if (report.type === DangerType.FIRE) {
-        console.log(report.image);
-        if (isBase64(report.image)) {
-          const response = await axios({
-            method: "POST",
-            url: "https://detect.roboflow.com/firedetector/1",
-            params: {
-                api_key: env.AI_AUTH
-            },
-            data: report.image,
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            }
-        })
-        console.log(response.data);
-        } 
+
+      if (isBase64(report.image)) {
+        if (report.type === DangerType.FIRE || report.type === DangerType.FLOOD) {
+          console.log(report.image);
+            const response = await axios({
+              method: "POST",
+              url: report.type === DangerType.FIRE ? "https://detect.roboflow.com/fire-smoke-detection-eozii/1" : 'https://detect.roboflow.com/flood-detection-3susv/1',
+              params: {
+                  api_key: env.AI_AUTH
+              },
+              data: report.image,
+              headers: {
+                  "Content-Type": "application/x-www-form-urlencoded"
+              }
+          })
+          console.log(response.data);
+          let predictionAvg = 0;
+          for (let prediction of response.data.prediction) {
+            predictionAvg += prediction.confidence;
+          }
+          predictionAvg /= response.data.predictions.length;
+          if (predictionAvg < 0.5) {
+            return res.send({error: true, msg: `Esa imagen no contiene un ${report.type === DangerType.FIRE ? 'fuego' : 'inundacion'}!`})
+          }
+        }
       }
       await collections.reports.insertOne(report);
       res.send({error: false, msg: 'Mandamos tu reporta!'});
