@@ -26,34 +26,8 @@ reportRouter.post('/', async (req: Request, res: Response) => {
           msg: 'You have already reported a disaster!',
         });
       //fire and water checks
-      console.log(`Basic ${Buffer.from(env.AI_AUTH).toString(
-        'base64',
-      )}`)
       if (report.type === DangerType.FIRE) {
         console.log(report.image);
-        const auth = 'Basic ' + Buffer.from(env.AI_AUTH).toString(
-          'base64',
-        )
-        const response = await axios.post<{
-          predictions: {probability: number}[];
-        }>('https://www.de-vis-software.ro/ignisdet.aspx', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: auth,
-          },
-          body: JSON.stringify({
-            base64_Photo_String: report.image,
-            photo_url: 'NO',
-          }),
-        });
-        console.log(response);
-        if (response.data.predictions[0].probability < 0.75)
-          return res.send({
-            error: true,
-            msg: 'Fuego no fue detectado en ese imagen!',
-          });
       }
       await collections.reports.insertOne(report);
       res.send({error: false, msg: 'Mandamos tu reporta!'});
