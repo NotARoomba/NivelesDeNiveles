@@ -44,7 +44,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
               }
           })
           console.log(response.data);
-
+          if (response.data.predictions.length === 0) return res.send({error: true, msg: `Esa imagen no contiene un ${report.type === DangerType.FIRE ? 'fuego' : 'inundacion'}!`})
           let predictionAvg = 0;
           for (let prediction of response.data.predictions) {
             predictionAvg += prediction.confidence;
