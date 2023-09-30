@@ -167,10 +167,14 @@ export async function connectToDatabase(io: Server) {
     // updates all the location data for all the users using a hacky hack
     //update range of incident
     if (next.operationType === 'update' && !next.fullDocument?.over) {
-      await incidentsCollection.updateOne(
-        {location: next.fullDocument?.location},
-        {range: getRange(next.fullDocument?.numberOfReports)},
-      );
+      try{
+        await incidentsCollection.updateOne(
+          {location: next.fullDocument?.location},
+          {range: getRange(next.fullDocument?.numberOfReports)},
+        );
+      } catch(e){
+        console.log(e);
+      }
       io.emit(NivelesEvents.UPDATE_LOCATION_DATA);
     } else {
       io.emit(NivelesEvents.UPDATE_LOCATION_DATA);
