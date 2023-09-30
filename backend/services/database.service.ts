@@ -109,7 +109,7 @@ export async function connectToDatabase(io: Server) {
           if (incident.level !== updatedSensor.status) {
             await incidentsCollection.updateOne(
               {location: incident.location},
-              {level: updatedSensor.status, timestamp: Date.now()},
+              {$set: {level: updatedSensor.status, timestamp: Date.now()}},
             );
           } else {
             await incidentsCollection.updateOne(
@@ -170,7 +170,7 @@ export async function connectToDatabase(io: Server) {
       try{
         await incidentsCollection.updateOne(
           {location: next.fullDocument?.location},
-          {range: getRange(next.fullDocument?.numberOfReports)},
+          {$set: {range: getRange(next.fullDocument?.numberOfReports)}},
         );
       } catch(e){
         console.log(e);
