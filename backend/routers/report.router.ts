@@ -58,7 +58,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
       await collections.reports.insertOne(report);
       res.send({error: false, msg: 'Mandamos tu reporta!'});
     } else {
-      res.send({error: true, msg: 'Un error ha ocurrido!'});
+      res.send({error: true, msg: 'Un error ha ocurrido con el base de datos!'});
     }
   } catch (error) {
     console.log(error);
