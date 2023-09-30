@@ -44,8 +44,9 @@ reportRouter.post('/', async (req: Request, res: Response) => {
               }
           })
           console.log(response.data);
+
           let predictionAvg = 0;
-          for (let prediction of response.data.prediction) {
+          for (let prediction of response.data.predictions) {
             predictionAvg += prediction.confidence;
           }
           predictionAvg /= response.data.predictions.length;
@@ -60,6 +61,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
       res.send({error: true, msg: 'Un error ha ocurrido!'});
     }
   } catch (error) {
+    console.log(error);
     res.send({error: true, msg: 'Un error ha ocurrido!'});
   }
 });
