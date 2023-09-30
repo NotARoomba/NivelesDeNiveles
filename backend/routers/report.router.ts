@@ -31,7 +31,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
 
       if (isBase64(report.image)) {
         if (report.type === DangerType.FIRE || report.type === DangerType.FLOOD) {
-          console.log(report.image);
+          // console.log(report.image);
             const response = await axios({
               method: "POST",
               url: report.type === DangerType.FIRE ? "https://detect.roboflow.com/fire-smoke-detection-eozii/1" : 'https://detect.roboflow.com/flood-detection-3susv/1',
@@ -43,7 +43,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
                   "Content-Type": "application/x-www-form-urlencoded"
               }
           })
-          console.log(response.data);
+          // console.log(response.data);
           if (response.data.predictions.length === 0) return res.send({error: true, msg: `Esa imagen no contiene un ${report.type === DangerType.FIRE ? 'fuego' : 'inundacion'}!`})
           let predictionAvg = 0;
           for (let prediction of response.data.predictions) {

@@ -29,8 +29,13 @@ export const collections: {
 // (# of reports * 250) + 500)
 
 function getRange(n: number) {
-  return n * 250 + 500;
+  return (n * 250) + 500;
 }
+
+function getLevel(n: number) {
+  return n < 3 ? DangerLevel.SAFE : n < 6 ? DangerLevel.RISK : DangerLevel.DANGER;
+}
+
 
 export async function connectToDatabase(io: Server) {
   const client: mongoDB.MongoClient = new mongoDB.MongoClient(env.MONGODB);
@@ -170,7 +175,7 @@ export async function connectToDatabase(io: Server) {
       try{
         await incidentsCollection.updateOne(
           {location: next.fullDocument?.location},
-          {$set: {range: getRange(next.fullDocument?.numberOfReports)}},
+          {$set: {range: getRange(next.fullDocument?.numberOfReports), level: getLevel(next.fullDocument?.numberOfReports)}},
         );
       } catch(e){
         console.log(e);
