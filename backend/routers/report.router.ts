@@ -50,6 +50,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
             predictionAvg += prediction.confidence;
           }
           predictionAvg /= response.data.predictions.length;
+          console.log(`REPORT PREDICTION AVERAGE: ${predictionAvg}`)
           if (predictionAvg < 0.5) {
             return res.send({error: true, msg: `Esa imagen no contiene un ${report.type === DangerType.FIRE ? 'fuego' : 'inundacion'}!`})
           }

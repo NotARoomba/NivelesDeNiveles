@@ -59,7 +59,8 @@ export async function callAPI(
           })
         ).json();
   } catch (error) {
-    Alert.alert('Error!', 'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.')
+    console.log(error);
+    // Alert.alert('Error!', 'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.')
     return {
       error: true,
       msg: 'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.',

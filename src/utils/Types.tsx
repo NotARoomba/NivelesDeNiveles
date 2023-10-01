@@ -25,6 +25,7 @@ export interface EvidenceProps {
   onChangeEvidence: (nev: string) => void;
   cameraOpen: boolean;
   setCameraOpen: (open: boolean) => void;
+  submitReport: () => void;
 }
 
 export interface PanelProps {

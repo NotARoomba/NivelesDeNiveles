@@ -13,10 +13,10 @@ import {
   useCameraPermission,
 } from 'react-native-vision-camera';
 import {EvidenceProps} from '../utils/Types';
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useEffect, useState} from 'react';
 import CameraPanel from './CameraPanel';
 
-export default function Evidence({evidence, onChangeEvidence, setCameraOpen, cameraOpen}: EvidenceProps) {
+export default function Evidence({evidence, onChangeEvidence, setCameraOpen, cameraOpen, submitReport}: EvidenceProps) {
   const [cameraPerms, setCameraPerms] = useState(false);
 
   const {hasPermission, requestPermission} = useCameraPermission();
@@ -77,6 +77,14 @@ export default function Evidence({evidence, onChangeEvidence, setCameraOpen, cam
          {cameraOpen ? <CameraPanel cameraOpen={cameraOpen} onChangeEvidence={onChangeEvidence} setCameraOpen={setCameraOpen} /> : <></>}
         </View>
       )}
+
+<View className="justify-center p-1 mt-2 -z-10">
+            <TouchableOpacity
+              className="p-3 bg-main w-3/5 m-auto rounded-full"
+              onPress={submitReport}>
+              <Text className="text-2xl text-accent text-center">Reporta</Text>
+            </TouchableOpacity>
+          </View>
     </View>
   );
 }

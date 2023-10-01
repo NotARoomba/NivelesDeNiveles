@@ -30,7 +30,6 @@ usersRouter.get('/:number', async (req: Request, res: Response) => {
     let user = null;
     if (collections.users) {
       user = (await collections.users.findOne({number})) as unknown as User;
-      console.log(user);
     }
     if (user) {
       res.send({user, error: false, msg: 'The user exists!'});

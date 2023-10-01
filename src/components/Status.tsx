@@ -14,12 +14,9 @@ export default function Status({reportFunction, locationData}: StatusProps) {
           status={locationData.status}
           reportFunction={reportFunction}
         />
-        <Text className="text-light mx-auto mr-4 justify-start text-lg font-bold">
-          Reportar
-        </Text>
       </View>
       <View>
-        <Text className="text-xl text-accent font-semibold ml-5">
+        <Text className="text-xl text-accent font-semibold ml-5 mt-0">
           ¿Qué puedes hacer?
         </Text>
         <Advice

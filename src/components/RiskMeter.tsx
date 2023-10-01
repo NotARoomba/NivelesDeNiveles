@@ -19,7 +19,7 @@ export default function RiskMeter({status, reportFunction}: RiskMeterProps) {
         <TouchableOpacity onPress={reportFunction}>
           <View
             className={
-              'p-3 pt-2 rounded-full ' +
+              'p-3 pt-2 rounded-full w-16 mx-auto ' +
               (status === DangerLevel.SAFE
                 ? 'bg-green-500'
                 : status === DangerLevel.RISK
@@ -29,6 +29,10 @@ export default function RiskMeter({status, reportFunction}: RiskMeterProps) {
             <Icon color="#f1eeff" size={40} name="alert-triangle" />
           </View>
         </TouchableOpacity>
+        <Text className="text-light mx-auto mt-1 text-lg font-bold">
+          Reportar
+        </Text>
+
       </View>
       <View />
     </View>
