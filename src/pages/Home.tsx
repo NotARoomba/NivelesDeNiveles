@@ -188,7 +188,7 @@ export default function Home({isDarkMode}: ScreenProp) {
           </MapView>
       <Panel locationData={locationData} /></View>
         ) : (
-          <View className='justify-center'><Text className='text-3xl text-center m-auto'>Nessecitamos tu ubicacion para funccionar, Haze clic en este texto para activarlo!</Text></View>
+          <View className='flex justify-center align-middle'><Text className='text-3xl text-center m-auto align-middle'>Nessecitamos tu ubicacion para funccionar. Haze clic para cambiarlo!</Text></View>
         )}
       </View>
     </View>
