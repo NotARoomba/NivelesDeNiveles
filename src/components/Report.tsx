@@ -28,20 +28,19 @@ export default function Report({reportFunction, cameraOpen, setCameraOpen}: Repo
     if (evidence === '') {
       return Alert.alert('Falta Informacion', 'Por favor llena la evidencia');
     }
-      const userData = (
+      const user = (
         await callAPI('/users/' + (await getData('number')), 'GET')
-      );
-      if (userData.error && typeof userData.error == 'string') return Alert.alert('Error!', 'Porfavor revisa que tu reloj esta sinchronizado!')
+      ).user;
     const res = await callAPI(
       '/report/',
       'POST',
       new ReportType(
-        userData.user.number,
+        user.number,
         dangerSelected,
         levelSelected,
         Date.now(),
         evidence,
-        userData.user.location,
+        user.location,
       ),
     );
     if (!res.error) return Alert.alert('Éxito!', res.msg);

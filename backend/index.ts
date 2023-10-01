@@ -8,7 +8,7 @@ import {verifyRouter} from './routers/verify.router';
 import {Server, Socket} from 'socket.io';
 import NivelesEvents from './models/events';
 import User from './models/user';
-import {createServer} from 'http';
+import {STATUS_CODES, createServer} from 'http';
 import {reportRouter} from './routers/report.router';
 import prune from './services/prune.service';
 import Incident from './models/incident';
@@ -37,7 +37,7 @@ connectToDatabase(io)
   .then(() => {
     app.use(cors(corsOptions));
     app.use(express.json({limit: '500mb'}));
-    app.use(HMAC(genSecret));
+    app.use(HMAC(genSecret, {minInterval: 30}));
     app.use('/users', usersRouter);
     app.use('/sensors', sensorsRouter);
     app.use('/verify', verifyRouter);
@@ -100,7 +100,6 @@ connectToDatabase(io)
       ) => {
         // check by error instance
         if (error instanceof AuthError) {
-          console.log(error)
           res.status(401).json({
             error: 'Invalid request',
             info: error.message,

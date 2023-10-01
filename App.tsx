@@ -8,6 +8,7 @@ import {Alert} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 export default function App() {
   const [logged, setlLogged] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const [isDarkMode, _setDarkMode] = useState(
     // Appearance.getColorScheme() === 'dark',
     false,
@@ -18,30 +19,44 @@ export default function App() {
     // checks if user is valid in database and if not then kicks out
     // storeData('number', '+573104250018');
     // AsyncStorage.removeItem('number');
-
-    getData('number').then(number => {
-      callAPI('/users/' + number, 'GET')
-        .then(res => {
-          if (res == null) {
-            setlLogged(false);
-          }
-          if (res.user && !res.error) {
-            setlLogged(true);
-          } else {
-            setlLogged(false);
-          }
-          SplashScreen.hide();
-          // Appearance.addChangeListener(appearance => {
-          //   setDarkMode(appearance.colorScheme === 'dark');
-          // });
-        })
-        .catch(() => {
-          Alert.alert(
-            'Error!',
-            'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.',
-          );
-        });
-    });
+    async function checkIfLogin() {
+      try {
+        const data = (await callAPI('/users/' + (await getData('number')), 'GET'));
+        if (!data) setlLogged(false);
+        else if (data.user && !data.error) setlLogged(true);
+        else setlLogged(false);
+        setLoaded(true);
+      } catch (e) {
+        Alert.alert(
+          'Error!',
+          'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.',
+        );
+      }
+    }
+    checkIfLogin();
+    // getData('number').then(number => {
+    //   callAPI('/users/' + number, 'GET')
+    //     .then(res => {
+    //       if (res == null) {
+    //         setlLogged(false);
+    //       }
+    //       if (res.user && !res.error) {
+    //         setlLogged(true);
+    //       } else {
+    //         setlLogged(false);
+    //       }
+    //       // SplashScreen.hide();
+    //       // Appearance.addChangeListener(appearance => {
+    //       //   setDarkMode(appearance.colorScheme === 'dark');
+    //       // });
+    //     })
+    //     .catch(() => {
+    //       Alert.alert(
+    //         'Error!',
+    //         'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.',
+    //       );
+    //     });
+    // });
   }, []);
   // const updateDarkMode = (v: boolean) =>
   //   Appearance.setColorScheme(v ? 'light' : 'dark');
@@ -50,11 +65,10 @@ export default function App() {
   // };
   return (
     <>
-      {logged ? (
+    {loaded ? logged ? 
         <Home isDarkMode={isDarkMode} />
-      ) : (
+      : 
         <Login isDarkMode={isDarkMode} updateFunction={[setlLogged]} />
-      )}
-    </>
+    : <></>}</>
   );
 }

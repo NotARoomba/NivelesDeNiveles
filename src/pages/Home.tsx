@@ -127,7 +127,7 @@ export default function Home({isDarkMode}: ScreenProp) {
           },
         );
       });
-      // SplashScreen.hide();
+      SplashScreen.hide();
     }
     updateMap();
   }, []);
