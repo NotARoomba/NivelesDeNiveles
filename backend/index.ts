@@ -14,7 +14,7 @@ import prune from './services/prune.service';
 import Incident from './models/incident';
 import {DangerLevel} from './models/types';
 import Sensor from './models/sensor';
-import haversine from 'haversine-distance'
+import haversine from 'haversine-distance';
 const app = express();
 const httpServer = createServer(app);
 const port = 3001;
@@ -54,10 +54,27 @@ connectToDatabase(io)
         async (user: User, callback) => {
           // console.log(user.location, user)
           // console.log(user);
-          if (!user) return callback({status: DangerLevel.SAFE, sensors: [], incidents: []});
-          let incidents = await collections.incidents?.find({over: false}).toArray() as unknown as Incident[];
-          incidents.filter((incident) => 
-            haversine({lat: user.location.coordinates[1], lon: user.location.coordinates[0]}, {lat: incident.location.coordinates[1], lon: incident.location.coordinates[0]}) < incident.range
+          if (!user)
+            return callback({
+              status: DangerLevel.SAFE,
+              sensors: [],
+              incidents: [],
+            });
+          let incidents = (await collections.incidents
+            ?.find({over: false})
+            .toArray()) as unknown as Incident[];
+          incidents.filter(
+            incident =>
+              haversine(
+                {
+                  lat: user.location.coordinates[1],
+                  lon: user.location.coordinates[0],
+                },
+                {
+                  lat: incident.location.coordinates[1],
+                  lon: incident.location.coordinates[0],
+                },
+              ) < incident.range,
           );
           // const incidents: Incident[] = (await collections.incidents
           //   ?.find({

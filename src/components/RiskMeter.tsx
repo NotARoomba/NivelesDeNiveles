@@ -32,7 +32,6 @@ export default function RiskMeter({status, reportFunction}: RiskMeterProps) {
         <Text className="text-light mx-auto mt-1 text-lg font-bold">
           Reportar
         </Text>
-
       </View>
       <View />
     </View>

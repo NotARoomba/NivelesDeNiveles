@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Config from 'react-native-config';
 import CryptoJS from 'crypto-es';
-import { Alert } from 'react-native';
+import {Alert} from 'react-native';
 
 export const storeData = async (key: string, value: string) => {
   try {

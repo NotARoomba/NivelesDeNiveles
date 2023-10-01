@@ -7,7 +7,7 @@ import Incident from '../models/incident';
 import Report from '../models/report';
 import NivelesEvents from '../models/events';
 import user from '../models/user';
-import haversine from 'haversine-distance'
+import haversine from 'haversine-distance';
 
 const env = dotenv.load({
   MONGODB: String,
@@ -31,13 +31,16 @@ export const collections: {
 // (# of reports * 250) + 500)
 
 function getRange(n: number) {
-  return (n * 250) + 500;
+  return n * 250 + 500;
 }
 
 function getLevel(n: number) {
-  return n < 3 ? DangerLevel.SAFE : n < 6 ? DangerLevel.RISK : DangerLevel.DANGER;
+  return n < 3
+    ? DangerLevel.SAFE
+    : n < 6
+    ? DangerLevel.RISK
+    : DangerLevel.DANGER;
 }
-
 
 export async function connectToDatabase(io: Server) {
   const client: mongoDB.MongoClient = new mongoDB.MongoClient(env.MONGODB);
@@ -84,9 +87,21 @@ export async function connectToDatabase(io: Server) {
       //from inistal safe state to other danger states or danger stat to safe state
       if (updatedSensor.status != beforeSensor.status) {
         //need to find an existing incident (user report) or make a new incident
-        let incidents = await collections.incidents?.find({type: updatedSensor.type, over: false}).toArray() as unknown as Incident[];
-        incidents.filter((incident) => 
-          haversine({lat: updatedSensor.location.coordinates[1], lon: updatedSensor.location.coordinates[0]}, {lat: incident.location.coordinates[1], lon: incident.location.coordinates[0]}) < incident.range
+        let incidents = (await collections.incidents
+          ?.find({type: updatedSensor.type, over: false})
+          .toArray()) as unknown as Incident[];
+        incidents.filter(
+          incident =>
+            haversine(
+              {
+                lat: updatedSensor.location.coordinates[1],
+                lon: updatedSensor.location.coordinates[0],
+              },
+              {
+                lat: incident.location.coordinates[1],
+                lon: incident.location.coordinates[0],
+              },
+            ) < incident.range,
         );
         // const incidentsNear: Incident[] = (await incidentsCollection
         //   .find({
@@ -139,9 +154,21 @@ export async function connectToDatabase(io: Server) {
       console.log('REPORT INSERTED');
       const report: Report = next.fullDocument as Report;
       // console.log(report);
-      let incidents = await collections.incidents?.find({type: report.type, over: false}).toArray() as unknown as Incident[];
-      incidents.filter((incident) => 
-        haversine({lat: report.location.coordinates[1], lon: report.location.coordinates[0]}, {lat: incident.location.coordinates[1], lon: incident.location.coordinates[0]}) < incident.range
+      let incidents = (await collections.incidents
+        ?.find({type: report.type, over: false})
+        .toArray()) as unknown as Incident[];
+      incidents.filter(
+        incident =>
+          haversine(
+            {
+              lat: report.location.coordinates[1],
+              lon: report.location.coordinates[0],
+            },
+            {
+              lat: incident.location.coordinates[1],
+              lon: incident.location.coordinates[0],
+            },
+          ) < incident.range,
       );
       // const incidentsNear: Incident[] = (await incidentsCollection
       //   .find({
@@ -182,14 +209,28 @@ export async function connectToDatabase(io: Server) {
     // updates all the location data for all the users using a hacky hack
     //update range of incident and level
     // also check if 2 incidents overlap and if so then merge the incident with the total range and set the center to the center of both of the points
-    if (next.operationType === 'update' && next.updateDescription.updatedFields?.numberOfReports ) {
-      console.log(next)
+    if (
+      next.operationType === 'update' &&
+      next.updateDescription.updatedFields?.numberOfReports
+    ) {
+      console.log(next);
       await incidentsCollection.updateOne(
         {_id: next.documentKey._id},
-        {$set: {range: getRange(next.updateDescription.updatedFields?.numberOfReports), level: getLevel(next.updateDescription.updatedFields?.numberOfReports)}},
+        {
+          $set: {
+            range: getRange(
+              next.updateDescription.updatedFields?.numberOfReports,
+            ),
+            level: getLevel(
+              next.updateDescription.updatedFields?.numberOfReports,
+            ),
+          },
+        },
       );
       // check for merges of inidents
-      let incidents = await collections.incidents?.find({over: false}).toArray() as unknown as Incident[];
+      let incidents = (await collections.incidents
+        ?.find({over: false})
+        .toArray()) as unknown as Incident[];
       for (let i = 0; i < incidents.length; i++) {
         for (let j = 0; j < incidents.length; i++) {
           // check if not the same
@@ -197,10 +238,44 @@ export async function connectToDatabase(io: Server) {
             // then check if the 2 incidents are the same type and if the distance between the centers are less than or equal to the sum of the ranges
             // if true then merge the incidents and change the center to the middle of the 2 incidents
             // finally delete the 2 child incidents and push the parent
-            if (incidents[i].type == incidents[j].type && haversine({lat: incidents[i].location.coordinates[1], lon: incidents[i].location.coordinates[0]}, {lat: incidents[j].location.coordinates[1], lon: incidents[j].location.coordinates[0]}) <= (incidents[i].range + incidents[j].range) ) {
-              const newCenter = [(incidents[i].location.coordinates[0] + incidents[j].location.coordinates[0] )/2, (incidents[i].location.coordinates[1] + incidents[j].location.coordinates[1] )/2]
-              const newIncident: Incident = new Incident(incidents[i].type, incidents[i].level + incidents[j].level, incidents[i].numberOfReports + incidents[j].numberOfReports, Date.now(), false, false, incidents[i].range + incidents[j].range, {type: 'Point', coordinates: newCenter});
-              await collections.incidents?.deleteMany({ $or: [{location: incidents[i].location}, {location:incidents[j].location}]});
+            if (
+              incidents[i].type == incidents[j].type &&
+              haversine(
+                {
+                  lat: incidents[i].location.coordinates[1],
+                  lon: incidents[i].location.coordinates[0],
+                },
+                {
+                  lat: incidents[j].location.coordinates[1],
+                  lon: incidents[j].location.coordinates[0],
+                },
+              ) <=
+                incidents[i].range + incidents[j].range
+            ) {
+              const newCenter = [
+                (incidents[i].location.coordinates[0] +
+                  incidents[j].location.coordinates[0]) /
+                  2,
+                (incidents[i].location.coordinates[1] +
+                  incidents[j].location.coordinates[1]) /
+                  2,
+              ];
+              const newIncident: Incident = new Incident(
+                incidents[i].type,
+                incidents[i].level + incidents[j].level,
+                incidents[i].numberOfReports + incidents[j].numberOfReports,
+                Date.now(),
+                false,
+                false,
+                incidents[i].range + incidents[j].range,
+                {type: 'Point', coordinates: newCenter},
+              );
+              await collections.incidents?.deleteMany({
+                $or: [
+                  {location: incidents[i].location},
+                  {location: incidents[j].location},
+                ],
+              });
               await collections.incidents?.insertOne(newIncident);
               return io.emit(NivelesEvents.UPDATE_LOCATION_DATA);
             }
@@ -211,4 +286,3 @@ export async function connectToDatabase(io: Server) {
     io.emit(NivelesEvents.UPDATE_LOCATION_DATA);
   });
 }
-

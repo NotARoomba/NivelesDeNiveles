@@ -16,7 +16,11 @@ import ReportType from '../../backend/models/report';
 import {Camera, useCameraDevice} from 'react-native-vision-camera';
 import Evidence from './Evidence';
 
-export default function Report({reportFunction, cameraOpen, setCameraOpen}: ReportProps) {
+export default function Report({
+  reportFunction,
+  cameraOpen,
+  setCameraOpen,
+}: ReportProps) {
   const [dangerSelected, setDangerSelected] = useState<DangerType>(
     DangerType.FLOOD,
   );
@@ -28,9 +32,8 @@ export default function Report({reportFunction, cameraOpen, setCameraOpen}: Repo
     if (evidence === '') {
       return Alert.alert('Falta Informacion', 'Por favor llena la evidencia');
     }
-      const user = (
-        await callAPI('/users/' + (await getData('number')), 'GET')
-      ).user;
+    const user = (await callAPI('/users/' + (await getData('number')), 'GET'))
+      .user;
     const res = await callAPI(
       '/report/',
       'POST',
@@ -105,7 +108,13 @@ export default function Report({reportFunction, cameraOpen, setCameraOpen}: Repo
       </View>
       <View className="justify-center p-1">
         <Text className="text-2xl text-center mt-4">Evidencia</Text>
-        <Evidence evidence={evidence} onChangeEvidence={onChangeEvidence} cameraOpen={cameraOpen} setCameraOpen={setCameraOpen} submitReport={submitReport}/>
+        <Evidence
+          evidence={evidence}
+          onChangeEvidence={onChangeEvidence}
+          cameraOpen={cameraOpen}
+          setCameraOpen={setCameraOpen}
+          submitReport={submitReport}
+        />
       </View>
     </View>
   );

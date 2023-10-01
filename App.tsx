@@ -5,7 +5,6 @@ import Home from './src/pages/Home';
 import Login from './src/pages/Login';
 import {callAPI, getData} from './src/utils/Functions';
 import {Alert} from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
 export default function App() {
   const [logged, setlLogged] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -21,7 +20,10 @@ export default function App() {
     // AsyncStorage.removeItem('number');
     async function checkIfLogin() {
       try {
-        const data = (await callAPI('/users/' + (await getData('number')), 'GET'));
+        const data = await callAPI(
+          '/users/' + (await getData('number')),
+          'GET',
+        );
         if (!data) setlLogged(false);
         else if (data.user && !data.error) setlLogged(true);
         else setlLogged(false);
@@ -65,10 +67,15 @@ export default function App() {
   // };
   return (
     <>
-    {loaded ? logged ? 
-        <Home isDarkMode={isDarkMode} />
-      : 
-        <Login isDarkMode={isDarkMode} updateFunction={[setlLogged]} />
-    : <></>}</>
+      {loaded ? (
+        logged ? (
+          <Home isDarkMode={isDarkMode} />
+        ) : (
+          <Login isDarkMode={isDarkMode} updateFunction={[setlLogged]} />
+        )
+      ) : (
+        <></>
+      )}
+    </>
   );
 }

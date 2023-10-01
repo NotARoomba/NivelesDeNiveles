@@ -69,7 +69,7 @@ export default function Panel({locationData}: PanelProps) {
       {...panResponder.panHandlers}
       className={
         'w-screen absolute left-0 rounded-t-3xl transition-all duration-200' +
-        (' h-[500px] bottom-[-400px]') +
+        ' h-[500px] bottom-[-400px]' +
         (report ? ' bg-accent' : ' bg-dark')
       }>
       <View className="justify-center">
@@ -81,7 +81,11 @@ export default function Panel({locationData}: PanelProps) {
         />
       </View>
       {report ? (
-        <Report reportFunction={reportFunction} cameraOpen={cameraOpen} setCameraOpen={setCameraOpen} />
+        <Report
+          reportFunction={reportFunction}
+          cameraOpen={cameraOpen}
+          setCameraOpen={setCameraOpen}
+        />
       ) : (
         <Status reportFunction={reportFunction} locationData={locationData} />
       )}

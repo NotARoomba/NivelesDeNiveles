@@ -16,7 +16,13 @@ import {EvidenceProps} from '../utils/Types';
 import {useEffect, useState} from 'react';
 import CameraPanel from './CameraPanel';
 
-export default function Evidence({evidence, onChangeEvidence, setCameraOpen, cameraOpen, submitReport}: EvidenceProps) {
+export default function Evidence({
+  evidence,
+  onChangeEvidence,
+  setCameraOpen,
+  cameraOpen,
+  submitReport,
+}: EvidenceProps) {
   const [cameraPerms, setCameraPerms] = useState(false);
 
   const {hasPermission, requestPermission} = useCameraPermission();
@@ -43,7 +49,7 @@ export default function Evidence({evidence, onChangeEvidence, setCameraOpen, cam
     }
     updatePerms();
   }, []);
-  
+
   return (
     <View className="justify-around">
       {!cameraPerms ? (
@@ -61,7 +67,7 @@ export default function Evidence({evidence, onChangeEvidence, setCameraOpen, cam
             className=" px-3 rounded-full bg-dark w-4/12 m-auto"
             onPress={e => {
               e.preventDefault();
-                setCameraOpen(!cameraOpen);
+              setCameraOpen(!cameraOpen);
             }}>
             <Text className="text-light  text-lg font-semibold text-center">
               Toma Foto
@@ -69,22 +75,30 @@ export default function Evidence({evidence, onChangeEvidence, setCameraOpen, cam
           </TouchableOpacity>
           {evidence.length !== 0 ? (
             <Text className="text-dark/80 text-lg m-auto">
-              Photo: {(evidence.length/1000).toFixed(2)} KB
+              Photo: {(evidence.length / 1000).toFixed(2)} KB
             </Text>
           ) : (
             <></>
           )}
-         {cameraOpen ? <CameraPanel cameraOpen={cameraOpen} onChangeEvidence={onChangeEvidence} setCameraOpen={setCameraOpen} /> : <></>}
+          {cameraOpen ? (
+            <CameraPanel
+              cameraOpen={cameraOpen}
+              onChangeEvidence={onChangeEvidence}
+              setCameraOpen={setCameraOpen}
+            />
+          ) : (
+            <></>
+          )}
         </View>
       )}
 
-<View className="justify-center p-1 mt-2 -z-10">
-            <TouchableOpacity
-              className="p-3 bg-main w-3/5 m-auto rounded-full"
-              onPress={submitReport}>
-              <Text className="text-2xl text-accent text-center">Reporta</Text>
-            </TouchableOpacity>
-          </View>
+      <View className="justify-center p-1 mt-2 -z-10">
+        <TouchableOpacity
+          className="p-3 bg-main w-3/5 m-auto rounded-full"
+          onPress={submitReport}>
+          <Text className="text-2xl text-accent text-center">Reporta</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

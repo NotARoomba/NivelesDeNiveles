@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, StatusBar, Alert, Platform, Text, Linking, TouchableOpacity} from 'react-native';
+import {
+  View,
+  StatusBar,
+  Alert,
+  Platform,
+  Text,
+  Linking,
+  TouchableOpacity,
+} from 'react-native';
 import {
   DangerLevel,
   DangerType,
@@ -106,7 +114,8 @@ export default function Home({isDarkMode}: ScreenProp) {
                 text: 'Grant',
                 onPress: () => Linking.openSettings(),
               },
-            ],);
+            ],
+          );
         }
       }
       const user: User = (
@@ -146,62 +155,75 @@ export default function Home({isDarkMode}: ScreenProp) {
       <View className="flex justify-center align-middle text-center justify-items-center">
         {locationPerms ? (
           <View>
-          <MapView
-            className="w-screen h-screen bg-neutral-200 justify-center m-auto"
-            provider={PROVIDER_GOOGLE}
-            showsUserLocation
-            showsMyLocationButton
-            loadingEnabled
-            initialRegion={region}
-            region={region}>
-            {locationData.incidents.length > 0 ? <Heatmap
-              points={[
-                      ...locationData.incidents.map(v => ({
-                        latitude: v.location.coordinates[1],
-                        longitude: v.location.coordinates[0],
-                      })),
-                    ]}
-              // points={[{latitude: 37.7882, longitude: -122.4324}, {latitude: 37.7882, longitude: -122.4524}]}
-              radius={50}
-              gradient={{
-                colorMapSize: 1000,
-                startPoints: [0.1, 0.6, 1],
-                colors: locationData.status === DangerLevel.SAFE
-                  ? ['#22c55e', '#22c55e', '#22c55e']
-                  : locationData.status === DangerLevel.RISK
-                  ? ['#f59e0b', '#f59e0b', '#f59e0b']
-                  : ['#ef4444', '#ef4444', '#ef4444'],
-              }}
-            /> : <></>}
-            {locationData.sensors.map((s, i) => (
-              <Marker
-                key={i}
-                coordinate={{
-                  latitude: s.location.coordinates[1],
-                  longitude: s.location.coordinates[0],
-                }}
-                title={s.name}
-                description={`Status: ${
-                  s.status === DangerLevel.SAFE
-                    ? 'seguro'
-                    : s.status === DangerLevel.RISK
-                    ? 'riesgo'
-                    : 'peligro'
-                }`}
-                pinColor={
-                  s.status === DangerLevel.SAFE
-                    ? '#22c55e'
-                    : s.status === DangerLevel.RISK
-                    ? '#f59e0b'
-                    : '#ef4444'
-                }
-                style={{justifyContent: 'center', margin: 'auto'}}
-              />
-            ))}
-          </MapView>
-      <Panel locationData={locationData} /></View>
+            <MapView
+              className="w-screen h-screen bg-neutral-200 justify-center m-auto"
+              provider={PROVIDER_GOOGLE}
+              showsUserLocation
+              showsMyLocationButton
+              loadingEnabled
+              initialRegion={region}
+              region={region}>
+              {locationData.incidents.length > 0 ? (
+                <Heatmap
+                  points={[
+                    ...locationData.incidents.map(v => ({
+                      latitude: v.location.coordinates[1],
+                      longitude: v.location.coordinates[0],
+                    })),
+                  ]}
+                  // points={[{latitude: 37.7882, longitude: -122.4324}, {latitude: 37.7882, longitude: -122.4524}]}
+                  radius={50}
+                  gradient={{
+                    colorMapSize: 1000,
+                    startPoints: [0.1, 0.6, 1],
+                    colors:
+                      locationData.status === DangerLevel.SAFE
+                        ? ['#22c55e', '#22c55e', '#22c55e']
+                        : locationData.status === DangerLevel.RISK
+                        ? ['#f59e0b', '#f59e0b', '#f59e0b']
+                        : ['#ef4444', '#ef4444', '#ef4444'],
+                  }}
+                />
+              ) : (
+                <></>
+              )}
+              {locationData.sensors.map((s, i) => (
+                <Marker
+                  key={i}
+                  coordinate={{
+                    latitude: s.location.coordinates[1],
+                    longitude: s.location.coordinates[0],
+                  }}
+                  title={s.name}
+                  description={`Status: ${
+                    s.status === DangerLevel.SAFE
+                      ? 'seguro'
+                      : s.status === DangerLevel.RISK
+                      ? 'riesgo'
+                      : 'peligro'
+                  }`}
+                  pinColor={
+                    s.status === DangerLevel.SAFE
+                      ? '#22c55e'
+                      : s.status === DangerLevel.RISK
+                      ? '#f59e0b'
+                      : '#ef4444'
+                  }
+                  style={{justifyContent: 'center', margin: 'auto'}}
+                />
+              ))}
+            </MapView>
+            <Panel locationData={locationData} />
+          </View>
         ) : (
-          <TouchableOpacity onPress={() => Linking.openSettings()} className='justify-center h-full'><Text className='text-3xl text-center m-auto align-middle'>Nessecitamos tu ubicacion precisa para funccionar. Haze clic para cambiarlo!</Text></TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => Linking.openSettings()}
+            className="justify-center h-full">
+            <Text className="text-3xl text-center m-auto align-middle">
+              Nessecitamos tu ubicacion precisa para funccionar. Haze clic para
+              cambiarlo!
+            </Text>
+          </TouchableOpacity>
         )}
       </View>
     </View>
