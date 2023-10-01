@@ -53,7 +53,7 @@ connectToDatabase(io)
         async (user: User, callback) => {
           // console.log(user.location, user)
           // console.log(user);
-          if (user.location == null) callback({status: DangerLevel.SAFE, sensors: [], incidents: []});
+          if (!user) callback({status: DangerLevel.SAFE, sensors: [], incidents: []});
           const incidents: Incident[] = (await collections.incidents
             ?.find({
               location: {

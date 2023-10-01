@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StatusBar, Alert, Platform} from 'react-native';
+import {View, StatusBar, Alert, Platform, Text} from 'react-native';
 import {
   DangerLevel,
   DangerType,
@@ -136,6 +136,7 @@ export default function Home({isDarkMode}: ScreenProp) {
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <View className="flex justify-center align-middle text-center justify-items-center">
         {locationPerms ? (
+          <View>
           <MapView
             className="w-screen h-screen bg-neutral-200 justify-center m-auto"
             provider={PROVIDER_GOOGLE}
@@ -185,11 +186,11 @@ export default function Home({isDarkMode}: ScreenProp) {
               />
             ))}
           </MapView>
+      <Panel locationData={locationData} /></View>
         ) : (
-          <></>
+          <View className='justify-center'><Text className='text-3xl text-center m-auto'>Nessecitamos tu ubicacion para funccionar, Haze clic en este texto para activarlo!</Text></View>
         )}
       </View>
-      <Panel locationData={locationData} />
     </View>
   );
 }
