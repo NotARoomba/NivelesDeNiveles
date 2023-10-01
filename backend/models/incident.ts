@@ -5,7 +5,7 @@ export default class Incident {
     public type: DangerType,
     public level: DangerLevel,
     public numberOfReports: number,
-    public startTimestamp: number,
+    public timestamp: number,
     public beenNotified: boolean,
     public over: boolean,
     public range: number,

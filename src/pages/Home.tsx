@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StatusBar, Alert, Platform, Text} from 'react-native';
+import {View, StatusBar, Alert, Platform, Text, Linking, TouchableOpacity} from 'react-native';
 import {
   DangerLevel,
   DangerType,
@@ -97,7 +97,16 @@ export default function Home({isDarkMode}: ScreenProp) {
           Alert.alert(
             'Activa Ubicacion',
             'Niveles de Niveles nessecita tu ubicacion para asegurar que no estas en riesgo!',
-          );
+            [
+              {
+                text: 'Cancel',
+                onPress: () => 1,
+              },
+              {
+                text: 'Grant',
+                onPress: () => Linking.openSettings(),
+              },
+            ],);
         }
       }
       const user: User = (
@@ -188,7 +197,7 @@ export default function Home({isDarkMode}: ScreenProp) {
           </MapView>
       <Panel locationData={locationData} /></View>
         ) : (
-          <View className='flex justify-center align-middle'><Text className='text-3xl text-center m-auto align-middle'>Nessecitamos tu ubicacion para funccionar. Haze clic para cambiarlo!</Text></View>
+          <TouchableOpacity onPress={() => Linking.openSettings()} className='justify-center h-full'><Text className='text-3xl text-center m-auto align-middle'>Nessecitamos tu ubicacion precisa para funccionar. Haze clic para cambiarlo!</Text></TouchableOpacity>
         )}
       </View>
     </View>
