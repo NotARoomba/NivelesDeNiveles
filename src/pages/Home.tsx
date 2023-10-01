@@ -166,7 +166,11 @@ export default function Home({isDarkMode}: ScreenProp) {
               gradient={{
                 colorMapSize: 1000,
                 startPoints: [0.1, 0.6, 1],
-                colors: ['#008000', '#FFA500', '#FF0000'],
+                colors: locationData.status === DangerLevel.SAFE
+                  ? ['#22c55e', '#22c55e', '#22c55e']
+                  : locationData.status === DangerLevel.RISK
+                  ? ['#f59e0b', '#f59e0b', '#f59e0b']
+                  : ['#ef4444', '#ef4444', '#ef4444'],
               }}
             /> : <></>}
             {locationData.sensors.map((s, i) => (
