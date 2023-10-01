@@ -170,16 +170,14 @@ export async function connectToDatabase(io: Server) {
   });
   incidentsCollection.watch().on('change', async next => {
     // updates all the location data for all the users using a hacky hack
-    //update range of incident
-    if (next.operationType === 'update' && !next.fullDocument?.over) {
+    //update range of incident and level
+    if (next.operationType === 'update' && next.updateDescription.updatedFields?.numberOfReports ) {
       console.log(next)
-        await incidentsCollection.updateOne(
-          {location: next.fullDocument?.location},
-          {$set: {range: getRange(next.fullDocument?.numberOfReports), level: getLevel(next.fullDocument?.numberOfReports)}},
-        );
-      io.emit(NivelesEvents.UPDATE_LOCATION_DATA);
-    } else {
-      io.emit(NivelesEvents.UPDATE_LOCATION_DATA);
+      await incidentsCollection.updateOne(
+        {_id: next.documentKey._id},
+        {$set: {range: getRange(next.updateDescription.updatedFields?.numberOfReports), level: getLevel(next.updateDescription.updatedFields?.numberOfReports)}},
+      );
     }
+    io.emit(NivelesEvents.UPDATE_LOCATION_DATA);
   });
 }
