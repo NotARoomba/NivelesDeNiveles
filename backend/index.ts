@@ -111,6 +111,7 @@ connectToDatabase(io)
     // app.listen(port, () => {
     //   console.log(`Server started at http://localhost:${port}`);
     // });
+    prune();
     setInterval(() => prune(), 1000 * 3600 * 2); // update data every so seconds
     httpServer.listen(port);
     console.log('Server Started!');
