@@ -100,6 +100,7 @@ connectToDatabase(io)
       ) => {
         // check by error instance
         if (error instanceof AuthError) {
+          console.log(error)
           res.status(401).json({
             error: 'Invalid request',
             info: error.message,
