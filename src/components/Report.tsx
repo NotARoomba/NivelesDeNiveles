@@ -31,6 +31,7 @@ export default function Report({reportFunction, cameraOpen, setCameraOpen}: Repo
     const reporter: User = (
       await callAPI('/users/' + (await getData('number')), 'GET')
     ).user;
+    console.log(reporter, (await getData('number')));
     const res = await callAPI(
       '/report/',
       'POST',
