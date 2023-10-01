@@ -172,14 +172,11 @@ export async function connectToDatabase(io: Server) {
     // updates all the location data for all the users using a hacky hack
     //update range of incident
     if (next.operationType === 'update' && !next.fullDocument?.over) {
-      try{
+      console.log(next.fullDocument)
         await incidentsCollection.updateOne(
           {location: next.fullDocument?.location},
           {$set: {range: getRange(next.fullDocument?.numberOfReports), level: getLevel(next.fullDocument?.numberOfReports)}},
         );
-      } catch(e){
-        console.log(e);
-      }
       io.emit(NivelesEvents.UPDATE_LOCATION_DATA);
     } else {
       io.emit(NivelesEvents.UPDATE_LOCATION_DATA);
