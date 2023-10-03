@@ -220,7 +220,7 @@ export default function Home({isDarkMode}: ScreenProp) {
             onPress={() => Linking.openSettings()}
             className="justify-center h-full">
             <Text className="text-3xl text-center m-auto align-middle">
-              Nessecitamos tu ubicacion precisa para funccionar. Haze clic para
+              Nes1ecitamos tu ubicacion precisa para funccionar. Haze clic para
               cambiarlo!
             </Text>
           </TouchableOpacity>

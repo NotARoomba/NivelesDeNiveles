@@ -51,7 +51,7 @@ export default function Evidence({
   }, []);
 
   return (
-    <View className="justify-around">
+    <View className="justify-around h-32">
       {!cameraPerms ? (
         <TextInput
           onChangeText={onChangeEvidence}
@@ -92,7 +92,7 @@ export default function Evidence({
         </View>
       )}
 
-      <View className="justify-center p-1 mt-2 -z-10">
+      <View className="justify-center p-1 mt-12 -z-10">
         <TouchableOpacity
           className="p-3 bg-main w-3/5 m-auto rounded-full"
           onPress={submitReport}>
