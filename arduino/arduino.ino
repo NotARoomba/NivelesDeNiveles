@@ -88,6 +88,7 @@ void loop()
   }
 //
 //  Serial.println(gpsSerial.available());
+
   if (gpsSerial.available()) {
     Serial.write(gpsSerial.read());
   }
