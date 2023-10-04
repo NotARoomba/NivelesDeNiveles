@@ -60,13 +60,14 @@ export default function Report({
             <Icon name="arrow-left" color="#180155" size={40} />
           </TouchableOpacity>
         </View>
-        <Text className="text-2xl w-1/2 -ml-2 font-bold">Reporta</Text>
+        <Text className="text-2xl w-1/2 -ml-2 font-bold text-dark">Reporta</Text>
       </View>
       <View className="justify-center p-1">
-        <Text className="text-2xl text-center mt-4">Tipo</Text>
+        <Text className="text-2xl text-center mt-4 text-dark">Tipo</Text>
         <View className="flex flex-row justify-around mt-4">
           {[DangerType.FLOOD, DangerType.FIRE, DangerType.AVALANCHE].map(
             (v, i) => (
+              <View className='justify-center'>
               <DangerTypeButton
                 key={i}
                 type={v}
@@ -80,11 +81,18 @@ export default function Report({
                 }
                 isSelected={dangerSelected === v}
               />
+              <Text className='text-dark mx-auto'>{v === DangerType.FLOOD
+                    ? 'Inundacion'
+                    : v === DangerType.FIRE
+                    ? 'Fuego'
+                    : 'Deslizamiento'}</Text>
+
+</View>
             ),
           )}
         </View>
       </View>
-      <View className="justify-center p-1">
+      {/* <View className="justify-center p-1">
         <Text className="text-2xl text-center mt-4">Nivel de Peligro</Text>
         <View className="flex flex-row justify-around mt-4">
           {[DangerLevel.SAFE, DangerLevel.RISK, DangerLevel.DANGER].map(
@@ -105,9 +113,9 @@ export default function Report({
             ),
           )}
         </View>
-      </View>
-      <View className="justify-center p-1">
-        <Text className="text-2xl text-center mt-4">Evidencia</Text>
+      </View> */}
+      <View className="justify-center p-1 mt-4">
+        <Text className="text-2xl text-center mt-4 text-dark">Evidencia</Text>
         <Evidence
           evidence={evidence}
           onChangeEvidence={onChangeEvidence}
