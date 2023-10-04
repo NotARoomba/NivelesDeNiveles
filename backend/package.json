@@ -1,7 +1,7 @@
 {
-  "name": "foro-pec-backend",
+  "name": "niveles-de-niveles-backend",
   "version": "1.0.0",
-  "description": "ForoPEC Backend",
+  "description": "Niveles De Niveles Backend",
   "main": "index.ts",
   "scripts": {
     "build": "npm i",
