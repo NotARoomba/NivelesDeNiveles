@@ -26,7 +26,7 @@ sensorsRouter.post('/', async (req: Request, res: Response) => {
   try {
     if (collections.sensors) {
       await collections.sensors.updateOne(
-        {number: data.name},
+        {name: data.name},
         {$set: data},
         {
           upsert: true,
