@@ -1,7 +1,5 @@
-// C++ code
-//
 #include <SoftwareSerial.h>
-#include <TinyGPS.h>
+//#include <TinyGPS.h>
 
 enum STATUS {
   SAFE,
@@ -16,21 +14,25 @@ enum TYPE {
 };
 
 
-const int TRIGGER_PIN = 4;
-const int ECHO_PIN = 5;
-const int RST_GPS = 0;
-const int SENSOR_TYPE = 0;
-const int MAX_ULTRASONIC_DISTANCE = 42;
-const float ULTRASONIC_STATUS_DISTANCE = MAX_ULTRASONIC_DISTANCE / 3;
-const int PAST_DISTANCES_SIZE = 50;
+#define TRIGGER_PIN 4
+#define ECHO_PIN 5
+#define RST_GPS 0
+#define SENSOR_TYPE 0
+#define MAX_ULTRASONIC_DISTANCE 42
+#define ULTRASONIC_STATUS_DISTANCE (MAX_ULTRASONIC_DISTANCE / 3)
+#define PAST_DISTANCES_SIZE 50
+
+#define SENROR_TYPE FLOOD
+#define NAME "Sensor de Agua"
+//const long COORDINATES[] =  {-74.8503638L, 11.020311L};
 
 STATUS status = SAFE;
 long pastDistances[PAST_DISTANCES_SIZE];
 
 
-TinyGPS gps;
-long lat, lon;
-SoftwareSerial gpsSerial(3, 2);
+// TinyGPS gps;
+// long lat, lon;
+// SoftwareSerial gpsSerial(2, 3);
 
 void setup()
 {
@@ -38,9 +40,9 @@ void setup()
   pinMode(TRIGGER_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
-  gpsSerial.begin(9600);
-  pinMode(RST_GPS, OUTPUT);
-  digitalWrite(RST_GPS, HIGH);
+  // gpsSerial.begin(9600);
+  // pinMode(RST_GPS, OUTPUT);
+  // digitalWrite(RST_GPS, HIGH);
 }
 
 void loop()
@@ -89,12 +91,12 @@ void loop()
 //
 //  Serial.println(gpsSerial.available());
 
-  if (gpsSerial.available()) {
-    Serial.write(gpsSerial.read());
-  }
-  if (Serial.available()) {
-    gpsSerial.write(Serial.read());
-  }
+  // if (gpsSerial.available()) {
+  //   Serial.write(gpsSerial.read());
+  // }
+  // if (Serial.available()) {
+  //   gpsSerial.write(Serial.read());
+  // }
   
 //  Serial.print("Distance: ");
 //  Serial.println(distance);
@@ -103,6 +105,17 @@ void loop()
 //  Serial.print("Average Distanve: ");
 //  Serial.println(averageDistance);
 
+  Serial.print("{\"name\": \"");
+  Serial.print(NAME);
+  Serial.print("\", \"status\": ");
+  Serial.print(status);
+  Serial.print(", \"type\": ");
+  Serial.print(SENSOR_TYPE);
+  Serial.print(", \"location\": {\"type\": \"Point\", \"coordinates\": [");
+  Serial.print("-74.8503638");
+  Serial.print(", ");
+  Serial.print("11.020311");
+  Serial.println("]}}");
   
   delay(0);
 }
