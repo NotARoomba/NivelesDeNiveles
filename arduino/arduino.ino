@@ -117,5 +117,5 @@ void loop()
   Serial.print("11.020311");
   Serial.println("]}}");
   
-  delay(0);
+  delay(10);
 }

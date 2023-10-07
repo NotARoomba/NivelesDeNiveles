@@ -1,9 +1,9 @@
 import serial
 import time
 import json 
-import Crypto
-import hmac, math, requests
-from dotenv import load_dotenv
+from Crypto.Hash import MD5
+import hmac, math, requests, hashlib
+from dotenv import dotenv_values
 
 
 config = dotenv_values(".env")
@@ -20,9 +20,16 @@ while True:
     data = arduino.readline().strip().decode('utf-8').strip()
     if (is_json(data)):
         r = json.loads(data)
+        print(r)
         if int(r['status']) != beforeStatus:
             print("STATUS CHANGED TO: ", r['status'])
             beforeStatus = int(r['status'])
-            time = time.time() * 1000
-            auth = hmac.new(str(math.floor(time/(30*1000))), time + 'POST' + '/sensors' + str(Crypto.Hash.MD5.new(data)))
-            requests.post(config['API_URL'], data, headers={'Authorization': auth})
+            ct = time.time() * 1000
+            auth = hmac.new(bytearray(math.floor(ct/(30*1000))), bytearray(str(ct) + 'POST' + '/sensors' + MD5.new(bytearray(data, 'utf-8')).hexdigest(), 'utf-8'), digestmod=hashlib.sha256)
+            # auth.update(ct)
+            # auth.update('POST')
+            # auth.update('/sensors')
+            # auth.update(MD5.new(bytearray(data, 'utf-8')).hexdigest())
+            print(auth.hexdigest())
+            res = requests.post(config['API_URL'], data, headers={'Authorization': 'HMAC ' + str(ct) + ':' + auth.hexdigest()})
+            print(res)
