@@ -75,7 +75,7 @@ export async function connectToDatabase(io: Server) {
   sensorsCollection.createIndex({location: '2dsphere'});
   usersCollection.createIndex({location: '2dsphere'});
 
-  infoDB.command( { collMod: env.SENSOR_COLLECTION, changeStreamPreAndPostImages: { enabled: true } } );
+  // infoDB.command( { collMod: env.SENSOR_COLLECTION, changeStreamPreAndPostImages: { enabled: true } } );
 
 
   console.log('Successfully connected to database!');
@@ -91,6 +91,7 @@ export async function connectToDatabase(io: Server) {
   sensorsCollection.watch(pipeline, { fullDocument: "required", fullDocumentBeforeChange: 'required' }).on('change', async next => {
     // let sensors: Sensor[] = (await sensorsCollection.find({}).toArray() as unknown as Sensor[])
     if (next.operationType == 'update') {
+      console.log(next)
       let updatedSensor = next.fullDocument?.updatedFields as Sensor;
       let beforeSensor = next.fullDocumentBeforeChange?.updatedFields as Sensor;
       console.log(updatedSensor);
