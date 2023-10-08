@@ -1,13 +1,17 @@
+import binascii
+from datetime import datetime
 import serial
 import time
-import json 
-from Crypto.Hash import MD5
-import hmac, math, requests, hashlib
+import json
+import hmac, math, requests, hashlib, os
 from dotenv import dotenv_values
-
+if os.name =='nt':
+  port = 'COM5'
+else:
+  port = '/dev/ttyACM0'
 
 config = dotenv_values(".env")
-arduino = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=.1)
+arduino = serial.Serial(port=port, baudrate=9600, timeout=.1)
 beforeStatus = 0
 def is_json(myjson):
   try:
@@ -15,6 +19,10 @@ def is_json(myjson):
   except ValueError as e:
     return False
   return True
+def md5(data):
+    m = hashlib.md5()
+    m.update(data)
+    return m.hexdigest()
 
 while True:
     data = arduino.readline().strip().decode('utf-8').strip()
@@ -24,12 +32,14 @@ while True:
         if int(r['status']) != beforeStatus:
             print("STATUS CHANGED TO: ", r['status'])
             beforeStatus = int(r['status'])
-            ct = time.time() * 1000
-            auth = hmac.new(bytearray(math.floor(ct/(30*1000))), bytearray(str(ct) + 'POST' + '/sensors' + MD5.new(bytearray(data, 'utf-8')).hexdigest(), 'utf-8'), digestmod=hashlib.sha256)
-            # auth.update(ct)
-            # auth.update('POST')
-            # auth.update('/sensors')
-            # auth.update(MD5.new(bytearray(data, 'utf-8')).hexdigest())
-            print(auth.hexdigest())
-            res = requests.post(config['API_URL'], data, headers={'Authorization': 'HMAC ' + str(ct) + ':' + auth.hexdigest()})
+            ct = math.floor(time.time() * 1000)
+            print(ct)
+            auth = hmac.new(key=str(math.floor(ct/(30*1000))).encode(), digestmod=hashlib.sha256)
+            auth.update(str(ct).encode())
+            auth.update('POST'.encode())
+            auth.update('/sensors'.encode())
+            auth.update(md5(data.encode()).encode())
+            print('HMAC ' + str(ct) + ':' + auth.hexdigest(), config['API_URL'] + '/sensors')
+            res = requests.post(config['API_URL'] + '/sensors', data, headers={'Authorization': ('HMAC ' + str(ct) + ':' + auth.hexdigest()), 'Accept': 'application/json',
+              'Content-Type': 'application/json',})
             print(res)

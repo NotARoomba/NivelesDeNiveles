@@ -1,0 +1,36 @@
+{
+  "name": "arduino-server",
+  "version": "1.0.0",
+  "description": "A TS server for recieving serial from arduino",
+  "main": "index.ts",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.ts",
+    "start": "ts-node index.ts"
+  },
+  "author": "NotARoomba",
+  "license": "ISC",
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.1.1",
+    "serialport": "^12.0.0",
+    "ts-dotenv": "^0.9.1"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.2",
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "rootDir": "./",
+    "outDir": "./",
+    "esModuleInterop": true,
+    "strict": true
+  }
+}
