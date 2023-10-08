@@ -1,7 +1,7 @@
 import os from 'os';
 import crypto from 'crypto'
-const {ReadlineParser} = require('@serialport/parser-readline');
-import {SerialPort} from 'serialport';
+import {ReadlineParser} from '@serialport/parser-readline';
+import {SerialPort, SerialPortOpenOptions} from 'serialport';
 import * as dotenv from 'ts-dotenv';
 import Sensor from '../backend/models/sensor';
 
@@ -22,6 +22,7 @@ port.open(err => {
   }
   console.log('Port Opened!');
 });
+// @ts-ignore
 const parser = port.pipe(new ReadlineParser({delimiter: '\r\n'}));
 parser.on('data', async (data: string) => {
   let json: null | Sensor = null;
@@ -64,7 +65,7 @@ parser.on('data', async (data: string) => {
         },
         body: data,
       })
-    console.log(res.body);
+    console.log(res.json);
     // if (res.error) {
     //   console.log(`ERROR: ${res.msg ?? res.info}`);
     // } else {

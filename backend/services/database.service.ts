@@ -6,7 +6,6 @@ import {DangerLevel, DangerType} from '../models/types';
 import Incident from '../models/incident';
 import Report from '../models/report';
 import NivelesEvents from '../models/events';
-import user from '../models/user';
 import haversine from 'haversine-distance';
 
 const env = dotenv.load({
@@ -76,9 +75,20 @@ export async function connectToDatabase(io: Server) {
   sensorsCollection.createIndex({location: '2dsphere'});
   usersCollection.createIndex({location: '2dsphere'});
 
+  infoDB.command( { collMod: env.SENSOR_COLLECTION, changeStreamPreAndPostImages: { enabled: true } } );
+
+
   console.log('Successfully connected to database!');
   //check if there is incident and if not then make an incident
-  sensorsCollection.watch().on('change', async next => {
+  const pipeline = [
+    {
+        '$match': {
+            $or: [{ operationType: 'insert' }, { operationType: 'update' }]
+
+        }
+    }
+];
+  sensorsCollection.watch(pipeline, { fullDocument: "required", fullDocumentBeforeChange: 'required' }).on('change', async next => {
     // let sensors: Sensor[] = (await sensorsCollection.find({}).toArray() as unknown as Sensor[])
     if (next.operationType == 'update') {
       let updatedSensor = next.fullDocument?.updatedFields as Sensor;
