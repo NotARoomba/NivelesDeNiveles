@@ -38,7 +38,7 @@ connectToDatabase(io)
   .then(() => {
     app.use(cors(corsOptions));
     app.use(express.json({limit: '500mb'}));
-    // app.use(HMAC(genSecret, {minInterval: 30}));
+    app.use(HMAC(genSecret, {minInterval: 30}));
     app.use('/users', usersRouter);
     app.use('/sensors', sensorsRouter);
     app.use('/verify', verifyRouter);
@@ -113,23 +113,23 @@ connectToDatabase(io)
     app.use('/', async (_req: Request, res: Response) => {
       res.status(200).send('You arent supposed to be here');
     });
-    // app.use(
-    //   (
-    //     error: {message: string; code: string},
-    //     req: Request,
-    //     res: Response,
-    //     next: () => void,
-    //   ) => {
-    //     // check by error instance
-    //     if (error instanceof AuthError) {
-    //       res.status(401).json({
-    //         error: 'Invalid request',
-    //         info: error.message,
-    //       });
-    //     }
-    //     next();
-    //   },
-    // );
+    app.use(
+      (
+        error: {message: string; code: string},
+        req: Request,
+        res: Response,
+        next: () => void,
+      ) => {
+        // check by error instance
+        if (error instanceof AuthError) {
+          res.status(401).json({
+            error: 'Invalid request',
+            info: error.message,
+          });
+        }
+        next();
+      },
+    );
     // app.listen(port, () => {
     //   console.log(`Server started at http://localhost:${port}`);
     // });

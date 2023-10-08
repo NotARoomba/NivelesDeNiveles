@@ -91,10 +91,10 @@ export async function connectToDatabase(io: Server) {
   sensorsCollection.watch(pipeline, { fullDocument: "required", fullDocumentBeforeChange: 'required' }).on('change', async next => {
     // let sensors: Sensor[] = (await sensorsCollection.find({}).toArray() as unknown as Sensor[])
     if (next.operationType == 'update') {
-      console.log(next)
+      // console.log(next)
       let updatedSensor = next.fullDocument as Sensor;
       let beforeSensor = next.fullDocumentBeforeChange as Sensor;
-      console.log(updatedSensor);
+      // console.log(updatedSensor);
       //from inistal safe state to other danger states or danger stat to safe state
       if (updatedSensor.status != beforeSensor.status) {
         //need to find an existing incident (user report) or make a new incident
@@ -224,7 +224,7 @@ export async function connectToDatabase(io: Server) {
       next.operationType === 'update' &&
       next.updateDescription.updatedFields?.numberOfReports
     ) {
-      console.log(next);
+      // console.log(next);
       await incidentsCollection.updateOne(
         {_id: next.documentKey._id},
         {
