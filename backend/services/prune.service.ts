@@ -13,11 +13,11 @@ export default async function prune() {
 
   // GREATER THAN 2 HOURS WILL BE MARKED AS OVER AND NOT PROCESSED ANYMORE
   await collections.reports?.updateMany(
-    {timestamp: {$lt: Date.now() + 1000 * 3600 * 2}},
+    {timestamp: {$lt: Date.now() + (1000 * 3600 * 2)}},
     {$set: {over: true}},
   );
   await collections.incidents?.updateMany(
-    {timestamp: {$lt: Date.now() + 1000 * 3600 * 2}},
+    {timestamp: {$lt: Date.now() + (1000 * 3600 * 2)}},
     {$set: {over: true}},
   );
 }
