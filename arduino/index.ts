@@ -44,25 +44,25 @@ parser.on('data', async (data: string) => {
     //   ),
     // );
     // const hmac = `HMAC ${time}:${digest}`;
-    const hmac = crypto.createHmac("sha256", Math.floor(Date.now() / (30 * 1000)).toString());
-    const time = Date.now().toString();
+    // const hmac = crypto.createHmac("sha256", Math.floor(Date.now() / (30 * 1000)).toString());
+    // const time = Date.now().toString();
 
-    hmac.update(time);
-    hmac.update("POST");
-    hmac.update("/sensors/");
+    // hmac.update(time);
+    // hmac.update("POST");
+    // hmac.update("/sensors/");
 
-    const contentHash = crypto.createHash("md5");
-    contentHash.update(data);
+    // const contentHash = crypto.createHash("md5");
+    // contentHash.update(data);
 
-    hmac.update(contentHash.digest("hex"));
+    // hmac.update(contentHash.digest("hex"));
 
     const res = await (
-      await fetch(env.API_URL + '/sensors/', {
+      await fetch(env.API_URL + '/sensors', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: `HMAC ${time}:${hmac.digest("hex")}`,
+        //   Authorization: `HMAC ${time}:${hmac.digest("hex")}`,
         },
         body: data,
       })
