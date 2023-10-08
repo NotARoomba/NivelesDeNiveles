@@ -15,8 +15,8 @@ export default async function prune() {
 
   // GREATER THAN 2 HOURS WILL BE MARKED AS OVER AND NOT PROCESSED ANYMORE
   // IF AND ONlY IF THERE ARE NO SENSORS NEARBY THAT SAY OTHERWISE
-  const activeReports =  collections.reports?.find(
-    { timestamp: { $lt: Date.now() - (1000 * 3600 * 2) } }) as unknown as Report[];
+  const activeReports = (await collections.reports?.find(
+    { timestamp: { $lt: Date.now() - (1000 * 3600 * 2) } })) as unknown as Report[];
   for (let report of activeReports) {
     const sensorsNearby: Sensor[] = (await collections.sensors
       ?.find({
@@ -36,8 +36,8 @@ export default async function prune() {
   }
   // INCIDENTS
   // for every incident get the sensor that is within range of the incident and if it is of the same type then set the incident to the current date.now
-  const activeIncidents =  collections.incidents?.find(
-    { timestamp: { $lt: Date.now() - (1000 * 3600 * 2) } }) as unknown as Incident[];
+  const activeIncidents =  (await collections.incidents?.find(
+    { timestamp: { $lt: Date.now() - (1000 * 3600 * 2) } })) as unknown as Incident[];
     for (let incident of activeIncidents) {
       const sensorsNearby: Sensor[] = (await collections.sensors
         ?.find({
