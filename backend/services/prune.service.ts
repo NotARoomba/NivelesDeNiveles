@@ -17,6 +17,7 @@ export default async function prune() {
   // IF AND ONlY IF THERE ARE NO SENSORS NEARBY THAT SAY OTHERWISE
   const activeReports = (await collections.reports?.find(
     { timestamp: { $lt: Date.now() - (1000 * 3600 * 2) } })) as unknown as Report[];
+    console.log(activeReports)
   for (let report of activeReports) {
     const sensorsNearby: Sensor[] = (await collections.sensors
       ?.find({
