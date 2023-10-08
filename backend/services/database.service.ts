@@ -80,7 +80,7 @@ export async function connectToDatabase(io: Server) {
   //check if there is incident and if not then make an incident
   sensorsCollection.watch().on('change', async next => {
     // let sensors: Sensor[] = (await sensorsCollection.find({}).toArray() as unknown as Sensor[])
-    if (next.operationType == 'update' || next.operationType == 'insert') {
+    if (next.operationType == 'update') {
       let updatedSensor = next.fullDocument?.updatedFields as Sensor;
       let beforeSensor = next.fullDocumentBeforeChange?.updatedFields as Sensor;
       console.log(updatedSensor);

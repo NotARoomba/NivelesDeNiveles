@@ -25,7 +25,6 @@ port.open(err => {
 const parser = port.pipe(new ReadlineParser({delimiter: '\r\n'}));
 parser.on('data', async (data: string) => {
   let json: null | Sensor = null;
-  data = data.toString().trim();
   try {
     json = JSON.parse(data);
   } catch {
@@ -56,8 +55,7 @@ parser.on('data', async (data: string) => {
 
     // hmac.update(contentHash.digest("hex"));
 
-    const res = await (
-      await fetch(env.API_URL + '/sensors', {
+    const res = await fetch(env.API_URL + '/sensors', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -66,12 +64,11 @@ parser.on('data', async (data: string) => {
         },
         body: data,
       })
-    ).json();
-    console.log(res);
-    if (res.error) {
-      console.log(`ERROR: ${res.msg ?? res.info}`);
-    } else {
-      console.log('Succesfully sent data!');
-    }
+    console.log(res.body);
+    // if (res.error) {
+    //   console.log(`ERROR: ${res.msg ?? res.info}`);
+    // } else {
+    //   console.log('Succesfully sent data!');
+    // }
   }
 });
