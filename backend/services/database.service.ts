@@ -92,8 +92,8 @@ export async function connectToDatabase(io: Server) {
     // let sensors: Sensor[] = (await sensorsCollection.find({}).toArray() as unknown as Sensor[])
     if (next.operationType == 'update') {
       console.log(next)
-      let updatedSensor = next.fullDocument?.updatedFields as Sensor;
-      let beforeSensor = next.fullDocumentBeforeChange?.updatedFields as Sensor;
+      let updatedSensor = next.fullDocument as Sensor;
+      let beforeSensor = next.fullDocumentBeforeChange as Sensor;
       console.log(updatedSensor);
       //from inistal safe state to other danger states or danger stat to safe state
       if (updatedSensor.status != beforeSensor.status) {
