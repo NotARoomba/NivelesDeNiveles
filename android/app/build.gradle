@@ -75,9 +75,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.nivelesdeniveles"
+    namespace "com.notaroomba.nivelesdeniveles"
     defaultConfig {
-        applicationId "com.nivelesdeniveles"
+        applicationId "com.notaroomba.nivelesdeniveles"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
