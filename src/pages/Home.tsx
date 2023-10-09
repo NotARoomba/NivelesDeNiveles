@@ -103,8 +103,8 @@ export default function Home({isDarkMode}: ScreenProp) {
             });
         } else {
           Alert.alert(
-            'Activa Ubicacion',
-            'Niveles de Niveles nessecita tu ubicacion para asegurar que no estas en riesgo!',
+            'Activa ubicación',
+            'Niveles de Niveles nessecita tu ubicación para asegurar que no estas en riesgo!',
             [
               {
                 text: 'Cancel',
@@ -220,7 +220,7 @@ export default function Home({isDarkMode}: ScreenProp) {
             onPress={() => Linking.openSettings()}
             className="justify-center h-full">
             <Text className="text-3xl text-center m-auto align-middle">
-              Nes1ecitamos tu ubicacion precisa para funccionar. Haze clic para
+              Necesitamos tu ubicación precisa para funccionar. Haz clic para
               cambiarlo!
             </Text>
           </TouchableOpacity>

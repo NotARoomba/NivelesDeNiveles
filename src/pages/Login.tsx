@@ -38,8 +38,8 @@ async function parseLogin(number: string, updateLogged: Function) {
   const res = await callAPI('/verify/send', 'POST', {number});
   if (!res.error) {
     return prompt(
-      'Enter Code',
-      'Enter the verification code that was sent to ' + number,
+      'Ingresa el código',
+      'Ingresa el código de verificación enviado' + number,
       async input => await checkLogin(number, input, updateLogged),
       'plain-text',
       '',

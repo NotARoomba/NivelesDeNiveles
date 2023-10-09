@@ -45,7 +45,7 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
             }>
             Recomendaciones Zona{' '}
             {status === DangerLevel.SAFE
-              ? 'Segura'
+              ? 'Seguro'
               : status === DangerLevel.RISK
               ? 'Riesgo'
               : 'Peligro'}
@@ -59,7 +59,7 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
           className="justify-center px-1">
           <Text className="text-dark text-left text-lg">
             {status === DangerLevel.SAFE
-              ? 'Estas en una zona segura, no hay nada a preocuparte!'
+              ? 'Estás en una zona segura, no hay nada a preocuparte!'
               : status === DangerLevel.RISK
               ? 'INSERT RISK TEXT HERE AND THEN UPDATE THE HEIGHT VARIABLE IN THE ANIMATION SECTION UP ABOVE WITH THE DANGER LEVEL CHECKS OR THE TEXT WILL BE CUT OFF LIKE THIS'
               : 'INSERT DANGER TEXT HERE'}
