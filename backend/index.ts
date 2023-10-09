@@ -101,7 +101,7 @@ connectToDatabase(io)
               }
             })
             .toArray()) as unknown as Sensor[];
-            console.log(sensors)
+            // console.log(sensors)
           callback({status, sensors, incidents});
         },
       );
