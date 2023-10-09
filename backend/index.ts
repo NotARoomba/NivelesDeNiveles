@@ -92,14 +92,7 @@ connectToDatabase(io)
             if (incident.level > status) status = incident.level;
           }
           const sensors: Sensor[] = (await collections.sensors
-            ?.find({
-              location: {
-                $near: {
-                  $geometry: {...user.location},
-                  $maxDistance: 2000,
-                },
-              }
-            })
+            ?.find({})
             .toArray()) as unknown as Sensor[];
             // console.log(sensors)
           callback({status, sensors, incidents});
