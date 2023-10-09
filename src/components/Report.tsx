@@ -62,12 +62,12 @@ export default function Report({
         </View>
         <Text className="text-2xl w-1/2 -ml-2 font-bold text-dark">Reporta</Text>
       </View>
-      <View className="justify-center p-1">
-        <Text className="text-2xl text-center mt-4 text-dark">Tipo</Text>
+      <View className="justify-center p-1 pl-0 w-screen">
+        <Text className="text-2xl text-center -translate-x-2.5 mt-4 justify-around flex flex-row text-dark">Tipo</Text>
         <View className="flex flex-row justify-around mt-4">
           {[DangerType.FLOOD, DangerType.FIRE, DangerType.AVALANCHE].map(
             (v, i) => (
-              <View className='justify-center'>
+              <View className='justify-center' key={i}>
               <DangerTypeButton
                 key={i}
                 type={v}

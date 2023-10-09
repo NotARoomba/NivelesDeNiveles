@@ -190,7 +190,7 @@ export default function Home({isDarkMode}: ScreenProp) {
               )}
               {locationData.sensors.map((s, i) => (
                 <Marker
-                  key={i}
+                  key={i + s.status}
                   coordinate={{
                     latitude: s.location.coordinates[1],
                     longitude: s.location.coordinates[0],

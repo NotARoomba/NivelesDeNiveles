@@ -12,7 +12,7 @@ export default function DangerTypeButton({
     <TouchableOpacity onPress={() => onPress(type)}>
       <View
         className={
-          ' w-16 rounded-full aspect-square justify-center align-middle' +
+          'w-16 rounded-full aspect-square justify-center align-middle mx-auto' +
           (isSelected ? ' bg-highlight' : ' bg-main')
         }>
         <Icon
