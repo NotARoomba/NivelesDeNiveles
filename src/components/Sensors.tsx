@@ -27,10 +27,10 @@ export default function Sensors({sensors}: {sensors: Sensor[]}) {
             <View className="text-center justify-center w-1/2 m-auto">
               <Text className="text-light text-lg font-bold text-center">
                 {s.status === DangerLevel.SAFE
-                  ? 'Segura'
+                  ? 'Seguro'
                   : s.status === DangerLevel.RISK
-                  ? 'Riesgo'
-                  : 'Peligro'}
+                  ? 'Riesgoso'
+                  : 'Peligroso'}
               </Text>
             </View>
           </View>

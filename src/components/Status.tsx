@@ -27,13 +27,13 @@ export default function Status({reportFunction, locationData}: StatusProps) {
       </View>
       <View className="mt-5 ml-5">
         <Text className="text-xl text-accent font-semibold">
-          Nuestros Sensores
+          Nuestros sensores
         </Text>
         {locationData.sensors.length > 0 ? (
           <Sensors sensors={locationData.sensors} />
         ) : (
           <Text className="text-lg text-accent font-semibold mt-2">
-            No hay sensores cerca a ti!
+            No hay sensores cerca de ti!
           </Text>
         )}
       </View>

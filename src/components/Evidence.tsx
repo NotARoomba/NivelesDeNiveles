@@ -33,7 +33,7 @@ export default function Evidence({
       } else {
         Alert.alert(
           'Activa Camera',
-          'Niveles de Niveles nessecita tu nessecita tu camara para tomar foto del incidente!',
+          'Niveles de Niveles nececita tu cámara para tomar foto del incidente!',
           [
             {
               text: 'Cancel',

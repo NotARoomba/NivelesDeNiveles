@@ -30,7 +30,7 @@ export default function Report({
   const [evidence, onChangeEvidence] = useState('');
   const submitReport = async () => {
     if (evidence === '') {
-      return Alert.alert('Falta Informacion', 'Por favor llena la evidencia');
+      return Alert.alert('Falta Información', 'Por favor llena la evidencia');
     }
     const user = (await callAPI('/users/' + (await getData('number')), 'GET'))
       .user;
@@ -82,7 +82,7 @@ export default function Report({
                 isSelected={dangerSelected === v}
               />
               <Text className='text-dark mx-auto'>{v === DangerType.FLOOD
-                    ? 'Inundacion'
+                    ? 'Inundación'
                     : v === DangerType.FIRE
                     ? 'Fuego'
                     : 'Deslizamiento'}</Text>

@@ -9,10 +9,10 @@ export default function RiskMeter({status, reportFunction}: RiskMeterProps) {
         Te encuentras en una zona:{' '}
         <Text className="font-bold">
           {status === DangerLevel.SAFE
-            ? 'seguro'
+            ? 'segura'
             : status === DangerLevel.RISK
-            ? 'riesgo'
-            : 'peligro'}
+            ? 'riesgosa'
+            : 'peligrosa'}
         </Text>
       </Text>
       <View className="ml-24 -mt-1">
