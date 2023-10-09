@@ -132,7 +132,7 @@ export async function connectToDatabase(io: Server) {
             new Incident(
               updatedSensor.type,
               updatedSensor.status,
-              3,
+              1,
               Date.now(),
               false,
               false,
