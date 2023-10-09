@@ -39,7 +39,7 @@ async function parseLogin(number: string, updateLogged: Function) {
   if (!res.error) {
     return prompt(
       'Ingresa el código',
-      'Ingresa el código de verificación enviado' + number,
+      'Ingresa el código de verificación enviado a ' + number,
       async input => await checkLogin(number, input, updateLogged),
       'plain-text',
       '',

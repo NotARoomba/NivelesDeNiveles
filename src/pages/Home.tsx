@@ -133,6 +133,7 @@ export default function Home({isDarkMode}: ScreenProp) {
           user,
           (locationData: LocationData) => {
             setLocationData(locationData);
+            console.log(locationData)
           },
         );
       });
