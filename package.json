@@ -27,6 +27,7 @@
     "react-native-fs": "^2.20.0",
     "react-native-maps": "^1.7.1",
     "react-native-permissions": "^3.9.2",
+    "react-native-rename": "^3.2.13",
     "react-native-safe-area-context": "^4.7.2",
     "react-native-screens": "^3.25.0",
     "react-native-splash-screen": "^3.3.0",
