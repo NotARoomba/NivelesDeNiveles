@@ -98,8 +98,7 @@ connectToDatabase(io)
                   $geometry: {...user.location},
                   $maxDistance: 2000,
                 },
-              },
-              over: false,
+              }
             })
             .toArray()) as unknown as Sensor[];
             console.log(sensors)
