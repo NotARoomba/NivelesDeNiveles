@@ -151,7 +151,7 @@ export async function connectToDatabase(io: Server) {
           } else {
             await incidentsCollection.updateOne(
               {location: incident.location},
-              {$inc: {numberOfReports: 3}, timestamp: Date.now()},
+              {$inc: {numberOfReports: 1}, timestamp: Date.now()},
             );
           }
         }
