@@ -18,13 +18,13 @@ enum TYPE {
 #define ECHO_PIN 5
 #define RST_GPS 0
 #define SENSOR_TYPE 0
-#define MAX_ULTRASONIC_DISTANCE 174
+#define MAX_ULTRASONIC_DISTANCE 6
 #define ULTRASONIC_STATUS_DISTANCE (MAX_ULTRASONIC_DISTANCE / 3)
-#define PAST_DISTANCES_SIZE 100
+#define PAST_DISTANCES_SIZE 50
 
 #define SENROR_TYPE FLOOD
 #define NAME "Sensor de Agua"
-//const long COORDINATES[] =  {-74.8503638L, 11.020311L};
+//const long COORDINATES[] =  {-74.8170327L, 10.991287L};
 
 STATUS status = SAFE;
 long pastDistances[PAST_DISTANCES_SIZE];
@@ -112,9 +112,9 @@ void loop()
   Serial.print(", \"type\": ");
   Serial.print(SENSOR_TYPE);
   Serial.print(", \"location\": {\"type\": \"Point\", \"coordinates\": [");
-  Serial.print("-74.8503638");
+  Serial.print("-74.8170327");
   Serial.print(", ");
-  Serial.print("11.020311");
+  Serial.print("10.991287");
   Serial.println("]}}");
   
   delay(10);

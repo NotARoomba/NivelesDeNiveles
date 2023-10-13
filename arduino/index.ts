@@ -31,7 +31,7 @@ parser.on('data', async (data: string) => {
   } catch {
     json = null;
   }
-  // console.log(data)
+  // 1console.log(data)
   if (json && json.status !== beforeStatus) {
     beforeStatus = json.status;
     console.log(`STATUS CHANGED TO ${json.status}!`);

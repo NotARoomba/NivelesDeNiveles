@@ -28,7 +28,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
       if (pastReports.length >= 1)
         return res.send({
           error: true,
-          msg: 'You have already reported a disaster!',
+          msg: '¡Ya has reportado un desastre!',
         });
       //fire and water checks
 
