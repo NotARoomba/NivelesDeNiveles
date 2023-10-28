@@ -2,6 +2,7 @@ import express, {Request, Response} from 'express';
 import {collections} from '../services/database.service';
 import User from '../models/sensor';
 import Sensor from '../models/sensor';
+import STATUS_CODES from '../models/status';
 
 export const sensorsRouter = express.Router();
 
@@ -15,9 +16,9 @@ sensorsRouter.get('/', async (req: Request, res: Response) => {
         .find({})
         .toArray()) as unknown as Sensor[];
     }
-    res.send({sensors, error: false, msg: 'Got Sensor Data!'});
+    res.send({sensors, status: STATUS_CODES.SUCCESS});
   } catch (error) {
-    res.send({error: true, msg: error});
+    res.send({status: STATUS_CODES.GENERIC_ERROR});
   }
 });
 //for sensors to send data
@@ -34,6 +35,6 @@ sensorsRouter.post('/', async (req: Request, res: Response) => {
       );
     }
   } catch (error) {
-    res.send({error: true, msg: error});
+    res.send({status: STATUS_CODES.GENERIC_ERROR});
   }
 });

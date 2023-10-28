@@ -111,7 +111,7 @@ export default function Home({isDarkMode}: ScreenProp) {
                 onPress: () => 1,
               },
               {
-                text: 'Grant',
+                text: 'Conceder',
                 onPress: () => Linking.openSettings(),
               },
             ],
@@ -196,7 +196,7 @@ export default function Home({isDarkMode}: ScreenProp) {
                     longitude: s.location.coordinates[0],
                   }}
                   title={s.name}
-                  description={`Status: ${
+                  description={`Estado: ${
                     s.status === DangerLevel.SAFE
                       ? 'seguro'
                       : s.status === DangerLevel.RISK

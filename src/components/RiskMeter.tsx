@@ -29,7 +29,7 @@ export default function RiskMeter({status, reportFunction}: RiskMeterProps) {
             <Icon color="#f1eeff" size={40} name="alert-triangle" />
           </View>
         </TouchableOpacity>
-        <Text className="text-light mx-auto mt-1 text-lg font-bold">
+        <Text className="text-light mx-auto mt-2 text-lg font-bold">
           Reportar
         </Text>
       </View>

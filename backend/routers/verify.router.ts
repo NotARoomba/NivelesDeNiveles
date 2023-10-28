@@ -1,6 +1,7 @@
 import express, {Request, Response} from 'express';
 import {Twilio} from 'twilio';
 import {load} from 'ts-dotenv';
+import STATUS_CODES from '../models/status';
 
 const env = load({
   TW_SID: String,
@@ -17,10 +18,10 @@ verifyRouter.use(express.json());
 verifyRouter.post('/send', async (req: Request, res: Response) => {
   const number: string = req?.body?.number;
   if (req?.body?.number === '') {
-    return res.send({error: true, msg: 'Please add a number!'});
+    return res.send({status: STATUS_CODES.INVALID_NUMBER});
   }
   if (isNaN(parseInt(number.replace('+57', ''), 10))) {
-    return res.send({error: true, msg: 'Please add a valid number!'});
+    return res.send({status: STATUS_CODES.INVALID_NUMBER});
   }
   let verification;
   try {
@@ -31,21 +32,20 @@ verifyRouter.post('/send', async (req: Request, res: Response) => {
         channel: 'sms',
       });
     if (verification.status === 'pending') {
-      res.send({error: false, msg: 'The code has been sent!'});
+      res.send({status: STATUS_CODES.SENT_CODE});  
     } else if (!verification.lookup.valid) {
-      res.send({error: true, msg: 'The phone number does not exist!'});
+      res.send({status: STATUS_CODES.NUMBER_NOT_EXIST});
     } else {
-      res.send({error: true, msg: 'There was an error sending the code!'});
+      res.send({status: STATUS_CODES.ERROR_SENDING_CODE});
     }
-  } catch (error: any) {
-    console.log(error);
-    if (error.status === 429) {
+  } catch (status: any) {
+    console.log(status);
+    if (status.status === 429) {
       return res.send({
-        error: true,
-        msg: 'Too many attempts, try again in 10 minutes!',
+        status: STATUS_CODES.TOO_MANY_ATTEMPTS,
       });
     }
-    res.send({error: true, msg: 'Unable to send the Twilio code!'});
+    res.send({status: STATUS_CODES.ERROR_SENDING_CODE});
   }
 });
 
@@ -61,19 +61,18 @@ verifyRouter.post('/check', async (req: Request, res: Response) => {
         to: number,
       });
     if (verification.status === 'approved') {
-      res.send({error: false, msg: 'The code has been approved!'});
+      res.send({status: STATUS_CODES.SUCCESS});
     } else {
-      res.send({error: true, msg: 'Incorrect code!'});
+      res.send({status: STATUS_CODES.CODE_DENIED});
     }
-  } catch (error: any) {
-    if (error.status === 400 && error.code === 60200) {
-      return res.send({error: true, msg: 'The code is too short!'});
-    } else if (error.status === 404 && error.code === 20404) {
+  } catch (status: any) {
+    if (status.status === 400 && status.code === 60200) {
+      return res.send({status: STATUS_CODES.CODE_DENIED});
+    } else if (status.status === 404 && status.code === 20404) {
       return res.send({
-        error: true,
-        msg: 'The code has expired, please try again!',
+        status: STATUS_CODES.CODE_EXPIRED,
       });
     }
-    res.send({error: true, msg: 'Unable to check the code!'});
+    res.send({status: STATUS_CODES.CODE_FAILED});
   }
 });

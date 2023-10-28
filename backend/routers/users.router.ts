@@ -1,6 +1,7 @@
 import express, {Request, Response} from 'express';
 import {collections} from '../services/database.service';
 import User from '../models/user';
+import STATUS_CODES from '../models/status';
 
 export const usersRouter = express.Router();
 
@@ -18,9 +19,9 @@ usersRouter.post('/', async (req: Request, res: Response) => {
         },
       );
     }
-    res.send({error: false, msg: 'Updated User!'});
+    res.send({status: STATUS_CODES.SUCCESS});
   } catch (error) {
-    res.send({error: true, msg: error});
+    res.send({status: STATUS_CODES.GENERIC_ERROR});
   }
 });
 
@@ -32,11 +33,11 @@ usersRouter.get('/:number', async (req: Request, res: Response) => {
       user = (await collections.users.findOne({number})) as unknown as User;
     }
     if (user) {
-      res.send({user, error: false, msg: 'The user exists!'});
+      res.send({user, status: STATUS_CODES.SUCCESS});
     } else {
-      res.send({user: null, error: true, msg: 'User not found!'});
+      res.send({user: null, status: STATUS_CODES.USER_NOT_FOUND});
     }
   } catch (error) {
-    res.send({user: null, error: true, msg: error});
+    res.send({user: null, status: STATUS_CODES.GENERIC_ERROR});
   }
 });

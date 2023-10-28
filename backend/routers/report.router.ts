@@ -4,6 +4,7 @@ import Report from '../models/report';
 import {DangerType} from '../models/types';
 import axios from 'axios';
 import * as dotenv from 'ts-dotenv';
+import STATUS_CODES from '../models/status';
 
 export const reportRouter = express.Router();
 
@@ -23,12 +24,11 @@ reportRouter.post('/', async (req: Request, res: Response) => {
   try {
     if (collections.reports) {
       const pastReports: Report[] = (await collections.reports
-        .find({reporter: report.reporter})
+        .find({reporter: report.reporter, over: false})
         .toArray()) as unknown as Report[];
       if (pastReports.length >= 1)
         return res.send({
-          error: true,
-          msg: '¡Ya has reportado un desastre!',
+          status: STATUS_CODES.ALREADY_REPORTED,
         });
       //fire and water checks
 
@@ -55,10 +55,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
           console.log(response.data);
           if (response.data.predictions.length === 0)
             return res.send({
-              error: true,
-              msg: `Esa imagen no contiene un ${
-                report.type === DangerType.FIRE ? 'fuego' : 'inundacion'
-              }!`,
+              status: STATUS_CODES.MISMATCHED_IMAGE,
             });
           let predictionAvg = 0;
           for (let prediction of response.data.predictions) {
@@ -68,24 +65,20 @@ reportRouter.post('/', async (req: Request, res: Response) => {
           console.log(`REPORT PREDICTION AVERAGE: ${predictionAvg}`);
           if (predictionAvg < 0.5) {
             return res.send({
-              error: true,
-              msg: `Esa imagen no contiene un ${
-                report.type === DangerType.FIRE ? 'fuego' : 'inundacion'
-              }!`,
+              status: STATUS_CODES.MISMATCHED_IMAGE,
             });
           }
         }
       }
       await collections.reports.insertOne(report);
-      res.send({error: false, msg: 'Mandamos tu reporta!'});
+      res.send({status: STATUS_CODES.SUCCESS});
     } else {
       res.send({
-        error: true,
-        msg: 'Un error ha ocurrido con el base de datos!',
+        status: STATUS_CODES.GENERIC_ERROR,
       });
     }
   } catch (error) {
     console.log(error);
-    res.send({error: true, msg: 'Un error ha ocurrido!'});
+    res.send({status: STATUS_CODES.GENERIC_ERROR});
   }
 });

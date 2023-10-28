@@ -1,4 +1,4 @@
-export enum NivelesEvents {
+enum NivelesEvents {
   CONNECT = 'connect',
   DISCONNECT = 'disconnect',
   REQUEST_LOCATION_DATA = 'request_location_data',

@@ -40,7 +40,7 @@ export default function Evidence({
               onPress: () => 1,
             },
             {
-              text: 'Grant',
+              text: 'Conceder',
               onPress: () => Linking.openSettings(),
             },
           ],

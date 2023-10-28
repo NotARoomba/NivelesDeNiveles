@@ -561,7 +561,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.notaroomba.nivelesdeniveless;
+				PRODUCT_BUNDLE_IDENTIFIER = com.notaroomba.nivelesdeniveles;
 				PRODUCT_NAME = NivelesDeNiveles;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -593,7 +593,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.notaroomba.nivelesdeniveless;
+				PRODUCT_BUNDLE_IDENTIFIER = com.notaroomba.nivelesdeniveles;
 				PRODUCT_NAME = NivelesDeNiveles;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

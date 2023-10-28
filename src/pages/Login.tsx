@@ -11,10 +11,12 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
+import { Localizations } from '../utils/Localizations';
 import {FunctionScreenProp, styles} from '../utils/Types';
 import prompt from '@powerdesigninc/react-native-prompt';
 import {callAPI, storeData} from '../utils/Functions';
 import SplashScreen from 'react-native-splash-screen';
+import STATUS_CODES from '../../backend/models/status';
 
 async function checkLogin(
   number: string,
@@ -22,7 +24,7 @@ async function checkLogin(
   updateLogged: Function,
 ) {
   const check = await callAPI('/verify/check', 'POST', {number, code});
-  if (!check.error) {
+  if (check.status == STATUS_CODES.SUCCESS) {
     await storeData('number', number);
     await callAPI('/users', 'POST', {
       number,
@@ -30,7 +32,7 @@ async function checkLogin(
     });
     updateLogged(true);
   } else {
-    return Alert.alert('Error', check.msg);
+    return Alert.alert(Localizations.error, check.status);
   }
 }
 
@@ -38,15 +40,15 @@ async function parseLogin(number: string, updateLogged: Function) {
   const res = await callAPI('/verify/send', 'POST', {number});
   if (!res.error) {
     return prompt(
-      'Ingresa el código',
-      'Ingresa el código de verificación enviado a ' + number,
+      Localizations.enterCodeTitle,
+      Localizations.enterCodeDesc + number,
       async input => await checkLogin(number, input, updateLogged),
       'plain-text',
       '',
       'number-pad',
     );
   } else {
-    return Alert.alert('Error', res.msg);
+    return Alert.alert(Localizations.error, res.msg);
   }
 }
 
@@ -94,7 +96,7 @@ export default function Login({
             disabled={disable}
             onPress={() => {
               if (countryCode === '') {
-                Alert.alert('Error', 'Selecciona tu código de país.');
+                Alert.alert(Localizations.error, Localizations.selectCountryCode);
               } else {
                 setDisable(true);
                 parseLogin(
@@ -108,7 +110,7 @@ export default function Login({
             style={styles.shadow}
             className="flex justify-center align-middle p-2 bg-highlight text-dark rounded-full m-auto mt-6 shadow-2xl">
             <Text className="flex align-middle m-auto text-xl text-dark px-8">
-              Entrar
+              {Localizations.loginButton}
             </Text>
           </TouchableOpacity>
           <CountryPicker
@@ -119,7 +121,7 @@ export default function Login({
               setShow(!show);
             }}
             onBackdropPress={() => setShow(!show)}
-            lang={'es'}
+            lang={Localizations.getLanguage()}
             style={{modal: {height: 500}}}
           />
         </View>
