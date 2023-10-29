@@ -5,9 +5,9 @@ import { Localizations } from '../utils/Localizations';
 
 export default function RiskMeter({status, reportFunction}: RiskMeterProps) {
   return (
-    <View className="flex flex-row my-auto justify-center mb-2">
-      <Text className="text-light text-lg font-bold max-w-[50%]">
-        {Localizations.riskMeter.split('{')[0]}
+    <View className="flex flex-row my-auto justify-center mb-2 max-h-fit">
+      <Text className={"text-light text-lg font-bold max-w-[50%]" + (Localizations.getLanguage() == 'en' ? ' my-auto py-3 mt-0' : '')}>
+        {Localizations.riskMeter.split('{')[0]} 
         <Text className="font-bold">
           {status === DangerLevel.SAFE
             ? Localizations.safe

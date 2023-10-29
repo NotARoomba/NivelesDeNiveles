@@ -64,14 +64,14 @@ export default function Evidence({
           className="flex justify-center align-middle my-auto h-10 pl-3 py-0 text-lg border mt-3 w-12/12 rounded-full bg-main text-light font-bold"
         />
       ) : (
-        <View className="flex justify-around flex-row mt-2">
+        <View className="flex justify-around relative flex-row mt-2">
           <TouchableOpacity
             className=" px-3 rounded-full bg-dark w-4/12 m-auto"
             onPress={e => {
               e.preventDefault();
               setCameraOpen(!cameraOpen);
             }}>
-            <Text className="text-light  text-lg font-semibold text-center">
+            <Text className="text-light text-lg font-semibold text-center">
               {Localizations.takePhoto}
             </Text>
           </TouchableOpacity>

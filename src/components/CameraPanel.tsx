@@ -35,9 +35,9 @@ export default function CameraPanel({
       });
   };
   return (
-    <Animated.View className="w-screen h-screen absolute -right-3 -top-[77.5vh] translate-y-1/2 rounded-t-3xl transition-all duration-200 bg-light">
+    <Animated.View className="w-screen h-[101vh] absolute -top-[78vh] rounded-t-3xl transition-all duration-200 bg-light">
       <TouchableOpacity 
-        className="m-4 w-1/5 absolute z-10"
+        className="m-4 mt-12 w-1/5 absolute z-10"
         onPress={() => setCameraOpen(false)}>
         <Icon name="x" size={40} color={'#ffffff'} />
       </TouchableOpacity>

@@ -49,23 +49,28 @@ export default function Report({
       ),
     );
     if (res.status == STATUS_CODES.SUCCESS) return Alert.alert(Localizations.success);
-    else return Alert.alert(Localizations.error, Localizations.GENERIC_ERROR);
+    else if(res.status== STATUS_CODES.MISMATCHED_IMAGE || res.status === STATUS_CODES.ALREADY_REPORTED) return Alert.alert(Localizations.error, Localizations.formatString(Localizations.getString(STATUS_CODES[res.status]), (dangerSelected === DangerType.FLOOD
+      ? Localizations.flood.toLocaleLowerCase()
+      : dangerSelected === DangerType.FIRE
+      ? Localizations.fire.toLocaleLowerCase()
+      : Localizations.avalanche.toLocaleLowerCase())) as string);
+    else return Alert.alert(Localizations.error, Localizations.getString(STATUS_CODES[res.status]));
   };
 
   return (
-    <View className="bg-accent p-3 pt-0">
+    <View className="bg-accent pt-0">
       <View className="flex flex-row my-auto mt-2.5">
         <View className="w-2/5 align-middle">
           <TouchableOpacity
             onPress={reportFunction}
-            className="-mt-0.5 max-w-[40px]">
+            className="-mt-0.5 pl-3 max-w-[47px]">
             <Icon name="arrow-left" color="#180155" size={40} />
           </TouchableOpacity>
         </View>
-        <Text className="text-2xl w-1/2 -ml-2 font-bold text-dark">{Localizations.report}</Text>
+        <Text className="text-2xl w-1/2 font-bold text-dark">{Localizations.report}</Text>
       </View>
       <View className="justify-center p-1 pl-0 w-screen">
-        <Text className="text-2xl text-center -translate-x-2.5 mt-4 justify-around flex flex-row text-dark">{Localizations.type}</Text>
+        <Text className="text-2xl text-center mt-4 justify-around flex flex-row text-dark">{Localizations.type}</Text>
         <View className="flex flex-row justify-around mt-4">
           {[DangerType.FLOOD, DangerType.FIRE, DangerType.AVALANCHE].map(
             (v, i) => (
@@ -83,7 +88,7 @@ export default function Report({
                 }
                 isSelected={dangerSelected === v}
               />
-              <Text className='text-dark mx-auto'>{v === DangerType.FLOOD
+              <Text className='text-dark mx-auto mt-1'>{v === DangerType.FLOOD
                     ? Localizations.flood
                     : v === DangerType.FIRE
                     ? Localizations.fire
@@ -116,7 +121,7 @@ export default function Report({
           )}
         </View>
       </View> */}
-      <View className="justify-center p-1 mt-4">
+      <View className="justify-center p-1 pl-0 mt-4">
         <Text className="text-2xl text-center mt-4 text-dark">{Localizations.evidence}</Text>
         <Evidence
           evidence={evidence}

@@ -5,5 +5,5 @@
   Created by Nathan Alspaugh on 10/28/23.
   
 */
-NSCameraUsageDescription = "$(PRODUCT_NAME) necesita su cámara para tomar una foto del incidente.";
-NSLocationWhenInUseUsageDescription = "$(PRODUCT_NAME) necesita tu ubicación para comprobar automáticamente si estás en peligro.";
+NSCameraUsageDescription = "Niveles De Niveles necesita su cámara para tomar una foto del incidente.";
+NSLocationWhenInUseUsageDescription = "Niveles De Niveles necesita tu ubicación para comprobar automáticamente si estás en peligro.";

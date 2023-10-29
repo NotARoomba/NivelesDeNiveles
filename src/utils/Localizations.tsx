@@ -57,7 +57,7 @@ export const Localizations = new LocalizedStrings({
         activateCameraTitle: 'Activate Camera',
         activateCameraDesc: 'Niveles De Niveles needs your camera to take a photo of the incident.',
         homeNoLocation: 'Niveles De Niveles needs your location to work. Click here to change permissions!',
-        recommendationsForZoneTitle: '{0) Recommendations',
+        recommendationsForZoneTitle: '{0} Recommendations',
         recommendationsForSafe: "You are in a safe zone, there's nothing to worry about!",
         recommendationsForRisk: "You are in a risk zone, make sure you have a first aid kit on hand and establish an evacuation route.",
         recommendationsForDanger: "You are in a danger zone, evacuate as soon as possible.",
