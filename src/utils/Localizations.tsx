@@ -1,4 +1,4 @@
-import LocalizedStrings from 'react-native-localization';
+import LocalizedStrings, { GlobalStrings } from 'react-native-localization';
 import STATUS_CODES from '../../backend/models/status';
 //GENERIC_ERROR,
 // USER_NOT_FOUND,
@@ -13,20 +13,29 @@ import STATUS_CODES from '../../backend/models/status';
 // ALREADY_REPORTED,
 // MISMATCHED_IMAGE,
 export const Localizations = new LocalizedStrings({
-    "es": {
-
-        error: 'Error',
-        userNotFound: '',
-        loginButton: 'Entrar',
-        enterCodeTitle: 'Ingresa el código',
-        enterCodeDesc: 'Ingresa el código de verificación enviado a '
-    },
+    // "es": {
+    //     error: 'Error',
+    //     userNotFound: '',
+    //     loginButton: 'Entrar',
+    //     enterCodeTitle: 'Ingresa el código',
+    //     enterCodeDesc: 'Ingresa el código de verificación enviado a ',
+    //     activateLocationTitle: 'Activate Location',
+    //     activateLocationDesc: 'Niveles De Niveles needs your location to automatically check if you are in danger.',
+    // },
     "en": {
-        fire: 'fire',
-        flood: 'flood',
-        landslide: 'landslide',
+        fire: 'Fire',
+        flood: 'Flood',
+        avalanche: 'Avalanche',
         error: 'Error',
-        success: 'Success',
+        success: 'Success!',
+        cancel: 'Cancel',
+        grant: 'Grant',
+        safe: 'Safe',
+        risk: 'Risk',
+        danger: 'Danger',
+        report: 'Report',
+        evidence: 'Evidence',
+        type: 'Type',
         GENERIC_ERROR: 'An error has occured',
         USER_NOT_FOUND: 'That user does not exist',
         INVALID_NUMBER: 'Enter a valid phone number',
@@ -39,12 +48,28 @@ export const Localizations = new LocalizedStrings({
         CODE_FAILED: 'There was an error sending the code',
         ALREADY_REPORTED: 'You have already reported a {0}',
         MISMATCHED_IMAGE: 'The image does not contain a {0}',
+        loginButton: 'Enter',
         enterCodeTitle: 'Enter the code',
         enterCodeDesc: 'Enter the verification code sent to ',
         selectCountryCode: 'Select your country code',
+        activateLocationTitle: 'Activate Location',
+        activateLocationDesc: 'Niveles De Niveles needs your location to automatically check if you are in danger.',
+        activateCameraTitle: 'Activate Camera',
+        activateCameraDesc: 'Niveles De Niveles needs your camera to take a photo of the incident.',
+        homeNoLocation: 'Niveles De Niveles needs your location to work. Click here to change permissions!',
+        recommendationsForZoneTitle: '{0) Recommendations',
+        recommendationsForSafe: "You are in a safe zone, there's nothing to worry about!",
+        recommendationsForRisk: "You are in a risk zone, make sure you have a first aid kit on hand and establish an evacuation route.",
+        recommendationsForDanger: "You are in a danger zone, evacuate as soon as possible.",
+        riskMeter: 'You are in a {0} zone!',
+        photo: 'Photo',
+        takePhoto: 'Take a Photo',
+        state: 'State',
+        missingInformationTitle: 'Missing Information',
+        missingInformationDesc: 'Please fill out the evidence!',
+        advice: 'What can you do?',
+        ourSensors: 'Our Sensors',
+        noSensorsNear: 'There are no sensors near you!',
+        phoneNumber: 'Phone Number'
     }
 });
-
-export function getStringFromStatusCode(status: STATUS_CODES) {
-    // return Localizations[STATUS_CODES[status]];
-}

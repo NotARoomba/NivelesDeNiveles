@@ -15,6 +15,8 @@ import User from '../../backend/models/user';
 import ReportType from '../../backend/models/report';
 import {Camera, useCameraDevice} from 'react-native-vision-camera';
 import Evidence from './Evidence';
+import { Localizations } from '../utils/Localizations';
+import STATUS_CODES from '../../backend/models/status';
 
 export default function Report({
   reportFunction,
@@ -30,7 +32,7 @@ export default function Report({
   const [evidence, onChangeEvidence] = useState('');
   const submitReport = async () => {
     if (evidence === '') {
-      return Alert.alert('Falta Información', 'Por favor llena la evidencia');
+      return Alert.alert(Localizations.missingInformationTitle, Localizations.missingInformationDesc);
     }
     const user = (await callAPI('/users/' + (await getData('number')), 'GET'))
       .user;
@@ -46,8 +48,8 @@ export default function Report({
         user.location,
       ),
     );
-    if (!res.error) return Alert.alert('Éxito!', res.msg);
-    else return Alert.alert('Error!', res.msg);
+    if (res.status == STATUS_CODES.SUCCESS) return Alert.alert(Localizations.success);
+    else return Alert.alert(Localizations.error, Localizations.GENERIC_ERROR);
   };
 
   return (
@@ -60,10 +62,10 @@ export default function Report({
             <Icon name="arrow-left" color="#180155" size={40} />
           </TouchableOpacity>
         </View>
-        <Text className="text-2xl w-1/2 -ml-2 font-bold text-dark">Reporta</Text>
+        <Text className="text-2xl w-1/2 -ml-2 font-bold text-dark">{Localizations.report}</Text>
       </View>
       <View className="justify-center p-1 pl-0 w-screen">
-        <Text className="text-2xl text-center -translate-x-2.5 mt-4 justify-around flex flex-row text-dark">Tipo</Text>
+        <Text className="text-2xl text-center -translate-x-2.5 mt-4 justify-around flex flex-row text-dark">{Localizations.type}</Text>
         <View className="flex flex-row justify-around mt-4">
           {[DangerType.FLOOD, DangerType.FIRE, DangerType.AVALANCHE].map(
             (v, i) => (
@@ -82,10 +84,10 @@ export default function Report({
                 isSelected={dangerSelected === v}
               />
               <Text className='text-dark mx-auto'>{v === DangerType.FLOOD
-                    ? 'Inundación'
+                    ? Localizations.flood
                     : v === DangerType.FIRE
-                    ? 'Fuego'
-                    : 'Deslizamiento'}</Text>
+                    ? Localizations.fire
+                    : Localizations.avalanche}</Text>
 
 </View>
             ),
@@ -115,7 +117,7 @@ export default function Report({
         </View>
       </View> */}
       <View className="justify-center p-1 mt-4">
-        <Text className="text-2xl text-center mt-4 text-dark">Evidencia</Text>
+        <Text className="text-2xl text-center mt-4 text-dark">{Localizations.evidence}</Text>
         <Evidence
           evidence={evidence}
           onChangeEvidence={onChangeEvidence}

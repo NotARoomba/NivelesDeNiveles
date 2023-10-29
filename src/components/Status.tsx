@@ -4,6 +4,7 @@ import RiskMeter from './RiskMeter';
 import Advice from './Advice';
 import {useState} from 'react';
 import Sensors from './Sensors';
+import { Localizations } from '../utils/Localizations';
 
 export default function Status({reportFunction, locationData}: StatusProps) {
   const [isOpen, setOpen] = useState(false);
@@ -17,7 +18,7 @@ export default function Status({reportFunction, locationData}: StatusProps) {
       </View>
       <View>
         <Text className="text-xl text-accent font-semibold ml-5 mt-0">
-          ¿Qué puedes hacer?
+          {Localizations.advice}
         </Text>
         <Advice
           status={locationData.status}
@@ -27,13 +28,13 @@ export default function Status({reportFunction, locationData}: StatusProps) {
       </View>
       <View className="mt-5 ml-5">
         <Text className="text-xl text-accent font-semibold">
-          Nuestros sensores
+          {Localizations.ourSensors}
         </Text>
         {locationData.sensors.length > 0 ? (
           <Sensors sensors={locationData.sensors} />
         ) : (
           <Text className="text-lg text-accent font-semibold mt-2">
-            No hay sensores cerca de ti!
+            {Localizations.noSensorsNear}
           </Text>
         )}
       </View>

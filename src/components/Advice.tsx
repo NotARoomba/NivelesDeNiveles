@@ -2,6 +2,7 @@ import React, {View, Text, TouchableOpacity, Animated} from 'react-native';
 import {AdviceProps, DangerLevel} from '../utils/Types';
 import Icon from 'react-native-vector-icons/Feather';
 import {useRef} from 'react';
+import { Localizations } from '../utils/Localizations';
 
 export default function Advice({status, isOpen, setOpen}: AdviceProps) {
   const flipValue = useRef(new Animated.Value(0)).current;
@@ -43,12 +44,11 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
             className={
               'text-dark text-lg' + (isOpen ? ' font-bold' : ' font-medium')
             }>
-            Recomendaciones Zona{' '}
-            {status === DangerLevel.SAFE
-              ? 'Segura'
+              {Localizations.formatString(Localizations.recommendationsForZoneTitle, status === DangerLevel.SAFE
+              ? Localizations.safe
               : status === DangerLevel.RISK
-              ? 'Riesgo'
-              : 'Peligro'}
+              ? Localizations.risk
+              : Localizations.danger)}
           </Text>
           <Animated.View style={{transform: [{rotate: flip}]}}>
             <Icon name="chevron-down" size={30} />
@@ -59,10 +59,10 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
           className="justify-center px-1">
           <Text className="text-dark text-left text-lg">
             {status === DangerLevel.SAFE
-              ? 'Estás en una zona segura, no hay nada a preocuparte!'
+              ? Localizations.recommendationsForSafe
               : status === DangerLevel.RISK
-              ? 'Estás en una zona de riesgo, procura tener a la mano tu botiquín y establecer una ruta de evacuación'
-              : 'Estás en una zona de peligro, evacúa lo antes posible'}
+              ? Localizations.recommendationsForRisk
+              : Localizations.recommendationsForDanger}
           </Text>
         </Animated.View>
       </View>

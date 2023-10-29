@@ -36,9 +36,9 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) nessecita tu camara para tomar foto del incidente.</string>
+	<string>$(PRODUCT_NAME) needs your camera to take a photo of the incident.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) nessecita tu ubicacion para automaticamente buscar si estas en riesgo.</string>
+	<string>$(PRODUCT_NAME) needs your location to automatically check if you are in danger.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Feather.ttf</string>

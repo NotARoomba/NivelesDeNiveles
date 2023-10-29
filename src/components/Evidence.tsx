@@ -15,6 +15,7 @@ import {
 import {EvidenceProps} from '../utils/Types';
 import {useEffect, useState} from 'react';
 import CameraPanel from './CameraPanel';
+import { Localizations } from '../utils/Localizations';
 
 export default function Evidence({
   evidence,
@@ -32,15 +33,16 @@ export default function Evidence({
         setCameraPerms(true);
       } else {
         Alert.alert(
-          'Activa Camera',
-          'Niveles de Niveles nececita tu cámara para tomar foto del incidente!',
+          Localizations.activateCameraTitle,
+          Localizations.activateCameraDesc,
           [
             {
-              text: 'Cancel',
+              text: Localizations.cancel,
               onPress: () => 1,
+              style: 'cancel'
             },
             {
-              text: 'Conceder',
+              text: Localizations.grant,
               onPress: () => Linking.openSettings(),
             },
           ],
@@ -70,12 +72,12 @@ export default function Evidence({
               setCameraOpen(!cameraOpen);
             }}>
             <Text className="text-light  text-lg font-semibold text-center">
-              Toma Foto
+              {Localizations.takePhoto}
             </Text>
           </TouchableOpacity>
           {evidence.length !== 0 ? (
             <Text className="text-dark/80 text-lg m-auto">
-              Photo: {(evidence.length / 1000).toFixed(2)} KB
+              {Localizations.photo}: {(evidence.length / 1000).toFixed(2)} KB
             </Text>
           ) : (
             <></>
@@ -96,7 +98,7 @@ export default function Evidence({
         <TouchableOpacity
           className="p-3 bg-main w-3/5 m-auto rounded-full"
           onPress={submitReport}>
-          <Text className="text-2xl text-accent text-center">Reporta</Text>
+          <Text className="text-2xl text-accent text-center">{Localizations.report}</Text>
         </TouchableOpacity>
       </View>
     </View>

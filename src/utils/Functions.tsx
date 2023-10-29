@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Config from 'react-native-config';
 import CryptoJS from 'crypto-es';
 import {Alert} from 'react-native';
+import STATUS_CODES from '../../backend/models/status';
 
 export const storeData = async (key: string, value: string) => {
   try {
@@ -62,8 +63,7 @@ export async function callAPI(
     console.log(error);
     // Alert.alert('Error!', 'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.')
     return {
-      error: true,
-      msg: 'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.',
+      status: STATUS_CODES.GENERIC_ERROR,
     };
   }
 }

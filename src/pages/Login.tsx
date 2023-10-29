@@ -32,13 +32,13 @@ async function checkLogin(
     });
     updateLogged(true);
   } else {
-    return Alert.alert(Localizations.error, check.status);
+    return Alert.alert(Localizations.error, Localizations.getString(STATUS_CODES[check.status]));
   }
 }
 
 async function parseLogin(number: string, updateLogged: Function) {
   const res = await callAPI('/verify/send', 'POST', {number});
-  if (!res.error) {
+  if (res.status == STATUS_CODES.SUCCESS) {
     return prompt(
       Localizations.enterCodeTitle,
       Localizations.enterCodeDesc + number,
@@ -48,7 +48,7 @@ async function parseLogin(number: string, updateLogged: Function) {
       'number-pad',
     );
   } else {
-    return Alert.alert(Localizations.error, res.msg);
+    return Alert.alert(Localizations.error, Localizations.getString(STATUS_CODES[res.status]));
   }
 }
 
@@ -74,7 +74,7 @@ export default function Login({
             resizeMode={'contain'}
           />
           <View className="justify-center pt-12 mt-16">
-            <Text className="text-center text-lg text-dark">Celular</Text>
+            <Text className="text-center text-lg text-dark">{Localizations.phoneNumber}</Text>
             <View className="flex flex-row justify-center m-auto align-middle">
               <TouchableOpacity
                 onPress={() => setShow(!show)}

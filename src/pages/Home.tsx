@@ -24,6 +24,7 @@ import NivelesEvents from '../../backend/models/events';
 import Panel from '../components/Panel';
 import User from '../../backend/models/user';
 import SplashScreen from 'react-native-splash-screen';
+import { Localizations } from '../utils/Localizations';
 
 export default function Home({isDarkMode}: ScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
@@ -103,15 +104,16 @@ export default function Home({isDarkMode}: ScreenProp) {
             });
         } else {
           Alert.alert(
-            'Activa ubicación',
-            'Niveles de Niveles nessecita tu ubicación para asegurar que no estas en riesgo!',
+            Localizations.activateLocationTitle,
+            Localizations.activateLocationDesc,
             [
               {
-                text: 'Cancel',
+                text: Localizations.cancel,
                 onPress: () => 1,
+                style: 'cancel'
               },
               {
-                text: 'Conceder',
+                text: Localizations.grant,
                 onPress: () => Linking.openSettings(),
               },
             ],
@@ -196,12 +198,12 @@ export default function Home({isDarkMode}: ScreenProp) {
                     longitude: s.location.coordinates[0],
                   }}
                   title={s.name}
-                  description={`Estado: ${
+                  description={`${Localizations.state}: ${
                     s.status === DangerLevel.SAFE
-                      ? 'seguro'
+                      ? Localizations.safe
                       : s.status === DangerLevel.RISK
-                      ? 'riesgo'
-                      : 'peligro'
+                      ? Localizations.risk
+                      : Localizations.danger
                   }`}
                   pinColor={
                     s.status === DangerLevel.SAFE
@@ -221,8 +223,7 @@ export default function Home({isDarkMode}: ScreenProp) {
             onPress={() => Linking.openSettings()}
             className="justify-center h-full">
             <Text className="text-3xl text-center m-auto align-middle">
-              Necesitamos tu ubicación precisa para funccionar. Haz clic para
-              cambiarlo!
+             {Localizations.homeNoLocation}
             </Text>
           </TouchableOpacity>
         )}

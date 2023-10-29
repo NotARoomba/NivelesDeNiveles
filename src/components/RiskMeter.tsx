@@ -1,19 +1,21 @@
 import React, {View, Text, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {DangerLevel, RiskMeterProps} from '../utils/Types';
+import { Localizations } from '../utils/Localizations';
 
 export default function RiskMeter({status, reportFunction}: RiskMeterProps) {
   return (
     <View className="flex flex-row my-auto justify-center mb-2">
       <Text className="text-light text-lg font-bold max-w-[50%]">
-        Te encuentras en una zona:{' '}
+        {Localizations.riskMeter.split('{')[0]}
         <Text className="font-bold">
           {status === DangerLevel.SAFE
-            ? 'segura'
+            ? Localizations.safe
             : status === DangerLevel.RISK
-            ? 'riesgosa'
-            : 'peligrosa'}
+            ? Localizations.risk
+            : Localizations.danger}
         </Text>
+        {Localizations.riskMeter.split('}')[1]}
       </Text>
       <View className="ml-24 -mt-1">
         <TouchableOpacity onPress={reportFunction}>
@@ -30,7 +32,7 @@ export default function RiskMeter({status, reportFunction}: RiskMeterProps) {
           </View>
         </TouchableOpacity>
         <Text className="text-light mx-auto mt-2 text-lg font-bold">
-          Reportar
+          {Localizations.report}
         </Text>
       </View>
       <View />
