@@ -250,6 +250,7 @@ export async function connectToDatabase(io: Server) {
             // then check if the 2 incidents are the same type and if the distance between the centers are less than or equal to the sum of the ranges
             // if true then merge the incidents and change the center to the middle of the 2 incidents
             // finally delete the 2 child incidents and push the parent
+            console.log(incidents[i], incidents[j], i, j)
             if (
               incidents[i].type == incidents[j].type &&
               haversine(
