@@ -45,11 +45,12 @@ export default function Report({
         levelSelected,
         Date.now(),
         evidence,
+        false,
         user.location,
       ),
     );
     if (res.status == STATUS_CODES.SUCCESS) return Alert.alert(Localizations.success);
-    else if(res.status== STATUS_CODES.MISMATCHED_IMAGE || res.status === STATUS_CODES.ALREADY_REPORTED) return Alert.alert(Localizations.error, Localizations.formatString(Localizations.getString(STATUS_CODES[res.status]), (dangerSelected === DangerType.FLOOD
+    else if(res.status== STATUS_CODES.MISMATCHED_IMAGE) return Alert.alert(Localizations.error, Localizations.formatString(Localizations.getString(STATUS_CODES[res.status]), (dangerSelected === DangerType.FLOOD
       ? Localizations.flood.toLocaleLowerCase()
       : dangerSelected === DangerType.FIRE
       ? Localizations.fire.toLocaleLowerCase()

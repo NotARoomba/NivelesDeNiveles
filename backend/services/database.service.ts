@@ -242,7 +242,6 @@ export async function connectToDatabase(io: Server) {
       let incidents = (await collections.incidents
         ?.find({over: false})
         .toArray()) as unknown as Incident[];
-      if (incidents.length > 1) {
       for (let i = 0; i < incidents.length; i++) {
         for (let j = 0; j < incidents.length; i++) {
           // check if not the same
@@ -250,7 +249,6 @@ export async function connectToDatabase(io: Server) {
             // then check if the 2 incidents are the same type and if the distance between the centers are less than or equal to the sum of the ranges
             // if true then merge the incidents and change the center to the middle of the 2 incidents
             // finally delete the 2 child incidents and push the parent
-            console.log(incidents[i], incidents[j], i, j)
             if (
               incidents[i].type == incidents[j].type &&
               haversine(
@@ -295,7 +293,6 @@ export async function connectToDatabase(io: Server) {
           }
         }
       }
-    }
     }
     io.emit(NivelesEvents.UPDATE_LOCATION_DATA);
   });

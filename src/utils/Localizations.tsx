@@ -46,7 +46,7 @@ export const Localizations = new LocalizedStrings({
         CODE_DENIED: 'The code is incorrect',
         CODE_EXPIRED: 'The code has expired',
         CODE_FAILED: 'There was an error sending the code',
-        ALREADY_REPORTED: 'You have already reported a {0}',
+        ALREADY_REPORTED: 'You have already reported a disaster!',
         MISMATCHED_IMAGE: 'The image does not contain a {0}',
         loginButton: 'Enter',
         enterCodeTitle: 'Enter the code',
