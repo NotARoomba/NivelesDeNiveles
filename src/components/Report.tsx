@@ -67,7 +67,6 @@ export default function Report({
     <View className="bg-accent pt-0">
       <Spinner
           visible={isLoading}
-          textContent={'Loading...'}
         />
       <View className="flex flex-row my-auto mt-2.5">
         <View className="w-2/5 align-middle">
