@@ -30,6 +30,7 @@ export interface EvidenceProps {
 
 export interface PanelProps {
   locationData: LocationData;
+  setLogged: Function;
 }
 
 export interface AdviceProps {
@@ -65,6 +66,7 @@ export interface ReportProps {
   reportFunction: () => void;
   cameraOpen: boolean;
   setCameraOpen: (open: boolean) => void;
+  setLogged: Function;
 }
 
 export interface LocationData {
@@ -72,13 +74,9 @@ export interface LocationData {
   sensors: Sensor[];
   incidents: Incident[];
 }
-
-export interface ScreenProp {
-  isDarkMode: boolean;
-}
 export interface FunctionScreenProp {
   isDarkMode: boolean;
-  updateFunction: Function[];
+  updateFunction: Function;
 }
 
 export enum PanelState {

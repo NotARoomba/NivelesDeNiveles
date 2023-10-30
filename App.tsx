@@ -69,9 +69,9 @@ export default function App() {
     <>
       {loaded ? (
         logged ? (
-          <Home isDarkMode={isDarkMode} />
+          <Home isDarkMode={isDarkMode} updateFunction={setlLogged} />
         ) : (
-          <Login isDarkMode={isDarkMode} updateFunction={[setlLogged]} />
+          <Login isDarkMode={isDarkMode} updateFunction={setlLogged} />
         )
       ) : (
         <></>

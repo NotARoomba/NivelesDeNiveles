@@ -70,6 +70,10 @@ export const Localizations = new LocalizedStrings({
         advice: 'What can you do?',
         ourSensors: 'Our Sensors',
         noSensorsNear: 'There are no sensors near you!',
-        phoneNumber: 'Phone Number'
+        phoneNumber: 'Phone Number',
+        logoutTitle: 'Logout',
+        logoutDesc: 'Are you sure you want to logout?',
+        logout: 'Logout',
+        sending: 'Sending'
     }
 });

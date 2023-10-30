@@ -4,7 +4,7 @@ import {DangerLevel, LocationData, PanelProps} from '../utils/Types';
 import Report from './Report';
 import Status from './Status';
 
-export default function Panel({locationData}: PanelProps) {
+export default function Panel({locationData, setLogged}: PanelProps) {
   const pan = useRef(new Animated.ValueXY()).current;
   const [showing, setShowing] = useState(false);
   const [report, setReport] = useState(false);
@@ -85,6 +85,7 @@ export default function Panel({locationData}: PanelProps) {
           reportFunction={reportFunction}
           cameraOpen={cameraOpen}
           setCameraOpen={setCameraOpen}
+          setLogged={setLogged}
         />
       ) : (
         <Status reportFunction={reportFunction} locationData={locationData} />

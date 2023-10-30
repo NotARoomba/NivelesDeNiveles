@@ -18,11 +18,13 @@ import Evidence from './Evidence';
 import { Localizations } from '../utils/Localizations';
 import Spinner from 'react-native-loading-spinner-overlay';
 import STATUS_CODES from '../../backend/models/status';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Report({
   reportFunction,
   cameraOpen,
   setCameraOpen,
+  setLogged
 }: ReportProps) {
   const [dangerSelected, setDangerSelected] = useState<DangerType>(
     DangerType.FLOOD,
@@ -63,20 +65,50 @@ export default function Report({
     else return Alert.alert(Localizations.error, Localizations.getString(STATUS_CODES[res.status]));
   };
 
+  const logoutFunction = () => {
+    Alert.alert(
+      Localizations.logoutTitle,
+      Localizations.logoutDesc,
+      [
+        {
+          text: Localizations.cancel,
+          onPress: () => 1,
+          style: 'cancel'
+        },
+        {
+          text: Localizations.logout,
+          onPress: () => {AsyncStorage.removeItem('number');setLogged(false)},
+          style: 'destructive'
+        },
+      ],
+    );
+  }
+
   return (
     <View className="bg-accent pt-0">
       <Spinner
           visible={isLoading}
+          overlayColor='#00000099'
+          textContent={Localizations.sending}
+          textStyle={{color: '#fff', marginTop: -50}}
+          animation='fade'
         />
       <View className="flex flex-row my-auto mt-2.5">
-        <View className="w-2/5 align-middle">
+        <View className="w-1/3 align-middle">
           <TouchableOpacity
             onPress={reportFunction}
             className="-mt-0.5 pl-3 max-w-[47px]">
             <Icon name="arrow-left" color="#180155" size={40} />
           </TouchableOpacity>
         </View>
-        <Text className="text-2xl w-1/2 font-bold text-dark">{Localizations.report}</Text>
+        <Text className="text-2xl w-1/3 font-bold text-center text-dark">{Localizations.report}</Text>
+        <View className="w-1/3 align-middle flex">
+          <TouchableOpacity
+            onPress={logoutFunction}
+            className="-mt-0.5 pr-1 mr-2 max-w-[47px] justify-self-end ml-auto">
+            <Icon name="log-out" color="#180155" size={40} />
+          </TouchableOpacity>
+        </View>
       </View>
       <View className="justify-center p-1 pl-0 w-screen">
         <Text className="text-2xl text-center mt-4 justify-around flex flex-row text-dark">{Localizations.type}</Text>

@@ -35,7 +35,7 @@ export default function CameraPanel({
       });
   };
   return (
-    <Animated.View className="w-screen h-[101vh] absolute -top-[78vh] rounded-t-3xl transition-all duration-200 bg-light">
+    <Animated.View className="w-screen h-[102vh] absolute -top-[79vh] rounded-t-3xl transition-all duration-200 bg-light">
       <TouchableOpacity 
         className="m-4 mt-12 w-1/5 absolute z-10"
         onPress={() => setCameraOpen(false)}>
@@ -49,7 +49,7 @@ export default function CameraPanel({
             device={device}
             isActive={true}
             photo
-            enableZoomGesture={true}
+            enableZoomGesture={false}
             className="w-full h-full"
           />
           <TouchableOpacity

@@ -101,7 +101,7 @@ export default function Login({
                 setDisable(true);
                 parseLogin(
                   countryCode.slice(4) + number,
-                  updateFunction[0],
+                  updateFunction,
                 ).then(() => {
                   setDisable(false);
                 });

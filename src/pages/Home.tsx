@@ -11,8 +11,8 @@ import {
 import {
   DangerLevel,
   DangerType,
+  FunctionScreenProp,
   LocationData,
-  ScreenProp,
 } from '../utils/Types';
 import MapView, {PROVIDER_GOOGLE, Heatmap, Marker} from 'react-native-maps';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
@@ -26,7 +26,7 @@ import User from '../../backend/models/user';
 import SplashScreen from 'react-native-splash-screen';
 import { Localizations } from '../utils/Localizations';
 
-export default function Home({isDarkMode}: ScreenProp) {
+export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
   const [u, setUser] = useState<User | null>(null);
   const [region, setRegion] = useState({
@@ -216,7 +216,7 @@ export default function Home({isDarkMode}: ScreenProp) {
                 />
               ))}
             </MapView>
-            <Panel locationData={locationData} />
+            <Panel locationData={locationData} setLogged={updateFunction} />
           </View>
         ) : (
           <TouchableOpacity
