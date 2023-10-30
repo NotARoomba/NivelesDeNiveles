@@ -16,6 +16,7 @@ import ReportType from '../../backend/models/report';
 import {Camera, useCameraDevice} from 'react-native-vision-camera';
 import Evidence from './Evidence';
 import { Localizations } from '../utils/Localizations';
+import Spinner from 'react-native-loading-spinner-overlay';
 import STATUS_CODES from '../../backend/models/status';
 
 export default function Report({
@@ -30,10 +31,13 @@ export default function Report({
     DangerLevel.SAFE,
   );
   const [evidence, onChangeEvidence] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const submitReport = async () => {
+
     if (evidence === '') {
       return Alert.alert(Localizations.missingInformationTitle, Localizations.missingInformationDesc);
     }
+    setIsLoading(true);
     const user = (await callAPI('/users/' + (await getData('number')), 'GET'))
       .user;
     const res = await callAPI(
@@ -49,6 +53,7 @@ export default function Report({
         user.location,
       ),
     );
+    setIsLoading(false);
     if (res.status == STATUS_CODES.SUCCESS) return Alert.alert(Localizations.success);
     else if(res.status== STATUS_CODES.MISMATCHED_IMAGE) return Alert.alert(Localizations.error, Localizations.formatString(Localizations.getString(STATUS_CODES[res.status]), (dangerSelected === DangerType.FLOOD
       ? Localizations.flood.toLocaleLowerCase()
@@ -60,6 +65,10 @@ export default function Report({
 
   return (
     <View className="bg-accent pt-0">
+      <Spinner
+          visible={isLoading}
+          textContent={'Loading...'}
+        />
       <View className="flex flex-row my-auto mt-2.5">
         <View className="w-2/5 align-middle">
           <TouchableOpacity
