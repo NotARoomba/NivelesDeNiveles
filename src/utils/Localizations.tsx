@@ -132,7 +132,7 @@ export const Localizations = new LocalizedStrings({
         safe: 'Sûr',
         risk: 'Risque',
         danger: 'Danger',
-        report: 'Signaler',
+        report: 'Rapport',
         evidence: 'Preuve',
         type: 'Type',
         GENERIC_ERROR: "Une erreur s'est produite",
