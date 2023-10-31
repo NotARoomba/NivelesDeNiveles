@@ -66,7 +66,7 @@ export default function Evidence({
       ) : (
         <View className="flex justify-around relative flex-row mt-2">
           <TouchableOpacity
-            className=" px-3 rounded-full bg-dark w-4/12 m-auto"
+            className=" px-3 rounded-full bg-dark w-5/12 m-auto"
             onPress={e => {
               e.preventDefault();
               setCameraOpen(!cameraOpen);
