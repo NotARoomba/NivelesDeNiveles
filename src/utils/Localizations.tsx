@@ -13,15 +13,6 @@ import STATUS_CODES from '../../backend/models/status';
 // ALREADY_REPORTED,
 // MISMATCHED_IMAGE,
 export const Localizations = new LocalizedStrings({
-    // "es": {
-    //     error: 'Error',
-    //     userNotFound: '',
-    //     loginButton: 'Entrar',
-    //     enterCodeTitle: 'Ingresa el código',
-    //     enterCodeDesc: 'Ingresa el código de verificación enviado a ',
-    //     activateLocationTitle: 'Activate Location',
-    //     activateLocationDesc: 'Niveles De Niveles needs your location to automatically check if you are in danger.',
-    // },
     "en": {
         fire: 'Fire',
         flood: 'Flood',
@@ -76,7 +67,7 @@ export const Localizations = new LocalizedStrings({
         logout: 'Logout',
         sending: 'Sending'
     },
-    "fn": {
+    "fr": {
         fire: 'Feu',
         flood: 'Inondation',
         avalanche: 'Avalanche',
