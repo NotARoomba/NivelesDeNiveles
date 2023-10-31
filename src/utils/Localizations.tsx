@@ -132,7 +132,7 @@ export const Localizations = new LocalizedStrings({
         safe: 'Seguro',
         risk: 'Riesgo',
         danger: 'Peligro',
-        report: 'Informe',
+        report: 'Reporta',
         evidence: 'Evidencia',
         type: 'Tipo',
         GENERIC_ERROR: 'Se ha producido un error',
