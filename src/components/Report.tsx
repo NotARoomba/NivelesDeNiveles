@@ -62,7 +62,13 @@ export default function Report({
       : dangerSelected === DangerType.FIRE
       ? Localizations.fire.toLocaleLowerCase()
       : Localizations.avalanche.toLocaleLowerCase())) as string);
-    else return Alert.alert(Localizations.error, Localizations.getString(STATUS_CODES[res.status]));
+    else {
+      try {
+        return Alert.alert(Localizations.error, Localizations.getString(STATUS_CODES[res.status]));
+      } catch {
+        return Alert.alert(Localizations.error, Localizations.GENERIC_ERROR);
+      }
+    }
   };
 
   const logoutFunction = () => {
