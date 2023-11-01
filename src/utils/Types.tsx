@@ -31,6 +31,8 @@ export interface EvidenceProps {
 export interface PanelProps {
   locationData: LocationData;
   setLogged: Function;
+  cameraOpen: boolean;
+  setCameraOpen: (open: boolean) => void;
 }
 
 export interface AdviceProps {

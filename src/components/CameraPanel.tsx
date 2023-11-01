@@ -37,12 +37,12 @@ export default function CameraPanel({
   return (
     <Animated.View className="w-screen h-[102vh] absolute -top-[79vh] rounded-t-3xl transition-all duration-200 bg-light">
       <TouchableOpacity 
-        className="m-4 mt-12 w-1/5 absolute z-10"
+        className="m-4 mt-12 w-1/5 absolute z-30"
         onPress={() => setCameraOpen(false)}>
         <Icon name="x" size={40} color={'#ffffff'} />
       </TouchableOpacity>
       {device ? (
-        <View className="">
+        <View>
           <Camera
             ref={camera}
             format={format}
@@ -53,7 +53,7 @@ export default function CameraPanel({
             className="w-full h-full"
           />
           <TouchableOpacity
-            className="z-10 absolute left-1/2 -translate-x-8 bottom-16"
+            className="absolute left-1/2 -translate-x-8 bottom-16"
             onPress={() => photo()}>
             <Icon name="circle" size={72} color={'#ffffff'} />
           </TouchableOpacity>

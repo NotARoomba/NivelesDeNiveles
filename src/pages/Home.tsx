@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {createRef, useEffect, useRef, useState} from 'react';
 import {
   View,
   StatusBar,
@@ -24,16 +24,19 @@ import NivelesEvents from '../../backend/models/events';
 import Panel from '../components/Panel';
 import User from '../../backend/models/user';
 import SplashScreen from 'react-native-splash-screen';
+import Icon from 'react-native-vector-icons/Feather'
 import { Localizations } from '../utils/Localizations';
 
 export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
   const [u, setUser] = useState<User | null>(null);
+  const mapRef = useRef<MapView>(null);
+  const [cameraOpen, setCameraOpen] = useState(false);
   const [region, setRegion] = useState({
     latitude: 0,
     longitude: 0,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0922,
+    latitudeDelta: 50,
+    longitudeDelta: 50,
   });
   const [locationData, setLocationData] = useState<LocationData>({
     status: DangerLevel.SAFE,
@@ -144,13 +147,14 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
     updateMap();
   }, []);
   useEffect(() => {
-    if (u)
+    if (u) {
       setRegion({
         latitude: u.location.coordinates[1],
         longitude: u.location.coordinates[0],
         latitudeDelta: 0.0922,
         longitudeDelta: 0.1922,
       });
+    }
   }, [u]);
   return (
     <View className=" bg-light">
@@ -158,12 +162,31 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       <View className="flex justify-center align-middle text-center justify-items-center">
         {locationPerms ? (
           <View>
+          <TouchableOpacity
+          className={'top-16 absolute bg-dark-500 right-0 p-1 rounded-full -mt-0.5 pr-3 pt-3 mr-5 ' + (!cameraOpen ? 'z-10' : '')}
+          onPress={() => {
+            if (mapRef.current) {
+              mapRef.current.animateToRegion({
+                latitude: u?.location.coordinates[1] ?? 0,
+                longitude: u?.location.coordinates[0] ?? 0,
+                latitudeDelta: u?.location.coordinates[1] ? 0.0922 : 50,
+                longitudeDelta: u?.location.coordinates[1] ? 0.0421 : 50,
+              });
+            }
+          }} >
+            <Icon
+            name="navigation"
+            size={40}
+            color="#f1eeff"
+          />
+          </TouchableOpacity>
             <MapView
               className="w-screen h-screen bg-neutral-200 justify-center m-auto"
               provider={PROVIDER_GOOGLE}
               showsUserLocation
               showsMyLocationButton
               loadingEnabled
+              ref={mapRef}
               initialRegion={region}
               region={region}>
               {locationData.incidents.length > 0 ? (
@@ -195,7 +218,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
                   key={i + s.status}
                   coordinate={{
                     latitude: s.location.coordinates[1],
-                    longitude: s.location.coordinates[0],
+                    longitude: s.location.coordinates[0]
                   }}
                   title={s.name}
                   description={`${Localizations.state}: ${
@@ -216,7 +239,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
                 />
               ))}
             </MapView>
-            <Panel locationData={locationData} setLogged={updateFunction} />
+            <Panel locationData={locationData} setLogged={updateFunction} cameraOpen={cameraOpen} setCameraOpen={setCameraOpen} />
           </View>
         ) : (
           <TouchableOpacity

@@ -51,6 +51,7 @@ export default function Evidence({
     }
     updatePerms();
   }, []);
+    
 
   return (
     <View className="justify-around h-32">
@@ -61,13 +62,13 @@ export default function Evidence({
           keyboardType="default"
           placeholderTextColor={'#ffffff'}
           multiline
-          className="flex justify-center align-middle my-auto h-10 pl-3 py-0 text-lg border mt-3 w-12/12 rounded-full bg-main text-light font-bold"
+          className="flex justify-center align-middle my-auto h-10 pl-3 py-0 text-lg border mt-3 w-11/12 mx-auto rounded-full bg-main text-light font-bold"
         />
       ) : (
-        <View className="flex justify-around relative flex-row mt-2">
+        <View className="flex justify-around relative w-full flex-row mt-2">
           <TouchableOpacity
-            className=" px-3 rounded-full bg-dark w-5/12 m-auto"
-            onPress={e => {
+            className=" px-3 rounded-full bg-dark w-6/12 m-auto"
+            onPress={async e => {
               e.preventDefault();
               setCameraOpen(!cameraOpen);
             }}>
