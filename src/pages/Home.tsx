@@ -221,7 +221,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
                     longitude: s.location.coordinates[0]
                   }}
                   title={s.name}
-                  description={`${Localizations.state}: ${
+                  description={`${Localizations.formatString(Localizations.sensorType, s.type === DangerType.FLOOD ? Localizations.flood : s.type === DangerType.FIRE ? Localizations.fire : Localizations.avalanche)}\n${Localizations.state}: ${
                     s.status === DangerLevel.SAFE
                       ? Localizations.safe
                       : s.status === DangerLevel.RISK
