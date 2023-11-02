@@ -53,10 +53,6 @@ verifyRouter.post('/check', async (req: Request, res: Response) => {
   const number: string = req?.body?.number;
   const code: string = req?.body?.code as string;
   let verification;
-    
-  if (number === '+573104250018') {
-    return res.send({status: STATUS_CODES.SUCCESS});
-  }
   try {
     verification = await twilio.verify.v2
       .services(env.TW_VSID)
