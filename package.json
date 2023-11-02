@@ -15,6 +15,7 @@
     "@bam.tech/react-native-make": "^3.0.3",
     "@powerdesigninc/react-native-prompt": "^0.1.2",
     "@react-native-async-storage/async-storage": "^1.19.3",
+    "@react-native-community/netinfo": "^10.0.0",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.7",
     "axios": "^1.5.1",

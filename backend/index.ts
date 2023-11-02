@@ -66,7 +66,7 @@ connectToDatabase(io)
             .toArray()) as unknown as Incident[];
           incidents.filter(
             incident =>
-              haversine(
+              { const dist = haversine(
                 {
                   lat: user.location.coordinates[1],
                   lon: user.location.coordinates[0],
@@ -75,7 +75,7 @@ connectToDatabase(io)
                   lat: incident.location.coordinates[1],
                   lon: incident.location.coordinates[0],
                 },
-              ) < incident.range,
+              ); console.log(dist); dist < incident.range}
           );
           // const incidents: Incident[] = (await collections.incidents
           //   ?.find({

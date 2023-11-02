@@ -14,7 +14,8 @@ import {
   FunctionScreenProp,
   LocationData,
 } from '../utils/Types';
-import MapView, {PROVIDER_GOOGLE, Heatmap, Marker} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Heatmap, Marker, Circle} from 'react-native-maps';
+import NetInfo, { NetInfoSubscription } from "@react-native-community/netinfo";
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {callAPI, getData} from '../utils/Functions';
 import GetLocation from 'react-native-get-location';
@@ -27,6 +28,7 @@ import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/Feather'
 import { Localizations } from '../utils/Localizations';
 import STATUS_CODES from '../../backend/models/status';
+import Incident from '../../backend/models/incident';
 
 export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
@@ -105,33 +107,40 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
           );
         }
       }
-      const res = await callAPI('/users/' + (await getData('number')), 'GET');
+      const userNumber = (await getData('number')) as string
+      const res = await callAPI('/users/' + userNumber, 'GET');
       if (res.status !== STATUS_CODES.SUCCESS) {
         if (res.status === STATUS_CODES.NO_CONNECTION) Alert.alert(Localizations.error, Localizations.NO_CONNECTION);
         else Alert.alert(Localizations.error, Localizations.GENERIC_ERROR);
       } else {
         setUser(res.user);
+        //get location and update database with location
+        //then open a websocket connecton listening for updates around the location
+        const socket = io(Config.API_URL);
+        // socket.emit(NivelesEvents.CONNECT)
+        // console.log(user)
+        socket.on(NivelesEvents.UPDATE_LOCATION_DATA, () => {
+          socket.emit(
+            NivelesEvents.REQUEST_LOCATION_DATA,
+            res.user.number,
+            (locationData: LocationData, user: User) => {
+              setLocationData(locationData);
+              setUser(user);
+              // console.log(locationData)
+            },
+          );
+        });
       }
-      //get location and update database with location
-      //then open a websocket connecton listening for updates around the location
-      const socket = io(Config.API_URL);
-      // socket.emit(NivelesEvents.CONNECT)
-      // console.log(user)
-      socket.on(NivelesEvents.UPDATE_LOCATION_DATA, () => {
-        socket.emit(
-          NivelesEvents.REQUEST_LOCATION_DATA,
-          res.user.number,
-          (locationData: LocationData, user: User) => {
-            setLocationData(locationData);
-            setUser(user);
-            // console.log(locationData)
-          },
-        );
-      });
-
       SplashScreen.hide();
     }
     updateMap();
+      
+    const unsubscribe = NetInfo.addEventListener(async state => {
+      if (state.isInternetReachable) {
+        updateMap();
+    } else {
+    }});
+    return () => unsubscribe();
   }, []);
   useEffect(() => {
     if (u) {
@@ -180,31 +189,35 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
               ref={mapRef}
               initialRegion={region}
               region={region}>
-              {locationData.incidents.length > 0 ? (
+              {/* {locationData.incidents.length > 0 ? ( 
                 <Heatmap
-                  points={[
-                    ...locationData.incidents.map(v => ({
-                      latitude: v.location.coordinates[1],
-                      longitude: v.location.coordinates[0],
-                      weight: v.level * 5000
-                    })),
-                  ]}
-                  // points={[{latitude: 37.7882, longitude: -122.4324}, {latitude: 37.7882, longitude: -122.4524}]}
-                  radius={50}
-                  gradient={{
-                    colorMapSize: 1000,
-                    startPoints: [0.1, 0.6, 1],
-                    colors:
-                      locationData.status === DangerLevel.SAFE
-                        ? ['#22c55e', '#22c55e', '#22c55e']
-                        : locationData.status === DangerLevel.RISK
-                        ? ['#f59e0b', '#f59e0b', '#f59e0b']
-                        : ['#ef4444', '#ef4444', '#ef4444'],
-                  }}
-                />
-              ) : (
-                <></>
-              )}
+                //   points={[
+                //     ...locationData.incidents.map(v => ({
+                //       latitude: v.location.coordinates[1],
+                //       longitude: v.location.coordinates[0],
+                //       weight: (v.level * 5000)
+                //     })),
+                //   ]}
+                //   // points={[{latitude: 37.7882, longitude: -122.4324}, {latitude: 37.7882, longitude: -122.4524}]}
+                //   radius={50}
+                //   gradient={{
+                //     colorMapSize: 2,
+                //     startPoints: [0.1, 0.6, 1],
+                //     colors: ['#22c55e', '#f59e0b', '#ef4444']
+                //       // locationData.status === DangerLevel.SAFE
+                //       //   ? ['#22c55e', '#22c55e', '#22c55e']
+                //       //   : locationData.status === DangerLevel.RISK
+                //       //   ? ['#f59e0b', '#f59e0b', '#f59e0b']
+                //       //   : ['#ef4444', '#ef4444', '#ef4444'],
+                //   }}
+                // />*/}
+                {locationData.incidents.map((v: Incident, i) => (<Circle key={i} center={{
+                        latitude: v.location.coordinates[1],
+                        longitude: v.location.coordinates[0],
+                }} strokeColor={v.level === DangerLevel.SAFE ? '#22c55e88' : v.level === DangerLevel.RISK ? '#f59e0b88' : '#ef444488'} radius={v.range} fillColor={v.level === DangerLevel.SAFE ? '#22c55e88' : v.level === DangerLevel.RISK ? '#f59e0b88' : '#ef444488'} />))}
+              {/* // ) : (
+              //   <></>
+              // )} */}
               {locationData.sensors.map((s, i) => (
                 <Marker
                   key={i + s.status}
