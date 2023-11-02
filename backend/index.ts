@@ -64,19 +64,19 @@ connectToDatabase(io)
           let incidents = (await collections.incidents
             ?.find({over: false})
             .toArray()) as unknown as Incident[];
-          incidents.filter(
-            incident =>
-              { const dist = haversine(
-                {
-                  lat: user.location.coordinates[1],
-                  lon: user.location.coordinates[0],
-                },
-                {
-                  lat: incident.location.coordinates[1],
-                  lon: incident.location.coordinates[0],
-                },
-              ); console.log(dist, incident.range); return dist < incident.range}
-          );
+          // incidents.filter(
+          //   incident =>
+          //     { const dist = haversine(
+          //       {
+          //         lat: user.location.coordinates[1],
+          //         lon: user.location.coordinates[0],
+          //       },
+          //       {
+          //         lat: incident.location.coordinates[1],
+          //         lon: incident.location.coordinates[0],
+          //       },
+          //     ); console.log(dist, incident.range); return dist < incident.range}
+          // );
           // const incidents: Incident[] = (await collections.incidents
           //   ?.find({
           //     location: {
@@ -90,7 +90,16 @@ connectToDatabase(io)
           //   .toArray()) as unknown as Incident[];
           let status = DangerLevel.SAFE;
           for (let incident of incidents) {
-            if (incident.level > status) status = incident.level;
+            if (incident.level > status && haversine(
+              {
+                lat: user.location.coordinates[1],
+                lon: user.location.coordinates[0],
+              },
+              {
+                lat: incident.location.coordinates[1],
+                lon: incident.location.coordinates[0],
+              },
+            ) < incident.range) status = incident.level;
           }
           const sensors: Sensor[] = (await collections.sensors
             ?.find({})
