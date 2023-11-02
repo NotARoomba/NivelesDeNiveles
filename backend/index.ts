@@ -75,7 +75,7 @@ connectToDatabase(io)
                   lat: incident.location.coordinates[1],
                   lon: incident.location.coordinates[0],
                 },
-              ); console.log(dist); return dist < incident.range}
+              ); console.log(dist, incident.range); return dist < incident.range}
           );
           // const incidents: Incident[] = (await collections.incidents
           //   ?.find({
