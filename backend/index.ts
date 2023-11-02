@@ -96,7 +96,7 @@ connectToDatabase(io)
             ?.find({})
             .toArray()) as unknown as Sensor[];
             // console.log(sensors)
-          callback({status, sensors, incidents});
+          callback({status, sensors, incidents}, user);
         },
       );
       socket.on(NivelesEvents.DISCONNECT, () => {
