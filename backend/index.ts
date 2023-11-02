@@ -51,9 +51,10 @@ connectToDatabase(io)
       socket.emit(NivelesEvents.UPDATE_LOCATION_DATA);
       socket.on(
         NivelesEvents.REQUEST_LOCATION_DATA,
-        async (user: User, callback) => {
+        async (number: String, callback) => {
           // console.log(user.location, user)
           // console.log(user);
+          const user = await collections.users?.findOne({number});
           if (!user)
             return callback({
               status: DangerLevel.SAFE,

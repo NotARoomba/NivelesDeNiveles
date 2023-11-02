@@ -40,19 +40,23 @@ export default function Report({
       return Alert.alert(Localizations.missingInformationTitle, Localizations.missingInformationDesc);
     }
     setIsLoading(true);
-    const user = (await callAPI('/users/' + (await getData('number')), 'GET'))
-      .user;
+    const userData = (await callAPI('/users/' + (await getData('number')), 'GET'));
+    console.log(userData)
+    if (userData.status === STATUS_CODES.NO_CONNECTION){
+      setIsLoading(false);
+      return Alert.alert(Localizations.error, Localizations.NO_CONNECTION)
+    }
     const res = await callAPI(
       '/report/',
       'POST',
       new ReportType(
-        user.number,
+        userData.user.number,
         dangerSelected,
         levelSelected,
         Date.now(),
         evidence,
         false,
-        user.location,
+        userData.user.location,
       ),
     );
     setIsLoading(false);

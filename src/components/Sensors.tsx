@@ -1,6 +1,6 @@
 import {View, Text, ScrollView} from 'react-native';
 import Sensor from '../../backend/models/sensor';
-import {DangerLevel} from '../utils/Types';
+import {DangerLevel, DangerType} from '../utils/Types';
 import {PanResponder} from 'react-native';
 import { Localizations } from '../utils/Localizations';
 
@@ -12,7 +12,7 @@ export default function Sensors({sensors}: {sensors: Sensor[]}) {
           <View
             key={i}
             className="flex flex-row justify-start border-t-4 rounded-sm border-accent py-2">
-            <View className="text-center justify-center w-1/2 m-auto">
+            <View className="text-center justify-center w-1/3 m-auto">
               <Text className="text-light text-lg text-center ">{s.name}</Text>
             </View>
             <View
@@ -25,7 +25,22 @@ export default function Sensors({sensors}: {sensors: Sensor[]}) {
                   : 'bg-red-500')
               }
             />
-            <View className="text-center justify-center w-1/2 m-auto">
+            <View className="text-center justify-center w-1/3 mx-3">
+              <Text className="text-light text-lg text-center">
+              {Localizations.formatString(Localizations.sensorType, s.type === DangerType.FLOOD ? Localizations.flood : s.type === DangerType.FIRE ? Localizations.fire : Localizations.avalanche)}
+              </Text>
+            </View>
+            <View
+              className={
+                'w-1 rounded ' +
+                (s.status === DangerLevel.SAFE
+                  ? 'bg-green-500'
+                  : s.status === DangerLevel.RISK
+                  ? 'bg-yellow-500'
+                  : 'bg-red-500')
+              }
+            />
+            <View className="text-center justify-center w-1/3 m-auto">
               <Text className="text-light text-lg font-bold text-center">
                 {s.status === DangerLevel.SAFE
                   ? Localizations.safe

@@ -26,6 +26,7 @@ import User from '../../backend/models/user';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/Feather'
 import { Localizations } from '../utils/Localizations';
+import STATUS_CODES from '../../backend/models/status';
 
 export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
@@ -41,26 +42,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   const [locationData, setLocationData] = useState<LocationData>({
     status: DangerLevel.SAFE,
     incidents: [],
-    sensors: [
-      {
-        name: 'Sensor 1',
-        status: DangerLevel.SAFE,
-        type: DangerType.FLOOD,
-        location: {coordinates: [37.7882, -122.4324], type: 'Point'},
-      },
-      {
-        name: 'Sensor 2',
-        status: DangerLevel.RISK,
-        type: DangerType.FLOOD,
-        location: {coordinates: [37.7882, -122.4524], type: 'Point'},
-      },
-      {
-        name: 'Sensor 3',
-        status: DangerLevel.DANGER,
-        type: DangerType.FLOOD,
-        location: {coordinates: [37.7882, -122.4624], type: 'Point'},
-      },
-    ],
+    sensors: [],
   });
   useEffect(() => {
     async function updateMap() {
@@ -123,10 +105,13 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
           );
         }
       }
-      const user: User = (
-        await callAPI('/users/' + (await getData('number')), 'GET')
-      ).user;
-      setUser(user);
+      const res = await callAPI('/users/' + (await getData('number')), 'GET');
+      if (res.status !== STATUS_CODES.SUCCESS) {
+        if (res.status === STATUS_CODES.NO_CONNECTION) Alert.alert(Localizations.error, Localizations.NO_CONNECTION);
+        else Alert.alert(Localizations.error, Localizations.GENERIC_ERROR);
+      } else {
+        setUser(res.user);
+      }
       //get location and update database with location
       //then open a websocket connecton listening for updates around the location
       const socket = io(Config.API_URL);
@@ -135,13 +120,15 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       socket.on(NivelesEvents.UPDATE_LOCATION_DATA, () => {
         socket.emit(
           NivelesEvents.REQUEST_LOCATION_DATA,
-          user,
-          (locationData: LocationData) => {
+          res.user.number,
+          (locationData: LocationData, user: User) => {
             setLocationData(locationData);
+            setUser(user);
             // console.log(locationData)
           },
         );
       });
+
       SplashScreen.hide();
     }
     updateMap();
@@ -164,13 +151,17 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
           <View>
           <TouchableOpacity
           className={'top-16 absolute bg-dark-500 right-0 p-1 rounded-full -mt-0.5 pr-3 pt-3 mr-5 ' + (!cameraOpen ? 'z-10' : '')}
-          onPress={() => {
+          onPress={async () => {
             if (mapRef.current) {
+              const location = await GetLocation.getCurrentPosition({
+                enableHighAccuracy: true,
+                timeout: 60000,
+              });
               mapRef.current.animateToRegion({
-                latitude: u?.location.coordinates[1] ?? 0,
-                longitude: u?.location.coordinates[0] ?? 0,
-                latitudeDelta: u?.location.coordinates[1] ? 0.0922 : 50,
-                longitudeDelta: u?.location.coordinates[1] ? 0.0421 : 50,
+                latitude: location.latitude,
+                longitude: location.longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
               });
             }
           }} >
@@ -195,6 +186,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
                     ...locationData.incidents.map(v => ({
                       latitude: v.location.coordinates[1],
                       longitude: v.location.coordinates[0],
+                      weight: v.level * 5000
                     })),
                   ]}
                   // points={[{latitude: 37.7882, longitude: -122.4324}, {latitude: 37.7882, longitude: -122.4524}]}

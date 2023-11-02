@@ -5,6 +5,7 @@ import Home from './src/pages/Home';
 import Login from './src/pages/Login';
 import {callAPI, getData} from './src/utils/Functions';
 import {Alert} from 'react-native';
+import STATUS_CODES from './backend/models/status';
 export default function App() {
   const [logged, setlLogged] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -19,21 +20,15 @@ export default function App() {
     // storeData('number', '+573104250018');
     // AsyncStorage.removeItem('number');
     async function checkIfLogin() {
-      try {
+        if (await getData('number')) setlLogged(true);
         const data = await callAPI(
           '/users/' + (await getData('number')),
           'GET',
         );
-        if (!data) setlLogged(false);
-        else if (data.user && !data.error) setlLogged(true);
-        else setlLogged(false);
+        if (data.status == STATUS_CODES.NO_CONNECTION) setlLogged(true);
+        else if (data.status !== STATUS_CODES.SUCCESS) setlLogged(false);
+        else setlLogged(true);
         setLoaded(true);
-      } catch (e) {
-        Alert.alert(
-          'Error!',
-          'No podemos conectar a nuestro servidor! Revisa tu conexion al internet.',
-        );
-      }
     }
     checkIfLogin();
     // getData('number').then(number => {

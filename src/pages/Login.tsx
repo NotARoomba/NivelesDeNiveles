@@ -17,6 +17,7 @@ import prompt from '@powerdesigninc/react-native-prompt';
 import {callAPI, storeData} from '../utils/Functions';
 import SplashScreen from 'react-native-splash-screen';
 import STATUS_CODES from '../../backend/models/status';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 async function checkLogin(
   number: string,
@@ -36,17 +37,20 @@ async function checkLogin(
   }
 }
 
-async function parseLogin(number: string, updateLogged: Function) {
+async function parseLogin(number: string, updateLogged: Function, setIsLoading: Function) {
   const res = await callAPI('/verify/send', 'POST', {number});
   if (res.status == STATUS_CODES.SUCCESS) {
-    return prompt(
-      Localizations.enterCodeTitle,
-      Localizations.enterCodeDesc + number,
-      async input => await checkLogin(number, input, updateLogged),
-      'plain-text',
-      '',
-      'number-pad',
-    );
+    setIsLoading(false);
+    setTimeout(() => {
+      return prompt(
+        Localizations.enterCodeTitle,
+        Localizations.enterCodeDesc + number,
+        async input => await checkLogin(number, input, updateLogged),
+        'plain-text',
+        '',
+        'number-pad',
+      );
+    }, 250)
   } else {
     return Alert.alert(Localizations.error, Localizations.getString(STATUS_CODES[res.status]));
   }
@@ -57,6 +61,7 @@ export default function Login({
   updateFunction,
 }: FunctionScreenProp) {
   const [number, onChangeNumber] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [show, setShow] = useState(false);
   const [countryCode, setCountryCode] = useState('🇨🇴+57');
   const [disable, setDisable] = useState(false);
@@ -67,6 +72,13 @@ export default function Login({
     <SafeAreaView className=" bg-light">
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <ScrollView className="pb-[1000px]">
+        <Spinner
+          visible={isLoading}
+          overlayColor='#00000099'
+          textContent={Localizations.sending}
+          textStyle={{color: '#fff', marginTop: -50}}
+          animation='fade'
+        />
         <View className="flex justify-center align-left mt-0">
           <Image
             source={require('../../public/logo.png')}
@@ -99,9 +111,11 @@ export default function Login({
                 Alert.alert(Localizations.error, Localizations.selectCountryCode);
               } else {
                 setDisable(true);
+                setIsLoading(true);
                 parseLogin(
                   countryCode.slice(4) + number,
                   updateFunction,
+                  setIsLoading
                 ).then(() => {
                   setDisable(false);
                 });
