@@ -1,13 +1,27 @@
-import type { Config } from 'tailwindcss'
+import type {Config} from 'tailwindcss';
 
 export default {
   content: ['./index.html', './src/tsx/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Archivo'],
+        sans: ['Raleway'],
+      },
+      keyframes: {
+        slowBounce: {
+          '0%': {
+            transform: 'translateY(10px)',
+          },
+          '100%': {
+            transform: 'translateY(-10px)',
+          },
+        },
+      },
+      animation: {
+        slowBounce: 'slowBounce 2s ease-in-out infinite alternate-reverse both',
       },
       colors: {
+        turple: '#5335A9',
         accent: {
           DEFAULT: '#9de5ff',
           100: '#003d53',
@@ -72,4 +86,4 @@ export default {
     },
   },
   plugins: [],
-} satisfies Config
+} satisfies Config;
