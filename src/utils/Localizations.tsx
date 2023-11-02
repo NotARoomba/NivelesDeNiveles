@@ -67,7 +67,8 @@ export const Localizations = new LocalizedStrings({
         logoutDesc: '¿Está seguro de que desea cerrar sesión?',
         logout: 'Cerrar sesión',
         sending: 'Enviando', 
-        sensorType: 'Sensor de {0}'       
+        sensorType: 'Sensor de {0}',
+        radius: 'Radio'    
     },
     "en": {
         fire: 'Fire',
@@ -124,6 +125,7 @@ export const Localizations = new LocalizedStrings({
         logout: 'Logout',
         sending: 'Sending',
         sensorType: '{0} Sensor',
+        radius: 'Radius'
     },
     "fr": {
         fire: 'Feu',
@@ -180,6 +182,7 @@ export const Localizations = new LocalizedStrings({
         logout: 'Déconnexion',
         sending: 'Envoi',
         sensorType: 'Capteur {0}',
+        radius: 'Rayon'
     },
     "zh": {
         fire: '火',
@@ -235,6 +238,7 @@ export const Localizations = new LocalizedStrings({
         logoutDesc: '你确定要登出？',
         logout: '登出',
         sending: '发送',
-        sensorType: '传感器{0}'    
+        sensorType: '传感器{0}'   ,
+        radius: '半径' 
     }
 });

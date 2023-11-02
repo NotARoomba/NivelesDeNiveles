@@ -218,6 +218,25 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
               {/* // ) : (
               //   <></>
               // )} */}
+               {locationData.incidents.map((v: Incident, i) => (
+                <Marker
+                  key={i}
+                  coordinate={{
+                    latitude: v.location.coordinates[1],
+                    longitude: v.location.coordinates[0]
+                  }}
+                  title={v.type === DangerType.FLOOD ? Localizations.flood : v.type === DangerType.FIRE ? Localizations.fire : Localizations.avalanche}
+                  description={`${Localizations.radius}: ${v.range}m`}
+                  pinColor={
+                    v.level === DangerLevel.SAFE
+                      ? '#22c55e'
+                      : v.level === DangerLevel.RISK
+                      ? '#f59e0b'
+                      : '#ef4444'
+                  }
+                  style={{justifyContent: 'center', margin: 'auto'}}
+                />
+              ))}
               {locationData.sensors.map((s, i) => (
                 <Marker
                   key={i + s.status}
