@@ -46,7 +46,6 @@ export default function Report({
       '/users/' + (await getData('number')),
       'GET',
     );
-    console.log(userData);
     if (userData.status === STATUS_CODES.NO_CONNECTION) {
       setIsLoading(false);
       return Alert.alert(Localizations.error, Localizations.NO_CONNECTION);
