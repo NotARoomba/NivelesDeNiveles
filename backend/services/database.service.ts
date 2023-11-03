@@ -77,87 +77,90 @@ export async function connectToDatabase(io: Server) {
 
   // infoDB.command( { collMod: env.SENSOR_COLLECTION, changeStreamPreAndPostImages: { enabled: true } } );
 
-
   console.log('Successfully connected to database!');
   //check if there is incident and if not then make an incident
   const pipeline = [
     {
-        '$match': {
-            $or: [{ operationType: 'insert' }, { operationType: 'update' }]
-
-        }
-    }
-];
-  sensorsCollection.watch(pipeline, { fullDocument: "required", fullDocumentBeforeChange: 'required' }).on('change', async next => {
-    // let sensors: Sensor[] = (await sensorsCollection.find({}).toArray() as unknown as Sensor[])
-    if (next.operationType == 'update') {
-      // console.log(next)
-      let updatedSensor = next.fullDocument as Sensor;
-      let beforeSensor = next.fullDocumentBeforeChange as Sensor;
-      // console.log(updatedSensor);
-      //from inistal safe state to other danger states or danger stat to safe state
-      if (updatedSensor.status != beforeSensor.status) {
-        //need to find an existing incident (user report) or make a new incident
-        let incidents = (await collections.incidents
-          ?.find({type: updatedSensor.type, over: false})
-          .toArray()) as unknown as Incident[];
-        incidents.filter(
-          incident =>
-            haversine(
-              {
-                lat: updatedSensor.location.coordinates[1],
-                lon: updatedSensor.location.coordinates[0],
-              },
-              {
-                lat: incident.location.coordinates[1],
-                lon: incident.location.coordinates[0],
-              },
-            ) < incident.range,
-        );
-        // const incidentsNear: Incident[] = (await incidentsCollection
-        //   .find({
-        //     location: {
-        //       $near: {
-        //         $geometry: {...updatedSensor.location},
-        //         $maxDistance: 2000,
-        //       },
-        //     },
-        //     type: updatedSensor.type,
-        //     over: false,
-        //   })
-        //   .toArray()) as unknown as Incident[];
-        //make a new incident
-        if (incidents.length === 0) {
-          await incidentsCollection.insertOne(
-            new Incident(
-              updatedSensor.type,
-              updatedSensor.status,
-              1,
-              Date.now(),
-              false,
-              false,
-              getRange(3),
-              updatedSensor.location,
-            ),
+      $match: {
+        $or: [{operationType: 'insert'}, {operationType: 'update'}],
+      },
+    },
+  ];
+  sensorsCollection
+    .watch(pipeline, {
+      fullDocument: 'required',
+      fullDocumentBeforeChange: 'required',
+    })
+    .on('change', async next => {
+      // let sensors: Sensor[] = (await sensorsCollection.find({}).toArray() as unknown as Sensor[])
+      if (next.operationType == 'update') {
+        // console.log(next)
+        let updatedSensor = next.fullDocument as Sensor;
+        let beforeSensor = next.fullDocumentBeforeChange as Sensor;
+        // console.log(updatedSensor);
+        //from inistal safe state to other danger states or danger stat to safe state
+        if (updatedSensor.status != beforeSensor.status) {
+          //need to find an existing incident (user report) or make a new incident
+          let incidents = (await collections.incidents
+            ?.find({type: updatedSensor.type, over: false})
+            .toArray()) as unknown as Incident[];
+          incidents.filter(
+            incident =>
+              haversine(
+                {
+                  lat: updatedSensor.location.coordinates[1],
+                  lon: updatedSensor.location.coordinates[0],
+                },
+                {
+                  lat: incident.location.coordinates[1],
+                  lon: incident.location.coordinates[0],
+                },
+              ) < incident.range,
           );
-        }
-        for (let incident of incidents) {
-          //then check if the incident inferior and then update the incident
-          if (incident.level !== updatedSensor.status) {
-            await incidentsCollection.updateOne(
-              {location: incident.location},
-              {$set: {level: updatedSensor.status, timestamp: Date.now()}},
+          // const incidentsNear: Incident[] = (await incidentsCollection
+          //   .find({
+          //     location: {
+          //       $near: {
+          //         $geometry: {...updatedSensor.location},
+          //         $maxDistance: 2000,
+          //       },
+          //     },
+          //     type: updatedSensor.type,
+          //     over: false,
+          //   })
+          //   .toArray()) as unknown as Incident[];
+          //make a new incident
+          if (incidents.length === 0) {
+            await incidentsCollection.insertOne(
+              new Incident(
+                updatedSensor.type,
+                updatedSensor.status,
+                1,
+                Date.now(),
+                false,
+                false,
+                getRange(3),
+                updatedSensor.location,
+              ),
             );
-          } else {
-            await incidentsCollection.updateOne(
-              {location: incident.location},
-              {$inc: {numberOfReports: 1}, timestamp: Date.now()},
-            );
+          }
+          for (let incident of incidents) {
+            //then check if the incident inferior and then update the incident
+            if (incident.level !== updatedSensor.status) {
+              await incidentsCollection.updateOne(
+                {location: incident.location},
+                {$set: {level: updatedSensor.status, timestamp: Date.now()}},
+              );
+            } else {
+              await incidentsCollection.updateOne(
+                {location: incident.location},
+                {$inc: {numberOfReports: 1}, timestamp: Date.now()},
+              );
+            }
           }
         }
       }
-    }
-  });
+    });
   // also check when a report has been created and then check for a prevoius incident and then update the numebr of reports as needed
   // also need to check if the report has expired every so and so hours and then delete t so that the only report tat are there are th ones that are currently ging on
   reportsCollection.watch().on('change', async next => {

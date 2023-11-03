@@ -15,7 +15,7 @@ import {
 import {EvidenceProps} from '../utils/Types';
 import {useEffect, useState} from 'react';
 import CameraPanel from './CameraPanel';
-import { Localizations } from '../utils/Localizations';
+import {Localizations} from '../utils/Localizations';
 
 export default function Evidence({
   evidence,
@@ -39,7 +39,7 @@ export default function Evidence({
             {
               text: Localizations.cancel,
               onPress: () => 1,
-              style: 'cancel'
+              style: 'cancel',
             },
             {
               text: Localizations.grant,
@@ -51,7 +51,6 @@ export default function Evidence({
     }
     updatePerms();
   }, []);
-    
 
   return (
     <View className="justify-around h-32">
@@ -99,7 +98,9 @@ export default function Evidence({
         <TouchableOpacity
           className="p-3 bg-main w-3/5 m-auto rounded-full"
           onPress={submitReport}>
-          <Text className="text-2xl text-accent text-center">{Localizations.report}</Text>
+          <Text className="text-2xl text-accent text-center">
+            {Localizations.report}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

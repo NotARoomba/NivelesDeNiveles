@@ -4,7 +4,7 @@ import RiskMeter from './RiskMeter';
 import Advice from './Advice';
 import {useState} from 'react';
 import Sensors from './Sensors';
-import { Localizations } from '../utils/Localizations';
+import {Localizations} from '../utils/Localizations';
 
 export default function Status({reportFunction, locationData}: StatusProps) {
   const [isOpen, setOpen] = useState(false);

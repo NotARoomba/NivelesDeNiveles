@@ -90,21 +90,25 @@ connectToDatabase(io)
           //   .toArray()) as unknown as Incident[];
           let status = DangerLevel.SAFE;
           for (let incident of incidents) {
-            if (incident.level > status && haversine(
-              {
-                lat: user.location.coordinates[1],
-                lon: user.location.coordinates[0],
-              },
-              {
-                lat: incident.location.coordinates[1],
-                lon: incident.location.coordinates[0],
-              },
-            ) < incident.range) status = incident.level;
+            if (
+              incident.level > status &&
+              haversine(
+                {
+                  lat: user.location.coordinates[1],
+                  lon: user.location.coordinates[0],
+                },
+                {
+                  lat: incident.location.coordinates[1],
+                  lon: incident.location.coordinates[0],
+                },
+              ) < incident.range
+            )
+              status = incident.level;
           }
           const sensors: Sensor[] = (await collections.sensors
             ?.find({})
             .toArray()) as unknown as Sensor[];
-            // console.log(sensors)
+          // console.log(sensors)
           callback({status, sensors, incidents}, user);
         },
       );

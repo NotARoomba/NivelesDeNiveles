@@ -4,7 +4,12 @@ import {DangerLevel, LocationData, PanelProps} from '../utils/Types';
 import Report from './Report';
 import Status from './Status';
 
-export default function Panel({locationData, setLogged, cameraOpen, setCameraOpen}: PanelProps) {
+export default function Panel({
+  locationData,
+  setLogged,
+  cameraOpen,
+  setCameraOpen,
+}: PanelProps) {
   const pan = useRef(new Animated.ValueXY()).current;
   const [showing, setShowing] = useState(false);
   const [report, setReport] = useState(false);

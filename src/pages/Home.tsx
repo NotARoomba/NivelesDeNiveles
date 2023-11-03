@@ -14,8 +14,13 @@ import {
   FunctionScreenProp,
   LocationData,
 } from '../utils/Types';
-import MapView, {PROVIDER_GOOGLE, Heatmap, Marker, Circle} from 'react-native-maps';
-import NetInfo, { NetInfoSubscription } from "@react-native-community/netinfo";
+import MapView, {
+  PROVIDER_GOOGLE,
+  Heatmap,
+  Marker,
+  Circle,
+} from 'react-native-maps';
+import NetInfo, {NetInfoSubscription} from '@react-native-community/netinfo';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {callAPI, getData} from '../utils/Functions';
 import GetLocation from 'react-native-get-location';
@@ -25,8 +30,8 @@ import NivelesEvents from '../../backend/models/events';
 import Panel from '../components/Panel';
 import User from '../../backend/models/user';
 import SplashScreen from 'react-native-splash-screen';
-import Icon from 'react-native-vector-icons/Feather'
-import { Localizations } from '../utils/Localizations';
+import Icon from 'react-native-vector-icons/Feather';
+import {Localizations} from '../utils/Localizations';
 import STATUS_CODES from '../../backend/models/status';
 import Incident from '../../backend/models/incident';
 
@@ -55,28 +60,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         locationStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
       if (locationStatus === RESULTS.GRANTED) {
         setLocationPerms(true);
-        const location = await GetLocation.getCurrentPosition({
-          enableHighAccuracy: true,
-          timeout: 60000,
-        });
-        if (location)
-          callAPI('/users/', 'POST', {
-            number: await getData('number'),
-            location: {
-              coordinates: [location.longitude, location.latitude],
-              type: 'Point',
-            },
-          });
-      } else if (locationStatus === RESULTS.DENIED) {
-        let requestLocation = null;
-        if (Platform.OS == 'ios')
-          requestLocation = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-        else if (Platform.OS == 'android')
-          requestLocation = await request(
-            PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-          );
-        if (requestLocation === RESULTS.GRANTED) {
-          setLocationPerms(true);
+        try {
           const location = await GetLocation.getCurrentPosition({
             enableHighAccuracy: true,
             timeout: 60000,
@@ -89,6 +73,31 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
                 type: 'Point',
               },
             });
+        } catch {}
+      } else if (locationStatus === RESULTS.DENIED) {
+        let requestLocation = null;
+        if (Platform.OS == 'ios')
+          requestLocation = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+        else if (Platform.OS == 'android')
+          requestLocation = await request(
+            PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+          );
+        if (requestLocation === RESULTS.GRANTED) {
+          setLocationPerms(true);
+          try {
+            const location = await GetLocation.getCurrentPosition({
+              enableHighAccuracy: true,
+              timeout: 60000,
+            });
+            if (location)
+              callAPI('/users/', 'POST', {
+                number: await getData('number'),
+                location: {
+                  coordinates: [location.longitude, location.latitude],
+                  type: 'Point',
+                },
+              });
+          } catch {}
         } else {
           Alert.alert(
             Localizations.activateLocationTitle,
@@ -97,7 +106,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
               {
                 text: Localizations.cancel,
                 onPress: () => 1,
-                style: 'cancel'
+                style: 'cancel',
               },
               {
                 text: Localizations.grant,
@@ -107,10 +116,11 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
           );
         }
       }
-      const userNumber = (await getData('number')) as string
+      const userNumber = (await getData('number')) as string;
       const res = await callAPI('/users/' + userNumber, 'GET');
       if (res.status !== STATUS_CODES.SUCCESS) {
-        if (res.status === STATUS_CODES.NO_CONNECTION) Alert.alert(Localizations.error, Localizations.NO_CONNECTION);
+        if (res.status === STATUS_CODES.NO_CONNECTION)
+          Alert.alert(Localizations.error, Localizations.NO_CONNECTION);
         else Alert.alert(Localizations.error, Localizations.GENERIC_ERROR);
       } else {
         setUser(res.user);
@@ -134,12 +144,13 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       SplashScreen.hide();
     }
     updateMap();
-      
+
     const unsubscribe = NetInfo.addEventListener(async state => {
       if (state.isInternetReachable) {
         updateMap();
-    } else {
-    }});
+      } else {
+      }
+    });
     return () => unsubscribe();
   }, []);
   useEffect(() => {
@@ -158,33 +169,35 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       <View className="flex justify-center align-middle text-center justify-items-center">
         {locationPerms ? (
           <View>
-          <TouchableOpacity
-          className={'top-16 absolute bg-dark-500 right-0 p-1 rounded-full -mt-0.5 pr-3 pt-3 mr-5 ' + (!cameraOpen ? 'z-10' : '')}
-          onPress={async () => {
-            if (mapRef.current) {
-              const location = await GetLocation.getCurrentPosition({
-                enableHighAccuracy: true,
-                timeout: 60000,
-              });
-              mapRef.current.animateToRegion({
-                latitude: location.latitude,
-                longitude: location.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              });
-            }
-          }} >
-            <Icon
-            name="navigation"
-            size={40}
-            color="#f1eeff"
-          />
-          </TouchableOpacity>
+            <TouchableOpacity
+              className={
+                'top-16 absolute bg-dark-500 right-0 p-1 rounded-full -mt-0.5 pr-3 pt-3 mr-5 ' +
+                (!cameraOpen ? 'z-10' : '')
+              }
+              onPress={async e => {
+                e.preventDefault();
+                try {
+                  if (mapRef.current) {
+                    const location = await GetLocation.getCurrentPosition({
+                      enableHighAccuracy: true,
+                      timeout: 60000,
+                    });
+                    mapRef.current.animateToRegion({
+                      latitude: location.latitude,
+                      longitude: location.longitude,
+                      latitudeDelta: 0.0922,
+                      longitudeDelta: 0.0421,
+                    });
+                  }
+                } catch {}
+              }}>
+              <Icon name="navigation" size={40} color="#f1eeff" />
+            </TouchableOpacity>
             <MapView
               className="w-screen h-screen bg-neutral-200 justify-center m-auto"
               provider={PROVIDER_GOOGLE}
               showsUserLocation
-              showsMyLocationButton
+              showsMyLocationButton={false}
               loadingEnabled
               ref={mapRef}
               initialRegion={region}
@@ -211,21 +224,47 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
                 //       //   : ['#ef4444', '#ef4444', '#ef4444'],
                 //   }}
                 // />*/}
-                {locationData.incidents.map((v: Incident, i) => (<Circle key={i} center={{
-                        latitude: v.location.coordinates[1],
-                        longitude: v.location.coordinates[0],
-                }} strokeColor={v.level === DangerLevel.SAFE ? '#22c55e88' : v.level === DangerLevel.RISK ? '#f59e0b88' : '#ef444488'} radius={v.range} fillColor={v.level === DangerLevel.SAFE ? '#22c55e88' : v.level === DangerLevel.RISK ? '#f59e0b88' : '#ef444488'} />))}
+              {locationData.incidents.map((v: Incident, i) => (
+                <Circle
+                  key={i}
+                  center={{
+                    latitude: v.location.coordinates[1],
+                    longitude: v.location.coordinates[0],
+                  }}
+                  strokeColor={
+                    v.level === DangerLevel.SAFE
+                      ? '#22c55e88'
+                      : v.level === DangerLevel.RISK
+                      ? '#f59e0b88'
+                      : '#ef444488'
+                  }
+                  radius={v.range}
+                  fillColor={
+                    v.level === DangerLevel.SAFE
+                      ? '#22c55e88'
+                      : v.level === DangerLevel.RISK
+                      ? '#f59e0b88'
+                      : '#ef444488'
+                  }
+                />
+              ))}
               {/* // ) : (
               //   <></>
               // )} */}
-               {locationData.incidents.map((v: Incident, i) => (
+              {locationData.incidents.map((v: Incident, i) => (
                 <Marker
                   key={i}
                   coordinate={{
                     latitude: v.location.coordinates[1],
-                    longitude: v.location.coordinates[0]
+                    longitude: v.location.coordinates[0],
                   }}
-                  title={v.type === DangerType.FLOOD ? Localizations.flood : v.type === DangerType.FIRE ? Localizations.fire : Localizations.avalanche}
+                  title={
+                    v.type === DangerType.FLOOD
+                      ? Localizations.flood
+                      : v.type === DangerType.FIRE
+                      ? Localizations.fire
+                      : Localizations.avalanche
+                  }
                   description={`${Localizations.radius}: ${v.range}m`}
                   pinColor={
                     v.level === DangerLevel.SAFE
@@ -242,10 +281,17 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
                   key={i + s.status}
                   coordinate={{
                     latitude: s.location.coordinates[1],
-                    longitude: s.location.coordinates[0]
+                    longitude: s.location.coordinates[0],
                   }}
                   title={s.name}
-                  description={`${Localizations.formatString(Localizations.sensorType, s.type === DangerType.FLOOD ? Localizations.flood : s.type === DangerType.FIRE ? Localizations.fire : Localizations.avalanche)}\n${Localizations.state}: ${
+                  description={`${Localizations.formatString(
+                    Localizations.sensorType,
+                    s.type === DangerType.FLOOD
+                      ? Localizations.flood
+                      : s.type === DangerType.FIRE
+                      ? Localizations.fire
+                      : Localizations.avalanche,
+                  )}\n${Localizations.state}: ${
                     s.status === DangerLevel.SAFE
                       ? Localizations.safe
                       : s.status === DangerLevel.RISK
@@ -263,14 +309,19 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
                 />
               ))}
             </MapView>
-            <Panel locationData={locationData} setLogged={updateFunction} cameraOpen={cameraOpen} setCameraOpen={setCameraOpen} />
+            <Panel
+              locationData={locationData}
+              setLogged={updateFunction}
+              cameraOpen={cameraOpen}
+              setCameraOpen={setCameraOpen}
+            />
           </View>
         ) : (
           <TouchableOpacity
             onPress={() => Linking.openSettings()}
             className="justify-center h-full">
             <Text className="text-3xl text-center m-auto align-middle">
-             {Localizations.homeNoLocation}
+              {Localizations.homeNoLocation}
             </Text>
           </TouchableOpacity>
         )}

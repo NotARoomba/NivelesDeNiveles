@@ -33,8 +33,7 @@ export default function NavBar() {
         className={
           ' bg-white/80 dark:bg-dark-500/80 w-screen absolute h-fit top-20 justify-center transition duration-300 flex flex-wrap' +
           (menu ? ' animate-show' : ' animate-hide hidden')
-        }>
-      </div>
+        }></div>
     </div>
   );
 }

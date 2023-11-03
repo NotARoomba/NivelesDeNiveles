@@ -11,7 +11,7 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import { Localizations } from '../utils/Localizations';
+import {Localizations} from '../utils/Localizations';
 import {FunctionScreenProp, styles} from '../utils/Types';
 import prompt from '@powerdesigninc/react-native-prompt';
 import {callAPI, storeData} from '../utils/Functions';
@@ -33,11 +33,18 @@ async function checkLogin(
     });
     updateLogged(true);
   } else {
-    return Alert.alert(Localizations.error, Localizations.getString(STATUS_CODES[check.status]));
+    return Alert.alert(
+      Localizations.error,
+      Localizations.getString(STATUS_CODES[check.status]),
+    );
   }
 }
 
-async function parseLogin(number: string, updateLogged: Function, setIsLoading: Function) {
+async function parseLogin(
+  number: string,
+  updateLogged: Function,
+  setIsLoading: Function,
+) {
   const res = await callAPI('/verify/send', 'POST', {number});
   if (res.status == STATUS_CODES.SUCCESS) {
     setIsLoading(false);
@@ -50,9 +57,12 @@ async function parseLogin(number: string, updateLogged: Function, setIsLoading: 
         '',
         'number-pad',
       );
-    }, 250)
+    }, 250);
   } else {
-    return Alert.alert(Localizations.error, Localizations.getString(STATUS_CODES[res.status]));
+    return Alert.alert(
+      Localizations.error,
+      Localizations.getString(STATUS_CODES[res.status]),
+    );
   }
 }
 
@@ -74,10 +84,10 @@ export default function Login({
       <ScrollView className="pb-[1000px]">
         <Spinner
           visible={isLoading}
-          overlayColor='#00000099'
+          overlayColor="#00000099"
           textContent={Localizations.sending}
           textStyle={{color: '#fff', marginTop: -50}}
-          animation='fade'
+          animation="fade"
         />
         <View className="flex justify-center align-left mt-0">
           <Image
@@ -86,7 +96,9 @@ export default function Login({
             resizeMode={'contain'}
           />
           <View className="justify-center pt-12 mt-16">
-            <Text className="text-center text-lg text-dark">{Localizations.phoneNumber}</Text>
+            <Text className="text-center text-lg text-dark">
+              {Localizations.phoneNumber}
+            </Text>
             <View className="flex flex-row justify-center m-auto align-middle">
               <TouchableOpacity
                 onPress={() => setShow(!show)}
@@ -108,14 +120,17 @@ export default function Login({
             disabled={disable}
             onPress={() => {
               if (countryCode === '') {
-                Alert.alert(Localizations.error, Localizations.selectCountryCode);
+                Alert.alert(
+                  Localizations.error,
+                  Localizations.selectCountryCode,
+                );
               } else {
                 setDisable(true);
                 setIsLoading(true);
                 parseLogin(
                   countryCode.slice(4) + number,
                   updateFunction,
-                  setIsLoading
+                  setIsLoading,
                 ).then(() => {
                   setDisable(false);
                 });

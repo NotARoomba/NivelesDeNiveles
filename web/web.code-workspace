@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../Chess"
+		},
+		{
+			"path": "../docs"
+		},
+		{
+			"path": "../../Petinder"
+		}
+	],
+	"settings": {}
+}

@@ -2,7 +2,7 @@ import React, {View, Text, TouchableOpacity, Animated} from 'react-native';
 import {AdviceProps, DangerLevel} from '../utils/Types';
 import Icon from 'react-native-vector-icons/Feather';
 import {useRef} from 'react';
-import { Localizations } from '../utils/Localizations';
+import {Localizations} from '../utils/Localizations';
 
 export default function Advice({status, isOpen, setOpen}: AdviceProps) {
   const flipValue = useRef(new Animated.Value(0)).current;
@@ -44,11 +44,14 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
             className={
               'text-dark text-lg' + (isOpen ? ' font-bold' : ' font-medium')
             }>
-              {Localizations.formatString(Localizations.recommendationsForZoneTitle, status === DangerLevel.SAFE
-              ? Localizations.safe
-              : status === DangerLevel.RISK
-              ? Localizations.risk
-              : Localizations.danger)}
+            {Localizations.formatString(
+              Localizations.recommendationsForZoneTitle,
+              status === DangerLevel.SAFE
+                ? Localizations.safe
+                : status === DangerLevel.RISK
+                ? Localizations.risk
+                : Localizations.danger,
+            )}
           </Text>
           <Animated.View style={{transform: [{rotate: flip}]}}>
             <Icon name="chevron-down" size={30} />

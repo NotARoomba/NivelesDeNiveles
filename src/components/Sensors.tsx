@@ -2,7 +2,7 @@ import {View, Text, ScrollView} from 'react-native';
 import Sensor from '../../backend/models/sensor';
 import {DangerLevel, DangerType} from '../utils/Types';
 import {PanResponder} from 'react-native';
-import { Localizations } from '../utils/Localizations';
+import {Localizations} from '../utils/Localizations';
 
 export default function Sensors({sensors}: {sensors: Sensor[]}) {
   return (
@@ -27,7 +27,14 @@ export default function Sensors({sensors}: {sensors: Sensor[]}) {
             />
             <View className="text-center justify-center w-1/3 mx-3">
               <Text className="text-light text-lg text-center">
-              {Localizations.formatString(Localizations.sensorType, s.type === DangerType.FLOOD ? Localizations.flood : s.type === DangerType.FIRE ? Localizations.fire : Localizations.avalanche)}
+                {Localizations.formatString(
+                  Localizations.sensorType,
+                  s.type === DangerType.FLOOD
+                    ? Localizations.flood
+                    : s.type === DangerType.FIRE
+                    ? Localizations.fire
+                    : Localizations.avalanche,
+                )}
               </Text>
             </View>
             <View

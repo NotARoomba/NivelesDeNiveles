@@ -1,6 +1,6 @@
 export interface DisasterCardProps {
-    icon: string;
-    title: string;
-    description: string;
-    delay: number;
+  icon: string;
+  title: string;
+  description: string;
+  delay: number;
 }

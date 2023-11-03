@@ -20,15 +20,12 @@ export default function App() {
     // storeData('number', '+573104250018');
     // AsyncStorage.removeItem('number');
     async function checkIfLogin() {
-        if (await getData('number')) setlLogged(true);
-        const data = await callAPI(
-          '/users/' + (await getData('number')),
-          'GET',
-        );
-        if (data.status == STATUS_CODES.NO_CONNECTION) setlLogged(true);
-        else if (data.status !== STATUS_CODES.SUCCESS) setlLogged(false);
-        else setlLogged(true);
-        setLoaded(true);
+      if (await getData('number')) setlLogged(true);
+      const data = await callAPI('/users/' + (await getData('number')), 'GET');
+      if (data.status == STATUS_CODES.NO_CONNECTION) setlLogged(true);
+      else if (data.status !== STATUS_CODES.SUCCESS) setlLogged(false);
+      else setlLogged(true);
+      setLoaded(true);
     }
     checkIfLogin();
     // getData('number').then(number => {
