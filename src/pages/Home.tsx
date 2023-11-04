@@ -300,8 +300,8 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
                     s.status === DangerLevel.SAFE
                       ? Localizations.safe
                       : s.status === DangerLevel.RISK
-                      ? Localizations.risk
-                      : Localizations.danger
+                      ? Localizations.risk_only
+                      : Localizations.danger_only
                   }`}
                   pinColor={
                     s.status === DangerLevel.SAFE

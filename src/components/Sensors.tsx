@@ -52,8 +52,8 @@ export default function Sensors({sensors}: {sensors: Sensor[]}) {
                 {s.status === DangerLevel.SAFE
                   ? Localizations.safe
                   : s.status === DangerLevel.RISK
-                  ? Localizations.risk
-                  : Localizations.danger}
+                  ? Localizations.risk_only
+                  : Localizations.danger_only}
               </Text>
             </View>
           </View>
