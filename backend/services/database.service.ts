@@ -254,47 +254,71 @@ export async function connectToDatabase(io: Server) {
         // need to send a notification warning the users if they are in a risk zone, safe zone (from a danger zone), or a danger zone
         const currentLevel = getLevel(
           next.updateDescription.updatedFields?.numberOfReports,
-        )
-        if (getLevel(
-          next.updateDescription.updatedFields?.numberOfReports,
-        )-1 !== getLevel(
-          next.updateDescription.updatedFields?.numberOfReports,
-        )) {
-        const notification = {
-          contents: {
-            en: `You are now in a ${currentLevel === DangerLevel.SAFE ? 'safe' : currentLevel === DangerLevel.RISK ? 'risk' : 'danger'} zone!`,
-            es: `Ahora se encuentra en una zona ${currentLevel === DangerLevel.SAFE? 'segura': currentLevel === DangerLevel.RISK? 'de riesgo': 'de peligro'}!`,
-            fr: `Vous êtes dans une zone de ${currentLevel === DangerLevel.SAFE? 'sûr': currentLevel === DangerLevel.RISK? 'risque': 'danger'}!`,
-            'zh-Hans': `该地区的状态${currentLevel === DangerLevel.SAFE? '安全': currentLevel === DangerLevel.RISK? '风险': '危险'}!`,
-          },
-          headings: {
-            en: `Niveles De Niveles`,
-            es: `Niveles De Niveles`,
-            fr: `Niveles De Niveles`,
-            'zh-Hans': `Niveles De Niveles`,
-          },
-          filters: [
-            {
-              field: 'location',
-              radius: getRange(
-                next.updateDescription.updatedFields?.numberOfReports,
-              ),
-              lat: next.fullDocument?.location.coordinates[1],
-              long: next.fullDocument?.location.coordinates[0],
+        );
+        if (
+          getLevel(next.updateDescription.updatedFields?.numberOfReports) -
+            1 !==
+          getLevel(next.updateDescription.updatedFields?.numberOfReports)
+        ) {
+          const notification = {
+            contents: {
+              en: `You are now in a ${
+                currentLevel === DangerLevel.SAFE
+                  ? 'safe'
+                  : currentLevel === DangerLevel.RISK
+                  ? 'risk'
+                  : 'danger'
+              } zone!`,
+              es: `Ahora se encuentra en una zona ${
+                currentLevel === DangerLevel.SAFE
+                  ? 'segura'
+                  : currentLevel === DangerLevel.RISK
+                  ? 'de riesgo'
+                  : 'de peligro'
+              }!`,
+              fr: `Vous êtes dans une zone de ${
+                currentLevel === DangerLevel.SAFE
+                  ? 'sûr'
+                  : currentLevel === DangerLevel.RISK
+                  ? 'risque'
+                  : 'danger'
+              }!`,
+              'zh-Hans': `该地区的状态${
+                currentLevel === DangerLevel.SAFE
+                  ? '安全'
+                  : currentLevel === DangerLevel.RISK
+                  ? '风险'
+                  : '危险'
+              }!`,
             },
-          ],
-        };
-        try {
-          const response = await onesignal.createNotification(notification);
-          // console.log(response.body);
-        } catch (e) {
-          if (e instanceof OneSignal.HTTPError) {
-            // When status code of HTTP response is not 2xx, HTTPError is thrown.
-            console.log(e.statusCode);
-            console.log(e.body);
+            headings: {
+              en: `Niveles De Niveles`,
+              es: `Niveles De Niveles`,
+              fr: `Niveles De Niveles`,
+              'zh-Hans': `Niveles De Niveles`,
+            },
+            filters: [
+              {
+                field: 'location',
+                radius: getRange(
+                  next.updateDescription.updatedFields?.numberOfReports,
+                ),
+                lat: next.fullDocument?.location.coordinates[1],
+                long: next.fullDocument?.location.coordinates[0],
+              },
+            ],
+          };
+          try {
+            const response = await onesignal.createNotification(notification);
+            // console.log(response.body);
+          } catch (e) {
+            if (e instanceof OneSignal.HTTPError) {
+              // When status code of HTTP response is not 2xx, HTTPError is thrown.
+              console.log(e.statusCode);
+              console.log(e.body);
+            }
           }
         }
-      }
         // check for merges of inidents
         let incidents = (await collections.incidents
           ?.find({over: false})

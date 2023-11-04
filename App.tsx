@@ -1,14 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {LogLevel, OneSignal} from 'react-native-onesignal';
-
 import Home from './src/pages/Home';
-
-
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 // import {callAPI, getData} from './src/utils/DataTypes';
 import Login from './src/pages/Login';
 import {callAPI, getData, storeData} from './src/utils/Functions';
-import {Alert} from 'react-native';
 import STATUS_CODES from './backend/models/status';
 import Config from 'react-native-config';
 export default function App() {
@@ -91,7 +87,9 @@ export default function App() {
     <>
       {loaded ? (
         logged ? (
-          <KeyboardAwareScrollView scrollEnabled={false}><Home isDarkMode={isDarkMode} updateFunction={setLog} /></KeyboardAwareScrollView>
+          <KeyboardAwareScrollView scrollEnabled={false}>
+            <Home isDarkMode={isDarkMode} updateFunction={setLog} />
+          </KeyboardAwareScrollView>
         ) : (
           <Login isDarkMode={isDarkMode} updateFunction={setLog} />
         )
