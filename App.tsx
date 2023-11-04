@@ -2,6 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {LogLevel, OneSignal} from 'react-native-onesignal';
 
 import Home from './src/pages/Home';
+
+
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 // import {callAPI, getData} from './src/utils/DataTypes';
 import Login from './src/pages/Login';
 import {callAPI, getData, storeData} from './src/utils/Functions';
@@ -40,7 +43,7 @@ export default function App() {
     //   Alert.alert('a')
     // });
     // checks if user is valid in database and if not then kicks out
-    storeData('number', '+573104250018');
+    // storeData('number', '+573104250018');
     // AsyncStorage.removeItem('number');
     async function checkIfLogin() {
       const number = await getData('number');
@@ -88,7 +91,7 @@ export default function App() {
     <>
       {loaded ? (
         logged ? (
-          <Home isDarkMode={isDarkMode} updateFunction={setLog} />
+          <KeyboardAwareScrollView scrollEnabled={false}><Home isDarkMode={isDarkMode} updateFunction={setLog} /></KeyboardAwareScrollView>
         ) : (
           <Login isDarkMode={isDarkMode} updateFunction={setLog} />
         )

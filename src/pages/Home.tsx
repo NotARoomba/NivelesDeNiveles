@@ -7,6 +7,7 @@ import {
   Text,
   Linking,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
 import {
   DangerLevel,
@@ -202,6 +203,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
               showsUserLocation
               showsMyLocationButton={false}
               loadingEnabled
+              onPress={Keyboard.dismiss}
               ref={mapRef}
               initialRegion={region}
               region={region}>
