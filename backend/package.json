@@ -23,6 +23,7 @@
     "haversine-distance": "^1.2.1",
     "hmac-auth-express": "^8.3.4",
     "mongodb": "^5.2.0",
+    "onesignal-node": "^3.4.0",
     "socket.io": "^4.7.2",
     "ts-dotenv": "^0.9.1",
     "twilio": "^4.17.0"

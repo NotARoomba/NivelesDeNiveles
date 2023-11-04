@@ -7,7 +7,7 @@ import Incident from '../models/incident';
 import Report from '../models/report';
 import NivelesEvents from '../models/events';
 import haversine from 'haversine-distance';
-const sdk = require('api')('@onesignal/v11.0#7g0slo7voi53');
+import * as OneSignal from 'onesignal-node';  
 
 const env = dotenv.load({
   MONGODB: String,
@@ -21,6 +21,8 @@ const env = dotenv.load({
   ONESIGNAL_APP_ID: String,
   ONESIGNAL_API_KEY: String
 });
+
+const onesignal = new OneSignal.Client(env.ONESIGNAL_APP_ID, env.ONESIGNAL_API_KEY);
 
 export const collections: {
   users?: mongoDB.Collection;
@@ -244,25 +246,51 @@ export async function connectToDatabase(io: Server) {
           },
         },
       );
-      const users = await sdk.createNotification({
-        app_id: env.ONESIGNAL_APP_ID,
-        filters: [{
+      const notification = {
+  contents: {
+    'en': 'New notification',
+  },
+  included_segments: ['Subscribed Users'],
+  filters: [
+   {
           field: "location",
           radius: getRange(
             next.updateDescription.updatedFields?.numberOfReports,
           ),
           lat:  next.fullDocument?.location.coordinates[1],
           long: next.fullDocument?.location.coordinates[0],
-      }],
-        contents: {
-          en: 'English or Any Language Message',
-          es: 'Spanish Message'
-        },
-        headings: {en: 'English or Any Language Message'}
-      }, {
-        authorization: `Basic ${env.ONESIGNAL_API_KEY}`
-      })
-      console.log(users);
+      }
+  ]
+};
+try {
+  const response = await onesignal.createNotification(notification);
+  console.log(response.body.id);
+} catch (e) {
+  if (e instanceof OneSignal.HTTPError) {
+    // When status code of HTTP response is not 2xx, HTTPError is thrown.
+    console.log(e.statusCode);
+    console.log(e.body);
+  }
+}
+      // const users = await sdk.createNotification({
+      //   app_id: env.ONESIGNAL_APP_ID,
+      //   filters: [{
+      //     field: "location",
+      //     radius: getRange(
+      //       next.updateDescription.updatedFields?.numberOfReports,
+      //     ),
+      //     lat:  next.fullDocument?.location.coordinates[1],
+      //     long: next.fullDocument?.location.coordinates[0],
+      // }],
+      //   contents: {
+      //     en: 'English or Any Language Message',
+      //     es: 'Spanish Message'
+      //   },
+      //   headings: {en: 'English or Any Language Message'}
+      // }, {
+      //   authorization: `Basic ${env.ONESIGNAL_API_KEY}`
+      // })
+      // console.log(users);
       // check for merges of inidents
       let incidents = (await collections.incidents
         ?.find({over: false})
