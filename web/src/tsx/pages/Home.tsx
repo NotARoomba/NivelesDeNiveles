@@ -3,6 +3,7 @@ import NavBar from '../components/NavBar';
 import {Link} from 'react-scroll';
 import 'boxicons';
 import DisasterCard from '../components/DisasterCard';
+import AdvancementCard from '../components/AdvancementCard';
 
 export default function Home() {
   const fadein = {
@@ -12,7 +13,7 @@ export default function Home() {
   return (
     <div className="text-black">
       <NavBar />
-      <div className=" bg-light-600 mx-auto my-auto justify-center flex flex-row h-screen p-52">
+      <div className=" bg-light-600 mx-auto my-auto justify-center flex flex-row h-auto p-52">
         <div className="justify-center my-auto align-middle mr-0 w-6/12 mx-auto">
           <p className="text-5xl text-dark font-bold">Niveles De Niveles</p>
           <p className="text-2xl text-neutral-600 my-4 mb-8">
@@ -155,6 +156,9 @@ export default function Home() {
             src="https://www.youtube.com/embed/a1bNz8M6Sew?si=hCeSToOI6zhFPqWr"
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+            <div className='my-8'>
+              <AdvancementCard title='GitHub' subtitle='Nuestro Repositorio' link='https://github.com/NotARoomba/NivelesDeNiveles' imagePath='/portfolio/hub.png' />
+            </div>
         </div>
       </div>
     </div>
