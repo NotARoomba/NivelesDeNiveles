@@ -244,8 +244,6 @@ export async function connectToDatabase(io: Server) {
           },
         },
       );
-      console.log(next)
-      console.log('ABOUT TO SEND NOTIFICATION');
       const users = await sdk.createNotification({
         app_id: env.ONESIGNAL_APP_ID,
         filters: [{
@@ -260,7 +258,7 @@ export async function connectToDatabase(io: Server) {
           en: 'English or Any Language Message',
           es: 'Spanish Message'
         },
-        name: 'INTERNAL_CAMPAIGN_NAME',
+        headings: {en: 'English or Any Language Message'}
       }, {
         authorization: `Basic ${env.ONESIGNAL_API_KEY}`
       })
