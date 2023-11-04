@@ -247,6 +247,7 @@ export async function connectToDatabase(io: Server) {
           },
         },
       );
+      console.log('ABOUT TO SEND NOTIFICATION');
       const users = await sdk.createNotification({
         app_id: env.ONESIGNAL_APP_ID,
         filters: [{
