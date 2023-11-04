@@ -692,7 +692,7 @@
 				CODE_SIGN_ENTITLEMENTS = NivelesDeNiveles/NivelesDeNiveles.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 3YY5ZGX52B;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = NivelesDeNiveles/Info.plist;
@@ -727,7 +727,7 @@
 				CODE_SIGN_ENTITLEMENTS = NivelesDeNiveles/NivelesDeNiveles.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 3YY5ZGX52B;
 				INFOPLIST_FILE = NivelesDeNiveles/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NivelesDeNiveles;

@@ -53,7 +53,7 @@ export const Localizations = new LocalizedStrings({
       'Niveles De Niveles necesita su cámara para tomar una foto del incidente.',
     homeNoLocation:
       'Niveles De Niveles necesita su ubicación para funcionar. ¡Haga clic aquí para cambiar los permisos!',
-    recommendationsForZoneTitle: 'Recomendaciones {0}',
+    recommendationsForZoneTitle: 'Recomendaciones Zona {0}',
     recommendationsForSafe:
       'Se encuentra en una zona segura, ¡no hay nada de qué preocuparse!',
     recommendationsForRisk:
