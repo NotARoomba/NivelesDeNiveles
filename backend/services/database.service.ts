@@ -250,7 +250,6 @@ export async function connectToDatabase(io: Server) {
   contents: {
     'en': 'New notification',
   },
-  included_segments: ['Subscribed Users'],
   filters: [
    {
           field: "location",
@@ -263,8 +262,9 @@ export async function connectToDatabase(io: Server) {
   ]
 };
 try {
+  console.log('ONE SIGNAL STUFF');
   const response = await onesignal.createNotification(notification);
-  console.log(response.body.id);
+  console.log(response);
 } catch (e) {
   if (e instanceof OneSignal.HTTPError) {
     // When status code of HTTP response is not 2xx, HTTPError is thrown.

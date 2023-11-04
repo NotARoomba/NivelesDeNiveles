@@ -59,10 +59,12 @@ async function parseLogin(
       );
     }, 250);
   } else {
-    return Alert.alert(
+    setIsLoading(false);
+    setTimeout(() => { return Alert.alert(
       Localizations.error,
       Localizations.getString(STATUS_CODES[res.status]),
     );
+    }, 250);
   }
 }
 

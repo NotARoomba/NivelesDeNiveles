@@ -5,7 +5,7 @@ import { LogLevel, OneSignal } from 'react-native-onesignal';
 import Home from './src/pages/Home';
 // import {callAPI, getData} from './src/utils/DataTypes';
 import Login from './src/pages/Login';
-import {callAPI, getData} from './src/utils/Functions';
+import {callAPI, getData, storeData} from './src/utils/Functions';
 import {Alert} from 'react-native';
 import STATUS_CODES from './backend/models/status';
 import Config from 'react-native-config';
@@ -20,7 +20,8 @@ export default function App() {
     const number = await getData('number');
     if (l && number) {
       OneSignal.login(number);
-    } else {
+    } else if (number) {
+      console.log('logout number')
       OneSignal.logout();
     }
     setLog(l);
@@ -45,8 +46,10 @@ export default function App() {
     // AsyncStorage.removeItem('number');
     async function checkIfLogin() {
       const number = await getData('number');
-      if (number) setLogged(true);
-      else return setLogged(false);
+      if (!number) {
+        setLoaded(true);
+        return setLogged(false);
+      }
       const data = await callAPI('/users/' + number, 'GET');
       if (data.status == STATUS_CODES.NO_CONNECTION) setLogged(true);
       else if (data.status !== STATUS_CODES.SUCCESS) setLogged(false);
