@@ -263,9 +263,15 @@ export async function connectToDatabase(io: Server) {
         const notification = {
           contents: {
             en: `You are now in a ${currentLevel === DangerLevel.SAFE ? 'safe' : currentLevel === DangerLevel.RISK ? 'risk' : 'danger'} zone!`,
+            es: `Ahora se encuentra en una zona ${currentLevel === DangerLevel.SAFE? 'segura': currentLevel === DangerLevel.RISK? 'de riesgo': 'de peligro'}!`,
+            fr: `Vous êtes dans une zone de ${currentLevel === DangerLevel.SAFE? 'sûr': currentLevel === DangerLevel.RISK? 'risque': 'danger'}!`,
+            zh: `该地区的状态${currentLevel === DangerLevel.SAFE? '安全': currentLevel === DangerLevel.RISK? '风险': '危险'}!`,
           },
           headings: {
             en: `Niveles De Niveles`,
+            es: `Niveles De Niveles`,
+            fr: `Niveles De Niveles`,
+            zh: `Niveles De Niveles`,
           },
           filters: [
             {
