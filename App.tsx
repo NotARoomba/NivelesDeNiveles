@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react';
+import { LogLevel, OneSignal } from 'react-native-onesignal';
+
 
 import Home from './src/pages/Home';
 // import {callAPI, getData} from './src/utils/DataTypes';
@@ -6,25 +8,49 @@ import Login from './src/pages/Login';
 import {callAPI, getData} from './src/utils/Functions';
 import {Alert} from 'react-native';
 import STATUS_CODES from './backend/models/status';
+import Config from 'react-native-config';
 export default function App() {
-  const [logged, setlLogged] = useState(false);
+  const [logged, setLog] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [isDarkMode, _setDarkMode] = useState(
     // Appearance.getColorScheme() === 'dark',
     false,
   );
+  const setLogged = async (l: boolean) => {
+    const number = await getData('number');
+    if (l && number) {
+      OneSignal.login(number);
+    } else {
+      OneSignal.logout();
+    }
+    setLog(l);
+  }
   // const updateDarkMode = (v: boolean) =>
   // Appearance.setColorScheme(v ? 'light' : 'dark');
   useEffect(() => {
+
+    // OneSignal Initialization
+    OneSignal.initialize(Config.ONESIGNAL_APP_ID);
+
+    // requestPermission will show the native iOS or Android notification permission prompt.
+    // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+    OneSignal.Notifications.requestPermission(true);
+
+    // // Method for listening for notification clicks
+    // OneSignal.Notifications.addEventListener('permissionChange', (event) => {
+    //   Alert.alert()
+    // });
     // checks if user is valid in database and if not then kicks out
     // storeData('number', '+573104250018');
     // AsyncStorage.removeItem('number');
     async function checkIfLogin() {
-      if (await getData('number')) setlLogged(true);
-      const data = await callAPI('/users/' + (await getData('number')), 'GET');
-      if (data.status == STATUS_CODES.NO_CONNECTION) setlLogged(true);
-      else if (data.status !== STATUS_CODES.SUCCESS) setlLogged(false);
-      else setlLogged(true);
+      const number = await getData('number');
+      if (number) setLogged(true);
+      else return setLogged(false);
+      const data = await callAPI('/users/' + number, 'GET');
+      if (data.status == STATUS_CODES.NO_CONNECTION) setLogged(true);
+      else if (data.status !== STATUS_CODES.SUCCESS) setLogged(false);
+      else setLogged(true);
       setLoaded(true);
     }
     checkIfLogin();
@@ -61,9 +87,9 @@ export default function App() {
     <>
       {loaded ? (
         logged ? (
-          <Home isDarkMode={isDarkMode} updateFunction={setlLogged} />
+          <Home isDarkMode={isDarkMode} updateFunction={setLog} />
         ) : (
-          <Login isDarkMode={isDarkMode} updateFunction={setlLogged} />
+          <Login isDarkMode={isDarkMode} updateFunction={setLog} />
         )
       ) : (
         <></>

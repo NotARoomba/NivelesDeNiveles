@@ -7,6 +7,7 @@ import Incident from '../models/incident';
 import Report from '../models/report';
 import NivelesEvents from '../models/events';
 import haversine from 'haversine-distance';
+const sdk = require('api')('@onesignal/v11.0#7g0slo7voi53');
 
 const env = dotenv.load({
   MONGODB: String,
@@ -17,6 +18,8 @@ const env = dotenv.load({
   REPORT_COLLECTION: String,
   INCIDENT_COLLECTION: String,
   AI_AUTH: String,
+  ONESIGNAL_APP_ID: String,
+  ONESIGNAL_API_KEY: String
 });
 
 export const collections: {
@@ -219,7 +222,10 @@ export async function connectToDatabase(io: Server) {
       }
     }
   });
-  incidentsCollection.watch().on('change', async next => {
+  incidentsCollection.watch(pipeline, {
+    fullDocument: 'required',
+    fullDocumentBeforeChange: 'required',
+  }).on('change', async next => {
     // updates all the location data for all the users using a hacky hack
     //update range of incident and level
     // also check if 2 incidents overlap and if so then merge the incident with the total range and set the center to the center of both of the points
@@ -241,6 +247,25 @@ export async function connectToDatabase(io: Server) {
           },
         },
       );
+      const users = await sdk.createNotification({
+        app_id: env.ONESIGNAL_APP_ID,
+        filters: [{
+          field: "location",
+          radius: getRange(
+            next.updateDescription.updatedFields?.numberOfReports,
+          ),
+          lat:  next.fullDocument?.location.coordinates[1],
+          long: next.fullDocument?.location.coordinates[0],
+      }],
+        contents: {
+          en: 'English or Any Language Message',
+          es: 'Spanish Message'
+        },
+        name: 'INTERNAL_CAMPAIGN_NAME',
+      }, {
+        authorization: `Basic ${env.ONESIGNAL_API_KEY}`
+      })
+      console.log(users);
       // check for merges of inidents
       let incidents = (await collections.incidents
         ?.find({over: false})
