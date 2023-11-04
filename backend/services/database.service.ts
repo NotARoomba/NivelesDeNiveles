@@ -265,7 +265,7 @@ export async function connectToDatabase(io: Server) {
             en: `You are now in a ${currentLevel === DangerLevel.SAFE ? 'safe' : currentLevel === DangerLevel.RISK ? 'risk' : 'danger'} zone!`,
           },
           headings: {
-            en: `You are now in a ${currentLevel === DangerLevel.SAFE ? 'safe' : currentLevel === DangerLevel.RISK ? 'risk' : 'danger'} zone!`,
+            en: `Niveles De Niveles`,
           },
           filters: [
             {
