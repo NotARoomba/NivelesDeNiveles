@@ -7,3 +7,5 @@
 */
 NSCameraUsageDescription = "Niveles De Niveles 需要你的相机来拍摄这一事件的照片。";
 NSLocationWhenInUseUsageDescription = "Niveles De Niveles 需要您的位置来自动检查您是否处于危险之中。";
+NSLocationAlwaysUsageDescription = "Niveles De Niveles 需要您的位置来自动检查您是否处于危险之中。";
+NSLocationAlwaysAndWhenInUseUsageDescription = "Niveles De Niveles 需要您的位置来自动检查您是否处于危险之中。";

@@ -34,6 +34,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import {Localizations} from '../utils/Localizations';
 import STATUS_CODES from '../../backend/models/status';
 import Incident from '../../backend/models/incident';
+import {OneSignal} from 'react-native-onesignal';
 
 export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
@@ -60,6 +61,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         locationStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
       if (locationStatus === RESULTS.GRANTED) {
         setLocationPerms(true);
+        OneSignal.Location.requestPermission();
         try {
           const location = await GetLocation.getCurrentPosition({
             enableHighAccuracy: true,
@@ -84,6 +86,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
           );
         if (requestLocation === RESULTS.GRANTED) {
           setLocationPerms(true);
+          OneSignal.Location.requestPermission();
           try {
             const location = await GetLocation.getCurrentPosition({
               enableHighAccuracy: true,

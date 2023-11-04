@@ -7,3 +7,5 @@
 */
 NSCameraUsageDescription = "Niveles De Niveles needs your camera to take a photo of the incident.";
 NSLocationWhenInUseUsageDescription = "Niveles De Niveles needs your location to automatically check if you are in danger.";
+NSLocationAlwaysUsageDescription = "Niveles De Niveles needs your location to automatically check if you are in danger.";
+NSLocationAlwaysAndWhenInUseUsageDescription = "Niveles De Niveles needs your location to automatically check if you are in danger.";

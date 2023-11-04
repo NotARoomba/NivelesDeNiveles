@@ -21,7 +21,7 @@ export default {
         slowBounce: 'slowBounce 2s ease-in-out infinite alternate-reverse both',
       },
       backgroundImage: {
-        'github': "url('/portfolio/hub.png')",
+        github: "url('/portfolio/hub.png')",
       },
       colors: {
         turple: '#5335A9',

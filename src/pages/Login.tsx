@@ -60,10 +60,11 @@ async function parseLogin(
     }, 250);
   } else {
     setIsLoading(false);
-    setTimeout(() => { return Alert.alert(
-      Localizations.error,
-      Localizations.getString(STATUS_CODES[res.status]),
-    );
+    setTimeout(() => {
+      return Alert.alert(
+        Localizations.error,
+        Localizations.getString(STATUS_CODES[res.status]),
+      );
     }, 250);
   }
 }

@@ -156,9 +156,14 @@ export default function Home() {
             src="https://www.youtube.com/embed/a1bNz8M6Sew?si=hCeSToOI6zhFPqWr"
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
-            <div className='my-8'>
-              <AdvancementCard title='GitHub' subtitle='Nuestro Repositorio' link='https://github.com/NotARoomba/NivelesDeNiveles' imagePath='/portfolio/hub.png' />
-            </div>
+          <div className="my-8">
+            <AdvancementCard
+              title="GitHub"
+              subtitle="Nuestro Repositorio"
+              link="https://github.com/NotARoomba/NivelesDeNiveles"
+              imagePath="/portfolio/hub.png"
+            />
+          </div>
         </div>
       </div>
     </div>

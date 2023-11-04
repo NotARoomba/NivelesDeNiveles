@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { LogLevel, OneSignal } from 'react-native-onesignal';
-
+import {LogLevel, OneSignal} from 'react-native-onesignal';
 
 import Home from './src/pages/Home';
 // import {callAPI, getData} from './src/utils/DataTypes';
@@ -18,31 +17,30 @@ export default function App() {
   );
   const setLogged = async (l: boolean) => {
     const number = await getData('number');
-    if (l && number) {
-      OneSignal.login(number);
-    } else if (number) {
-      console.log('logout number')
+    if (l) {
+      OneSignal.User.pushSubscription.optIn();
+    } else {
+      OneSignal.User.pushSubscription.optOut();
       OneSignal.logout();
     }
     setLog(l);
-  }
+  };
   // const updateDarkMode = (v: boolean) =>
   // Appearance.setColorScheme(v ? 'light' : 'dark');
   useEffect(() => {
-
+    OneSignal.Debug.setLogLevel(LogLevel.Verbose);
     // OneSignal Initialization
     OneSignal.initialize(Config.ONESIGNAL_APP_ID);
 
     // requestPermission will show the native iOS or Android notification permission prompt.
     // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
     OneSignal.Notifications.requestPermission(true);
-
     // // Method for listening for notification clicks
     // OneSignal.Notifications.addEventListener('permissionChange', (event) => {
-    //   Alert.alert()
+    //   Alert.alert('a')
     // });
     // checks if user is valid in database and if not then kicks out
-    // storeData('number', '+573104250018');
+    storeData('number', '+573104250018');
     // AsyncStorage.removeItem('number');
     async function checkIfLogin() {
       const number = await getData('number');

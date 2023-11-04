@@ -7,3 +7,5 @@
 */
 NSCameraUsageDescription = "Niveles De Niveles vous avez besoin de votre appareil photo pour prendre une photo de l'incident.";
 NSLocationWhenInUseUsageDescription = "Niveles De Niveles a besoin de votre position pour vérifier automatiquement si vous êtes en danger.";
+NSLocationAlwaysUsageDescription = "Niveles De Niveles a besoin de votre position pour vérifier automatiquement si vous êtes en danger.";
+NSLocationAlwaysAndWhenInUseUsageDescription = "Niveles De Niveles a besoin de votre position pour vérifier automatiquement si vous êtes en danger.";
