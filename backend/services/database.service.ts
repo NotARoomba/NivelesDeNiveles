@@ -222,9 +222,7 @@ export async function connectToDatabase(io: Server) {
       }
     }
   });
-  incidentsCollection.watch(pipeline, {
-    fullDocument: 'required',
-  }).on('change', async next => {
+  incidentsCollection.watch().on('change', async next => {
     // updates all the location data for all the users using a hacky hack
     //update range of incident and level
     // also check if 2 incidents overlap and if so then merge the incident with the total range and set the center to the center of both of the points
@@ -246,6 +244,7 @@ export async function connectToDatabase(io: Server) {
           },
         },
       );
+      console.log(next)
       console.log('ABOUT TO SEND NOTIFICATION');
       const users = await sdk.createNotification({
         app_id: env.ONESIGNAL_APP_ID,
