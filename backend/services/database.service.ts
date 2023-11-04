@@ -296,6 +296,8 @@ try {
         ?.find({over: false})
         .toArray()) as unknown as Incident[];
         console.log(incidents)
+        if (incidents.length>1) {
+
       for (let i = 0; i < incidents.length; i++) {
         for (let j = 0; j < incidents.length; i++) {
           // check if not the same
@@ -348,6 +350,7 @@ try {
         }
       }
     }
+  }
     io.emit(NivelesEvents.UPDATE_LOCATION_DATA);
   });
 }
