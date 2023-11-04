@@ -36,7 +36,7 @@ verifyRouter.post('/send', async (req: Request, res: Response) => {
     } else if (!verification.lookup.valid) {
       res.send({status: STATUS_CODES.NUMBER_NOT_EXIST});
     } else {
-      res.send({status: STATUS_CODES.ERROR_SENDING_CODE});
+      res.send({status: STATUS_CODES.SUCCESS});
     }
   } catch (status: any) {
     console.log(status);
