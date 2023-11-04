@@ -295,6 +295,7 @@ try {
       let incidents = (await collections.incidents
         ?.find({over: false})
         .toArray()) as unknown as Incident[];
+        console.log(incidents)
       for (let i = 0; i < incidents.length; i++) {
         for (let j = 0; j < incidents.length; i++) {
           // check if not the same
