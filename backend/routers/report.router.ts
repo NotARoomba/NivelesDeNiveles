@@ -52,7 +52,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
               'Content-Type': 'application/x-www-form-urlencoded',
             },
           });
-          console.log(response.data);
+          // console.log(response.data);
           if (response.data.predictions.length === 0)
             return res.send({
               status: STATUS_CODES.MISMATCHED_IMAGE,
@@ -62,7 +62,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
             predictionAvg += prediction.confidence;
           }
           predictionAvg /= response.data.predictions.length;
-          console.log(`REPORT PREDICTION AVERAGE: ${predictionAvg}`);
+          console.log(`REPORT PREDICTION AVERAGE: ${predictionAvg}% FOR DISASTER TYPE ${report.type}`);
           if (predictionAvg < 0.5) {
             return res.send({
               status: STATUS_CODES.MISMATCHED_IMAGE,
