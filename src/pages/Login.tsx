@@ -18,6 +18,7 @@ import {callAPI, storeData} from '../utils/Functions';
 import SplashScreen from 'react-native-splash-screen';
 import STATUS_CODES from '../../backend/models/status';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { OneSignal } from 'react-native-onesignal';
 
 async function checkLogin(
   number: string,
@@ -27,6 +28,7 @@ async function checkLogin(
   const check = await callAPI('/verify/check', 'POST', {number, code});
   if (check.status == STATUS_CODES.SUCCESS) {
     await storeData('number', number);
+    OneSignal.User.pushSubscription.optIn();
     await callAPI('/users', 'POST', {
       number,
       location: {type: 'Point', coordinates: [0, 0]},

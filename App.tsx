@@ -8,22 +8,12 @@ import {callAPI, getData, storeData} from './src/utils/Functions';
 import STATUS_CODES from './backend/models/status';
 import Config from 'react-native-config';
 export default function App() {
-  const [logged, setLog] = useState(false);
+  const [logged, setLogged] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [isDarkMode, _setDarkMode] = useState(
     // Appearance.getColorScheme() === 'dark',
     false,
   );
-  const setLogged = async (l: boolean) => {
-    const number = await getData('number');
-    if (l) {
-      OneSignal.User.pushSubscription.optIn();
-    } else {
-      OneSignal.User.pushSubscription.optOut();
-      OneSignal.logout();
-    }
-    setLog(l);
-  };
   // const updateDarkMode = (v: boolean) =>
   // Appearance.setColorScheme(v ? 'light' : 'dark');
   useEffect(() => {
@@ -88,10 +78,10 @@ export default function App() {
       {loaded ? (
         logged ? (
           <KeyboardAwareScrollView scrollEnabled={false}>
-            <Home isDarkMode={isDarkMode} updateFunction={setLog} />
+            <Home isDarkMode={isDarkMode} updateFunction={setLogged} />
           </KeyboardAwareScrollView>
         ) : (
-          <Login isDarkMode={isDarkMode} updateFunction={setLog} />
+          <Login isDarkMode={isDarkMode} updateFunction={setLogged} />
         )
       ) : (
         <></>
