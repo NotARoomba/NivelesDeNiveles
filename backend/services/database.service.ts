@@ -72,7 +72,7 @@ export async function connectToDatabase(io: Server) {
     env.REPORT_COLLECTION,
   );
   collections.reports = reportsCollection;
-  
+
   const incidentsCollection: mongoDB.Collection = infoDB.collection(
     env.INCIDENT_COLLECTION,
   );
@@ -238,23 +238,25 @@ export async function connectToDatabase(io: Server) {
         next.operationType === 'update' &&
         next.updateDescription.updatedFields?.numberOfReports
       ) {
+        let updatedIncident = next.fullDocument as Incident;
+        let beforeIncident = next.fullDocumentBeforeChange as Incident;
         // console.log(next);
         await incidentsCollection.updateOne(
           {_id: next.documentKey._id},
           {
             $set: {
               range: getRange(
-                next.updateDescription.updatedFields?.numberOfReports,
+                updatedIncident.numberOfReports,
               ),
               level: getLevel(
-                next.updateDescription.updatedFields?.numberOfReports,
+                updatedIncident.numberOfReports,
               ),
             },
           },
         );
         // need to send a notification warning the users if they are in a risk zone, safe zone (from a danger zone), or a danger zone
         const currentLevel = getLevel(
-          next.updateDescription.updatedFields?.numberOfReports,
+          updatedIncident.numberOfReports,
         );
           let notification = {
             contents: {
@@ -296,11 +298,9 @@ export async function connectToDatabase(io: Server) {
             filters: [
               {
                 field: 'location',
-                radius: getRange(
-                  next.updateDescription.updatedFields?.numberOfReports,
-                ),
-                lat: next.fullDocument?.location.coordinates[1],
-                long: next.fullDocument?.location.coordinates[0],
+                radius: updatedIncident.range,
+                lat: updatedIncident.location.coordinates[1],
+                long: updatedIncident.location.coordinates[0],
               },
             ],
           };
@@ -315,16 +315,15 @@ export async function connectToDatabase(io: Server) {
             }
           }
         // need to check for all the users that once were in the zone to then notify them that they are now in a safe zone
-        console.log(next.fullDocument?.numberOfReports, next.fullDocumentBeforeChange?.numberOfReports)
-        if (next.fullDocument?.numberOfReports < next.fullDocumentBeforeChange?.numberOfReports) {
+        console.log(updatedIncident.numberOfReports, beforeIncident.numberOfReports)
+        if (updatedIncident.numberOfReports < beforeIncident.numberOfReports) {
           const users = (await collections.users?.find({
                 location: {
                   $geoWithin: {
-                    $centerSphere: {...next.fullDocument?.location},
-                    $maxDistance: getRange(
-                      next.fullDocumentBeforeChange?.numberOfReports,
-                    ),
-                    $minDistance: getRange(next.fullDocument?.numberOfReports)
+                    $centerSphere: [updatedIncident.location.coordinates, getRange(
+                      beforeIncident.numberOfReports,
+                    )/6378100],
+                    $minDistance: getRange(updatedIncident.numberOfReports)
                   },
                 },
               })
