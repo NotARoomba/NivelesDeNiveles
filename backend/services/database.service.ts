@@ -317,17 +317,27 @@ export async function connectToDatabase(io: Server) {
         // need to check for all the users that once were in the zone to then notify them that they are now in a safe zone
         console.log(updatedIncident.numberOfReports, beforeIncident.numberOfReports)
         if (updatedIncident.numberOfReports < beforeIncident.numberOfReports) {
-          const users = (await collections.users?.find({
+          const outerUsers = (await collections.users?.find({
                 location: {
                   $geoWithin: {
                     $centerSphere: [updatedIncident.location.coordinates, getRange(
                       beforeIncident.numberOfReports,
                     )/6378100],
-                    $minDistance: getRange(updatedIncident.numberOfReports)
                   },
                 },
               })
               .toArray()) as unknown as User[];
+              const innerUsers = (await collections.users?.find({
+                location: {
+                  $geoWithin: {
+                    $centerSphere: [updatedIncident.location.coordinates, getRange(
+                      updatedIncident.numberOfReports,
+                    )/6378100],
+                  },
+                },
+              })
+              .toArray()) as unknown as User[];
+            const users = outerUsers.filter(u => !innerUsers.includes(u));
               console.log(users);
               for (let user of users) {
                 notification.filters[0].radius = 5;
