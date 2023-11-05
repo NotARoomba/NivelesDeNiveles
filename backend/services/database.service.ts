@@ -229,7 +229,10 @@ export async function connectToDatabase(io: Server) {
     }
   });
   incidentsCollection
-    .watch(pipeline, {fullDocument: 'required', fullDocumentBeforeChange: 'required'})
+    .watch(pipeline, {
+      fullDocument: 'required',
+      fullDocumentBeforeChange: 'required',
+    })
     .on('change', async next => {
       // updates all the location data for all the users using a hacky hack
       //update range of incident and level
@@ -245,115 +248,116 @@ export async function connectToDatabase(io: Server) {
           {_id: next.documentKey._id},
           {
             $set: {
-              range: getRange(
-                updatedIncident.numberOfReports,
-              ),
-              level: getLevel(
-                updatedIncident.numberOfReports,
-              ),
+              range: getRange(updatedIncident.numberOfReports),
+              level: getLevel(updatedIncident.numberOfReports),
             },
           },
         );
         // need to send a notification warning the users if they are in a risk zone, safe zone (from a danger zone), or a danger zone
-        const currentLevel = getLevel(
+        const currentLevel = getLevel(updatedIncident.numberOfReports);
+        let notification = {
+          contents: {
+            en: `You are now in a ${
+              currentLevel === DangerLevel.SAFE
+                ? 'safe'
+                : currentLevel === DangerLevel.RISK
+                ? 'risk'
+                : 'danger'
+            } zone!`,
+            es: `Ahora se encuentra en una zona ${
+              currentLevel === DangerLevel.SAFE
+                ? 'segura'
+                : currentLevel === DangerLevel.RISK
+                ? 'de riesgo'
+                : 'de peligro'
+            }!`,
+            fr: `Vous êtes dans une zone de ${
+              currentLevel === DangerLevel.SAFE
+                ? 'sûr'
+                : currentLevel === DangerLevel.RISK
+                ? 'risque'
+                : 'danger'
+            }!`,
+            'zh-Hans': `该地区的状态${
+              currentLevel === DangerLevel.SAFE
+                ? '安全'
+                : currentLevel === DangerLevel.RISK
+                ? '风险'
+                : '危险'
+            }!`,
+          },
+          headings: {
+            en: `Niveles De Niveles`,
+            es: `Niveles De Niveles`,
+            fr: `Niveles De Niveles`,
+            'zh-Hans': `Niveles De Niveles`,
+          },
+          filters: [
+            {
+              field: 'location',
+              radius: getRange(updatedIncident.numberOfReports),
+              lat: updatedIncident.location.coordinates[1],
+              long: updatedIncident.location.coordinates[0],
+            },
+          ],
+        };
+        try {
+          await onesignal.createNotification(notification);
+          // console.log(response.body);
+        } catch (e) {
+          if (e instanceof OneSignal.HTTPError) {
+            // When status code of HTTP response is not 2xx, HTTPError is thrown.
+            console.log(e.statusCode);
+            console.log(e.body);
+          }
+        }
+        // need to check for all the users that once were in the zone to then notify them that they are now in a safe zone
+        console.log(
           updatedIncident.numberOfReports,
+          beforeIncident.numberOfReports,
         );
-          let notification = {
-            contents: {
-              en: `You are now in a ${
-                currentLevel === DangerLevel.SAFE
-                  ? 'safe'
-                  : currentLevel === DangerLevel.RISK
-                  ? 'risk'
-                  : 'danger'
-              } zone!`,
-              es: `Ahora se encuentra en una zona ${
-                currentLevel === DangerLevel.SAFE
-                  ? 'segura'
-                  : currentLevel === DangerLevel.RISK
-                  ? 'de riesgo'
-                  : 'de peligro'
-              }!`,
-              fr: `Vous êtes dans une zone de ${
-                currentLevel === DangerLevel.SAFE
-                  ? 'sûr'
-                  : currentLevel === DangerLevel.RISK
-                  ? 'risque'
-                  : 'danger'
-              }!`,
-              'zh-Hans': `该地区的状态${
-                currentLevel === DangerLevel.SAFE
-                  ? '安全'
-                  : currentLevel === DangerLevel.RISK
-                  ? '风险'
-                  : '危险'
-              }!`,
-            },
-            headings: {
-              en: `Niveles De Niveles`,
-              es: `Niveles De Niveles`,
-              fr: `Niveles De Niveles`,
-              'zh-Hans': `Niveles De Niveles`,
-            },
-            filters: [
-              {
-                field: 'location',
-                radius: getRange(updatedIncident.numberOfReports),
-                lat: updatedIncident.location.coordinates[1],
-                long: updatedIncident.location.coordinates[0],
+        if (updatedIncident.numberOfReports < beforeIncident.numberOfReports) {
+          const outerUsers = (await collections.users
+            ?.find({
+              location: {
+                $geoWithin: {
+                  $centerSphere: [
+                    updatedIncident.location.coordinates,
+                    getRange(beforeIncident.numberOfReports) / 6378100,
+                  ],
+                },
               },
-            ],
-          };
-          try {
-            await onesignal.createNotification(notification);
-            // console.log(response.body);
-          } catch (e) {
-            if (e instanceof OneSignal.HTTPError) {
-              // When status code of HTTP response is not 2xx, HTTPError is thrown.
-              console.log(e.statusCode);
-              console.log(e.body);
+            })
+            .toArray()) as unknown as User[];
+          const innerUsers = (await collections.users
+            ?.find({
+              location: {
+                $geoWithin: {
+                  $centerSphere: [
+                    updatedIncident.location.coordinates,
+                    getRange(updatedIncident.numberOfReports) / 6378100,
+                  ],
+                },
+              },
+            })
+            .toArray()) as unknown as User[];
+          const users = outerUsers.filter(u => !innerUsers.includes(u));
+          for (let user of users) {
+            notification.filters[0].radius = 20;
+            notification.filters[0].lat = user.location.coordinates[1];
+            notification.filters[0].long = user.location.coordinates[0];
+            try {
+              await onesignal.createNotification(notification);
+              // console.log(response.body);
+            } catch (e) {
+              if (e instanceof OneSignal.HTTPError) {
+                // When status code of HTTP response is not 2xx, HTTPError is thrown.
+                console.log(e.statusCode);
+                console.log(e.body);
+              }
             }
           }
-        // need to check for all the users that once were in the zone to then notify them that they are now in a safe zone
-        console.log(updatedIncident.numberOfReports, beforeIncident.numberOfReports)
-        if (updatedIncident.numberOfReports < beforeIncident.numberOfReports) {
-          const outerUsers = (await collections.users?.find({
-                location: {
-                  $geoWithin: {
-                    $centerSphere: [updatedIncident.location.coordinates, getRange(
-                      beforeIncident.numberOfReports,
-                    )/6378100],
-                  },
-                },
-              })
-              .toArray()) as unknown as User[];
-              const innerUsers = (await collections.users?.find({
-                location: {
-                  $geoWithin: {
-                    $centerSphere: [updatedIncident.location.coordinates, getRange(
-                      updatedIncident.numberOfReports,
-                    )/6378100],
-                  },
-                },
-              })
-              .toArray()) as unknown as User[];
-            const users = outerUsers.filter(u => !innerUsers.includes(u));
-              for (let user of users) {
-                notification.filters[0].radius = 20;
-                notification.filters[0].lat = user.location.coordinates[1];
-                notification.filters[0].long = user.location.coordinates[0];
-                try {
-                  await onesignal.createNotification(notification);
-                  // console.log(response.body);
-                } catch (e) {
-                  if (e instanceof OneSignal.HTTPError) {
-                    // When status code of HTTP response is not 2xx, HTTPError is thrown.
-                    console.log(e.statusCode);
-                    console.log(e.body);
-                  }
-                }
-              }
-          }
+        }
         // check for merges of inidents
         let incidents = (await collections.incidents
           ?.find({over: false})

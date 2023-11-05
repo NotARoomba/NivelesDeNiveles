@@ -62,7 +62,9 @@ reportRouter.post('/', async (req: Request, res: Response) => {
             predictionAvg += prediction.confidence;
           }
           predictionAvg /= response.data.predictions.length;
-          console.log(`REPORT PREDICTION AVERAGE: ${predictionAvg}% FOR DISASTER TYPE ${report.type}`);
+          console.log(
+            `REPORT PREDICTION AVERAGE: ${predictionAvg}% FOR DISASTER TYPE ${report.type}`,
+          );
           if (predictionAvg < 0.5) {
             return res.send({
               status: STATUS_CODES.MISMATCHED_IMAGE,

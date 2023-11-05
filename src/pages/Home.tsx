@@ -8,6 +8,8 @@ import {
   Linking,
   TouchableOpacity,
   Keyboard,
+  Modal,
+  Image,
 } from 'react-native';
 import {
   DangerLevel,
@@ -22,7 +24,14 @@ import MapView, {
   Circle,
 } from 'react-native-maps';
 import NetInfo, {NetInfoSubscription} from '@react-native-community/netinfo';
-import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import {
+  check,
+  checkNotifications,
+  PERMISSIONS,
+  request,
+  requestNotifications,
+  RESULTS,
+} from 'react-native-permissions';
 import {callAPI, getData} from '../utils/Functions';
 import GetLocation from 'react-native-get-location';
 import Config from 'react-native-config';
@@ -36,12 +45,14 @@ import {Localizations} from '../utils/Localizations';
 import STATUS_CODES from '../../backend/models/status';
 import Incident from '../../backend/models/incident';
 import {OneSignal} from 'react-native-onesignal';
+import {platform} from 'os';
 
 export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
   const [u, setUser] = useState<User | null>(null);
   const mapRef = useRef<MapView>(null);
   const [cameraOpen, setCameraOpen] = useState(false);
+  const [notificationsModal, setNotificationsModal] = useState(false);
   const [region, setRegion] = useState({
     latitude: 0,
     longitude: 0,
@@ -56,6 +67,18 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   useEffect(() => {
     async function updateMap() {
       let locationStatus = null;
+      let {status, settings} = await checkNotifications();
+      if (status !== RESULTS.GRANTED) {
+        const {status, settings} = await requestNotifications([
+          'alert',
+          'badge',
+          'sound',
+          'providesAppSettings',
+        ]);
+        if (status !== RESULTS.GRANTED) {
+          setTimeout(() => setNotificationsModal(true), 1000);
+        }
+      }
       if (Platform.OS == 'ios')
         locationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
       else if (Platform.OS == 'android')
@@ -171,6 +194,50 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
     <View className=" bg-light">
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <View className="flex justify-center align-middle text-center justify-items-center">
+        <Modal
+          animationType="fade"
+          visible={notificationsModal}
+          style={{backgroundColor: '#000000'}}
+          transparent
+          onRequestClose={() => {
+            setNotificationsModal(!notificationsModal);
+          }}>
+          <View className="flex justify-center bg-light/70 h-screen">
+            <View className="flex jutify-center align-middle m-auto bg-light w-9/12 h-1/2 rounded-xl shadow-xl">
+              <Image
+                source={require('../../public/icon.png')}
+                className="h-32 aspect-square mx-auto mt-4"
+              />
+              <View className="flex flex-col">
+                <Text className="m-auto mt-2 text-2xl font-bold text-dark  ">
+                  {Localizations.activateNotificationsTitle}
+                </Text>
+                <Text className="m-auto mt-2 text-black text-center text-lg my-2 mb-8 px-8">
+                  {Localizations.activateNotificationsDesc}
+                </Text>
+              </View>
+              <View className="flex flex-row justify-center gap-4">
+                <TouchableOpacity
+                  onPress={() => setNotificationsModal(!notificationsModal)}
+                  className=" bg-dark  flex justify-center align-middle p-2 rounded w-28">
+                  <Text className="text-xl text-light m-auto font-bold">
+                    {Localizations.cancel}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    Linking.openSettings();
+                    setNotificationsModal(!notificationsModal);
+                  }}
+                  className="flex bg-highlight  justify-center align-middle p-2 rounded w-28">
+                  <Text className="text-lg text-light m-auto font-bold">
+                    {Localizations.grant}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
         {locationPerms ? (
           <View>
             <TouchableOpacity

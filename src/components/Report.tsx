@@ -19,7 +19,7 @@ import {Localizations} from '../utils/Localizations';
 import Spinner from 'react-native-loading-spinner-overlay';
 import STATUS_CODES from '../../backend/models/status';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { OneSignal } from 'react-native-onesignal';
+import {OneSignal} from 'react-native-onesignal';
 
 export default function Report({
   reportFunction,

@@ -78,6 +78,9 @@ export const Localizations = new LocalizedStrings({
     sending: 'Enviando',
     sensorType: 'Sensor de {0}',
     radius: 'Radio',
+    activateNotificationsTitle: 'Activar Notificaciones',
+    activateNotificationsDesc:
+      '¡Niveles De Niveles le gustaría enviarle notificaciones para alertarlo automáticamente si se encuentra en una zona segura, de riesgo o peligrosa!',
   },
   en: {
     fire: 'Fire',
@@ -145,6 +148,9 @@ export const Localizations = new LocalizedStrings({
     sending: 'Sending',
     sensorType: '{0} Sensor',
     radius: 'Radius',
+    activateNotificationsTitle: 'Activate Notifications',
+    activateNotificationsDesc:
+      'Niveles De Niveles would like to send you notifications to automatically alert you if you are in a safe, risk, or danger zone!',
   },
   fr: {
     fire: 'Feu',
@@ -212,6 +218,9 @@ export const Localizations = new LocalizedStrings({
     sending: 'Envoi',
     sensorType: 'Capteur {0}',
     radius: 'Rayon',
+    activateNotificationsTitle: 'Activer les Notifications',
+    activateNotificationsDesc:
+      'Niveles De Niveles souhaite vous envoyer des notifications pour vous alerter automatiquement si vous vous trouvez dans une zone sûre, à risque ou dangereuse!',
   },
   zh: {
     fire: '火',
@@ -273,5 +282,8 @@ export const Localizations = new LocalizedStrings({
     sending: '发送',
     sensorType: '传感器{0}',
     radius: '半径',
+    activateNotificationsTitle: '激活通知',
+    activateNotificationsDesc:
+      'Niveles De Niveles 希望向您发送通知，以便在您处于安全、风险或危险区域时自动提醒您!',
   },
 });

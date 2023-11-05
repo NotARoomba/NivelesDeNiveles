@@ -68,6 +68,7 @@
     "node": ">=16"
   },
   "reactNativePermissionsIOS": [
+    "LocationAlways",
     "LocationAccuracy",
     "LocationWhenInUse",
     "Notifications",

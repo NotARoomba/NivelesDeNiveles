@@ -18,7 +18,7 @@ import {callAPI, storeData} from '../utils/Functions';
 import SplashScreen from 'react-native-splash-screen';
 import STATUS_CODES from '../../backend/models/status';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { OneSignal } from 'react-native-onesignal';
+import {OneSignal} from 'react-native-onesignal';
 
 async function checkLogin(
   number: string,
