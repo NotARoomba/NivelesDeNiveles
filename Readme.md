@@ -1,6 +1,6 @@
 <div align="center">
   <br>
-  <img src="https://raw.githubusercontent.com/NotARoomba/NivelesDeNiveles/master/public/icon.png" alt="Niveles" width="200">
+  <img src="https://raw.githubusercontent.com/NotARoomba/NivelesDeNiveles/master/public/icon_rounded.png" alt="Niveles" width="200">
   <br>
   <h1>🌊Niveles De Niveles🌊</h1>
 </div>
