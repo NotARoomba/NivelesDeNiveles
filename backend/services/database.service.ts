@@ -315,6 +315,7 @@ export async function connectToDatabase(io: Server) {
             }
           }
         // need to check for all the users that once were in the zone to then notify them that they are now in a safe zone
+        console.log(next.fullDocument?.numberOfReports, next.fullDocumentBeforeChange?.numberOfReports)
         if (next.fullDocument?.numberOfReports < next.fullDocumentBeforeChange?.numberOfReports) {
           const users = (await collections.users?.find({
                 location: {
