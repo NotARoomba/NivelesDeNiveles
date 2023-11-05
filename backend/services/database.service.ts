@@ -323,11 +323,12 @@ export async function connectToDatabase(io: Server) {
                     $maxDistance: getRange(
                       next.fullDocumentBeforeChange?.numberOfReports,
                     ),
-                    $minDistance: getRange
+                    $minDistance: getRange(next.fullDocument?.numberOfReports)
                   },
                 },
               })
               .toArray()) as unknown as User[];
+              console.log(users);
               for (let user of users) {
                 notification.filters[0].radius = 5;
                 notification.filters[0].lat = user.location.coordinates[1];
