@@ -72,7 +72,7 @@ export async function connectToDatabase(io: Server) {
     env.REPORT_COLLECTION,
   );
   collections.reports = reportsCollection;
-
+    infoDB.createCollection('incidents', {changeStreamPreAndPostImages: {enabled: true}})
   const incidentsCollection: mongoDB.Collection = infoDB.collection(
     env.INCIDENT_COLLECTION,
   );
