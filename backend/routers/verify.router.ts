@@ -20,9 +20,6 @@ verifyRouter.post('/send', async (req: Request, res: Response) => {
   if (req?.body?.number === '') {
     return res.send({status: STATUS_CODES.INVALID_NUMBER});
   }
-  if (isNaN(parseInt(number.replace('+57', ''), 10))) {
-    return res.send({status: STATUS_CODES.INVALID_NUMBER});
-  }
   let verification;
   try {
     verification = await twilio.verify.v2
