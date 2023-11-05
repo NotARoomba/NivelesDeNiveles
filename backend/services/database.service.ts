@@ -298,7 +298,7 @@ export async function connectToDatabase(io: Server) {
             filters: [
               {
                 field: 'location',
-                radius: updatedIncident.range,
+                radius: getRange(updatedIncident.numberOfReports),
                 lat: updatedIncident.location.coordinates[1],
                 long: updatedIncident.location.coordinates[0],
               },
