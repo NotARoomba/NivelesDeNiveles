@@ -340,7 +340,7 @@ export async function connectToDatabase(io: Server) {
             const users = outerUsers.filter(u => !innerUsers.includes(u));
               console.log(users);
               for (let user of users) {
-                notification.filters[0].radius = 5;
+                notification.filters[0].radius = 20;
                 notification.filters[0].lat = user.location.coordinates[1];
                 notification.filters[0].long = user.location.coordinates[0];
                 try {
