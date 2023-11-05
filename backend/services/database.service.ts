@@ -229,7 +229,7 @@ export async function connectToDatabase(io: Server) {
     }
   });
   incidentsCollection
-    .watch([], {fullDocument: 'updateLookup', fullDocumentBeforeChange: 'required'})
+    .watch(pipeline, {fullDocument: 'required', fullDocumentBeforeChange: 'required'})
     .on('change', async next => {
       // updates all the location data for all the users using a hacky hack
       //update range of incident and level
