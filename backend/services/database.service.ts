@@ -8,6 +8,7 @@ import Report from '../models/report';
 import NivelesEvents from '../models/events';
 import haversine from 'haversine-distance';
 import * as OneSignal from 'onesignal-node';
+import User from '../models/user';
 
 const env = dotenv.load({
   MONGODB: String,
@@ -228,7 +229,7 @@ export async function connectToDatabase(io: Server) {
     }
   });
   incidentsCollection
-    .watch([], {fullDocument: 'updateLookup'})
+    .watch([], {fullDocument: 'updateLookup', fullDocumentBeforeChange: 'whenAvailable'})
     .on('change', async next => {
       // updates all the location data for all the users using a hacky hack
       //update range of incident and level
@@ -255,12 +256,7 @@ export async function connectToDatabase(io: Server) {
         const currentLevel = getLevel(
           next.updateDescription.updatedFields?.numberOfReports,
         );
-        if (
-          getLevel(next.updateDescription.updatedFields?.numberOfReports) -
-            1 !==
-          getLevel(next.updateDescription.updatedFields?.numberOfReports)
-        ) {
-          const notification = {
+          let notification = {
             contents: {
               en: `You are now in a ${
                 currentLevel === DangerLevel.SAFE
@@ -309,7 +305,7 @@ export async function connectToDatabase(io: Server) {
             ],
           };
           try {
-            const response = await onesignal.createNotification(notification);
+            await onesignal.createNotification(notification);
             // console.log(response.body);
           } catch (e) {
             if (e instanceof OneSignal.HTTPError) {
@@ -318,12 +314,41 @@ export async function connectToDatabase(io: Server) {
               console.log(e.body);
             }
           }
-        }
+        // need to check for all the users that once were in the zone to then notify them that they are now in a safe zone
+        if (next.fullDocument?.numberOfReports < next.fullDocumentBeforeChange?.numberOfReports) {
+          const users = (await collections.users?.find({
+                location: {
+                  $geoWithin: {
+                    $centerSphere: {...next.fullDocument?.location},
+                    $maxDistance: getRange(
+                      next.fullDocumentBeforeChange?.numberOfReports,
+                    ),
+                    $minDistance: getRange
+                  },
+                },
+              })
+              .toArray()) as unknown as User[];
+              for (let user of users) {
+                notification.filters[0].radius = 5;
+                notification.filters[0].lat = user.location.coordinates[1];
+                notification.filters[0].long = user.location.coordinates[0];
+                try {
+                  await onesignal.createNotification(notification);
+                  // console.log(response.body);
+                } catch (e) {
+                  if (e instanceof OneSignal.HTTPError) {
+                    // When status code of HTTP response is not 2xx, HTTPError is thrown.
+                    console.log(e.statusCode);
+                    console.log(e.body);
+                  }
+                }
+              }
+          }
         // check for merges of inidents
         let incidents = (await collections.incidents
           ?.find({over: false})
           .toArray()) as unknown as Incident[];
-        console.log(incidents);
+        // console.log(incidents);
         if (incidents.length > 1) {
           for (let i = 0; i < incidents.length; i++) {
             for (let j = 0; j < incidents.length; i++) {
