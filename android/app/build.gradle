@@ -80,7 +80,7 @@ android {
         applicationId "com.notaroomba.nivelesdeniveles"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
+        versionCode 8
         versionName "2.5"
     }
     signingConfigs {
