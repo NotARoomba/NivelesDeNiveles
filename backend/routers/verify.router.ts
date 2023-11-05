@@ -45,7 +45,7 @@ verifyRouter.post('/send', async (req: Request, res: Response) => {
         status: STATUS_CODES.TOO_MANY_ATTEMPTS,
       });
     }
-    res.send({status: STATUS_CODES.SUCCESS});
+    res.send({status: STATUS_CODES.ERROR_SENDING_CODE});
   }
 });
 
