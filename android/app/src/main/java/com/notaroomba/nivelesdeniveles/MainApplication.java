@@ -10,6 +10,9 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
+import com.onesignal.Continue;
+import com.onesignal.OneSignal;
+
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -60,5 +63,26 @@ public class MainApplication extends Application implements ReactApplication {
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+      // Verbose Logging set to help debug issues, remove before releasing your app.
+      // OneSignal.getDebug().setLogLevel(LogLevel.VERBOSE);
+
+      // OneSignal Initialization
+      OneSignal.initWithContext(this, BuildConfig.ONESIGNAL_APP_ID);
+
+      // requestPermission will show the native Android notification permission prompt.
+      // NOTE: It's recommended to use a OneSignal In-App Message to prompt instead.
+      OneSignal.getNotifications().requestPermission(true, Continue.with(r -> {
+          if (r.isSuccess()) {
+              if (r.getData()) {
+                  // `requestPermission` completed successfully and the user has accepted permission
+              }
+              else {
+                  // `requestPermission` completed successfully but the user has rejected permission
+              }
+          }
+          else {
+              // `requestPermission` completed unsuccessfully, check `r.getThrowable()` for more info on the failure reason
+          }
+      }));
   }
 }
