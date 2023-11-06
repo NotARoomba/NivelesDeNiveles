@@ -26,6 +26,7 @@ import MapView, {
 import NetInfo, {NetInfoSubscription} from '@react-native-community/netinfo';
 import {
   check,
+  checkLocationAccuracy,
   checkNotifications,
   PERMISSIONS,
   request,
@@ -46,6 +47,7 @@ import STATUS_CODES from '../../backend/models/status';
 import Incident from '../../backend/models/incident';
 import {OneSignal} from 'react-native-onesignal';
 import {platform} from 'os';
+import PermissionsModal from '../components/PermissionsModal';
 
 export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
@@ -53,6 +55,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   const mapRef = useRef<MapView>(null);
   const [cameraOpen, setCameraOpen] = useState(false);
   const [notificationsModal, setNotificationsModal] = useState(false);
+  const [locationModal, setLocationModal] = useState(false);
   const [region, setRegion] = useState({
     latitude: 0,
     longitude: 0,
@@ -67,81 +70,14 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   useEffect(() => {
     async function updateMap() {
       let locationStatus = null;
-      let {status, settings} = await checkNotifications();
-      if (status !== RESULTS.GRANTED) {
-        const {status, settings} = await requestNotifications([
-          'alert',
-          'badge',
-          'sound',
-          'providesAppSettings',
-        ]);
-        if (status !== RESULTS.GRANTED) {
-          setTimeout(() => setNotificationsModal(true), 1000);
-        }
-      }
-      if (Platform.OS == 'ios')
+    if (Platform.OS == 'ios')
         locationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
       else if (Platform.OS == 'android')
         locationStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-      if (locationStatus === RESULTS.GRANTED) {
+      if (locationStatus != RESULTS.GRANTED) {
+        setLocationModal(true);
+      } else {
         setLocationPerms(true);
-        OneSignal.Location.requestPermission();
-        try {
-          const location = await GetLocation.getCurrentPosition({
-            enableHighAccuracy: true,
-            timeout: 60000,
-          });
-          if (location)
-            callAPI('/users/', 'POST', {
-              number: await getData('number'),
-              location: {
-                coordinates: [location.longitude, location.latitude],
-                type: 'Point',
-              },
-            });
-        } catch {}
-      } else if (locationStatus === RESULTS.DENIED) {
-        let requestLocation = null;
-        if (Platform.OS == 'ios')
-          requestLocation = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-        else if (Platform.OS == 'android')
-          requestLocation = await request(
-            PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-          );
-        if (requestLocation === RESULTS.GRANTED) {
-          setLocationPerms(true);
-          OneSignal.Location.requestPermission();
-          try {
-            const location = await GetLocation.getCurrentPosition({
-              enableHighAccuracy: true,
-              timeout: 60000,
-            });
-            if (location)
-              callAPI('/users/', 'POST', {
-                number: await getData('number'),
-                location: {
-                  coordinates: [location.longitude, location.latitude],
-                  type: 'Point',
-                },
-              });
-          } catch {}
-        } else {
-          Alert.alert(
-            Localizations.activateLocationTitle,
-            Localizations.activateLocationDesc,
-            [
-              {
-                text: Localizations.cancel,
-                onPress: () => 1,
-                style: 'cancel',
-              },
-              {
-                text: Localizations.grant,
-                onPress: () => Linking.openSettings(),
-              },
-            ],
-          );
-        }
       }
       const userNumber = (await getData('number')) as string;
       const res = await callAPI('/users/' + userNumber, 'GET');
@@ -190,54 +126,102 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       });
     }
   }, [u]);
+  useEffect(() => {
+    const updateNotifications = async () => {
+      let {status, settings} = await checkNotifications();
+      if (status !== RESULTS.GRANTED) {
+        const {status, settings} = await requestNotifications([
+          'alert',
+          'badge',
+          'sound',
+          'providesAppSettings',
+        ]);
+        if (status !== RESULTS.GRANTED) {
+          setTimeout(() => setNotificationsModal(true), 1000);
+        }
+      }
+    }
+    if (locationPerms) {
+      updateNotifications();
+    }
+  }, [locationPerms])
+  const locationModalFunction = async () => {
+    let locationStatus = null;
+    if (Platform.OS == 'ios')
+        locationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+      else if (Platform.OS == 'android')
+        locationStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+      if (locationStatus === RESULTS.GRANTED) {
+        setLocationPerms(true);
+        OneSignal.Location.requestPermission();
+        try {
+          const location = await GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 60000,
+          });
+          if (location)
+            callAPI('/users/', 'POST', {
+              number: await getData('number'),
+              location: {
+                coordinates: [location.longitude, location.latitude],
+                type: 'Point',
+              },
+            });
+        } catch (e) { console.log(e)}
+      } else if (locationStatus === RESULTS.DENIED) {
+        console.log('denied')
+        let requestLocation = null;
+        if (Platform.OS == 'ios')
+          requestLocation = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+        else if (Platform.OS == 'android')
+          requestLocation = await request(
+            PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+          );
+        if (requestLocation === RESULTS.GRANTED) {
+          console.log('granted')
+          setLocationPerms(true);
+          OneSignal.Location.requestPermission();
+          try {
+            const location = await GetLocation.getCurrentPosition({
+              enableHighAccuracy: true,
+              timeout: 60000,
+            });
+            if (location)
+              callAPI('/users/', 'POST', {
+                number: await getData('number'),
+                location: {
+                  coordinates: [location.longitude, location.latitude],
+                  type: 'Point',
+                },
+              });
+          } catch {}
+        } else {
+          Alert.alert(
+            Localizations.activateLocationTitle,
+            Localizations.activateLocationDesc,
+            [
+              {
+                text: Localizations.cancel,
+                onPress: () => 1,
+                style: 'cancel',
+              },
+              {
+                text: Localizations.grant,
+                onPress: () => Linking.openSettings(),
+              },
+            ],
+          );
+        }
+      } else {
+        Linking.openSettings();
+      }
+  }
   return (
     <View className=" bg-light">
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <View className="flex justify-center align-middle text-center justify-items-center">
-        <Modal
-          animationType="fade"
-          visible={notificationsModal}
-          style={{backgroundColor: '#000000'}}
-          transparent
-          onRequestClose={() => {
-            setNotificationsModal(!notificationsModal);
-          }}>
-          <View className="flex justify-center bg-light/70 h-screen">
-            <View className="flex jutify-center align-middle m-auto bg-light w-9/12 h-1/2 rounded-xl shadow-xl">
-              <Image
-                source={require('../../public/icon.png')}
-                className="h-32 aspect-square mx-auto mt-4"
-              />
-              <View className="flex flex-col">
-                <Text className="m-auto mt-2 text-2xl font-bold text-dark  ">
-                  {Localizations.activateNotificationsTitle}
-                </Text>
-                <Text className="m-auto mt-2 text-black text-center text-lg my-2 mb-8 px-8">
-                  {Localizations.activateNotificationsDesc}
-                </Text>
-              </View>
-              <View className="flex flex-row justify-center gap-4">
-                <TouchableOpacity
-                  onPress={() => setNotificationsModal(!notificationsModal)}
-                  className=" bg-dark  flex justify-center align-middle p-2 rounded w-28">
-                  <Text className="text-xl text-light m-auto font-bold">
-                    {Localizations.cancel}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    Linking.openSettings();
-                    setNotificationsModal(!notificationsModal);
-                  }}
-                  className="flex bg-highlight  justify-center align-middle p-2 rounded w-28">
-                  <Text className="text-lg text-light m-auto font-bold">
-                    {Localizations.grant}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+        <PermissionsModal title={Localizations.activateNotificationsTitle} description={Localizations.activateNotificationsDesc} isActive={notificationsModal} setActive={setNotificationsModal} yesFunction={Linking.openSettings} />
+        <PermissionsModal title={Localizations.activateLocationTitle} description={Localizations.activateLocationDesc} isActive={locationModal} setActive={setLocationModal} yesFunction={locationModalFunction} />
         {locationPerms ? (
           <View>
             <TouchableOpacity
@@ -390,8 +374,8 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
           </View>
         ) : (
           <TouchableOpacity
-            onPress={() => Linking.openSettings()}
-            className="justify-center h-full">
+            onPress={() => locationModalFunction()}
+            className="justify-center bg-light h-screen">
             <Text className="text-3xl text-center m-auto align-middle">
               {Localizations.homeNoLocation}
             </Text>

@@ -14,6 +14,14 @@ export enum DangerType {
   AVALANCHE,
 }
 
+export interface PermissionsModalProps {
+  title: string;
+  description: string;
+  isActive: boolean;
+  setActive: (active: boolean) => void;
+  yesFunction: () => void;
+}
+
 export interface CameraPanelProps {
   cameraOpen: boolean;
   onChangeEvidence: (nev: string) => void;
