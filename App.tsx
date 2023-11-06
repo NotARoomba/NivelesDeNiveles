@@ -77,7 +77,7 @@ export default function App() {
     <>
       {loaded ? (
         logged ? (
-          <KeyboardAwareScrollView scrollEnabled={false}>
+          <KeyboardAwareScrollView className='bg-light' scrollEnabled={false}>
             <Home isDarkMode={isDarkMode} updateFunction={setLogged} />
           </KeyboardAwareScrollView>
         ) : (
