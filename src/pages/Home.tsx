@@ -148,9 +148,9 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   const locationModalFunction = async () => {
     let locationStatus = null;
     if (Platform.OS == 'ios')
-        locationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+        locationStatus = await check(PERMISSIONS.IOS.LOCATION_ALWAYS);
       else if (Platform.OS == 'android')
-        locationStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+        locationStatus = await check(PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION);
       if (locationStatus === RESULTS.GRANTED) {
         setLocationPerms(true);
         OneSignal.Location.requestPermission();
@@ -172,10 +172,10 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         console.log('denied')
         let requestLocation = null;
         if (Platform.OS == 'ios')
-          requestLocation = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+          requestLocation = await request(PERMISSIONS.IOS.LOCATION_ALWAYS);
         else if (Platform.OS == 'android')
           requestLocation = await request(
-            PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+            PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
           );
         if (requestLocation === RESULTS.GRANTED) {
           console.log('granted')
