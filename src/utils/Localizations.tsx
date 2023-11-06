@@ -49,12 +49,12 @@ export const Localizations = new LocalizedStrings({
     selectCountryCode: 'Seleccione su código de país',
     activateLocationTitle: 'Activar ubicación',
     activateLocationDesc:
-      'Niveles De Niveles necesita su ubicación para verificar automáticamente si está en peligro.',
+      'Niveles De Niveles necesita tu ubicación precisa para comprobar automáticamente si estás en peligro.',
     activateCameraTitle: 'Activar cámara',
     activateCameraDesc:
       'Niveles De Niveles necesita su cámara para tomar una foto del incidente.',
     homeNoLocation:
-      'Niveles De Niveles necesita su ubicación para funcionar. ¡Haga clic aquí para cambiar los permisos!',
+      'Niveles De Niveles necesita su ubicación precisa para funcionar. ¡Haga clic aquí para cambiar los permisos!',
     recommendationsForZoneTitle: 'Recomendaciones Zona {0}',
     recommendationsForSafe:
       'Se encuentra en una zona segura, ¡no hay nada de qué preocuparse!',
@@ -81,6 +81,9 @@ export const Localizations = new LocalizedStrings({
     activateNotificationsTitle: 'Activar Notificaciones',
     activateNotificationsDesc:
       '¡Niveles De Niveles le gustaría enviarle notificaciones para alertarlo automáticamente si se encuentra en una zona segura, de riesgo o peligrosa!',
+    activateBackgroundLocationTitle: 'Ubicación de Fondo',
+    activateBackgroundLocationDesc:
+      'Niveles De Niveles desea acceder a tu ubicación en segundo plano para enviarte notificaciones si tu seguridad está en riesgo. ¡Puedes activar esto editando los permisos de ubicación de Niveles De Niveles!',
   },
   en: {
     fire: 'Fire',
@@ -119,12 +122,12 @@ export const Localizations = new LocalizedStrings({
     selectCountryCode: 'Select your country code',
     activateLocationTitle: 'Activate Location',
     activateLocationDesc:
-      'Niveles De Niveles needs your location to automatically check if you are in danger.',
+      'Niveles De Niveles needs your precise location to automatically check if you are in danger.',
     activateCameraTitle: 'Activate Camera',
     activateCameraDesc:
       'Niveles De Niveles needs your camera to take a photo of the incident.',
     homeNoLocation:
-      'Niveles De Niveles needs your location to work. Click here to change permissions!',
+      'Niveles De Niveles needs your precise location to work. Click here to change permissions!',
     recommendationsForZoneTitle: '{0} Zone Recommendations',
     recommendationsForSafe:
       "You are in a safe zone, there's nothing to worry about!",
@@ -151,6 +154,9 @@ export const Localizations = new LocalizedStrings({
     activateNotificationsTitle: 'Activate Notifications',
     activateNotificationsDesc:
       'Niveles De Niveles would like to send you notifications to automatically alert you if you are in a safe, risk, or danger zone!',
+    activateBackgroundLocationTitle: 'Background Location',
+    activateBackgroundLocationDesc:
+      'Niveles De Niveles would like to access your background location to send you notifications if your safety is at risk! You can activate this by editing the location permissions for Niveles De Niveles!',
   },
   fr: {
     fire: 'Feu',
@@ -189,12 +195,12 @@ export const Localizations = new LocalizedStrings({
     selectCountryCode: 'Sélectionnez votre code de pays',
     activateLocationTitle: 'Activer la localisation',
     activateLocationDesc:
-      'Niveles De Niveles a besoin de votre emplacement pour vérifier automatiquement si vous êtes en danger.',
+      'Niveles De Niveles a besoin de votre emplacement précis pour vérifier automatiquement si vous êtes en danger.',
     activateCameraTitle: 'Activer la caméra',
     activateCameraDesc:
       "Niveles De Niveles a besoin de votre caméra pour prendre une photo de l'incident.",
     homeNoLocation:
-      'Niveles De Niveles a besoin de votre emplacement pour fonctionner. Cliquez ici pour modifier les autorisations !',
+      'Niveles De Niveles a besoin de votre emplacement précis pour fonctionner. Cliquez ici pour modifier les autorisations!',
     recommendationsForZoneTitle: 'Recommandations Zone {0}',
     recommendationsForSafe:
       "Vous êtes dans une zone sûre, il n'y a rien à craindre !",
@@ -221,6 +227,9 @@ export const Localizations = new LocalizedStrings({
     activateNotificationsTitle: 'Activer les Notifications',
     activateNotificationsDesc:
       'Niveles De Niveles souhaite vous envoyer des notifications pour vous alerter automatiquement si vous vous trouvez dans une zone sûre, à risque ou dangereuse!',
+    activateBackgroundLocationTitle: 'Emplacement en arrière-plan',
+    activateBackgroundLocationDesc:
+      "Niveles De Niveles souhaite accéder à votre position en arrière-plan pour vous envoyer des notifications si votre sécurité est menacée. Vous pouvez l'activer en modifiant les autorisations de localisation des niveaux ! ",
   },
   zh: {
     fire: '火',
@@ -259,9 +268,10 @@ export const Localizations = new LocalizedStrings({
     activateLocationDesc:
       'Niveles De Niveles 需要您的位置来自动检查您是否处于危险之中.',
     activateCameraTitle: '激活相机',
-    activateCameraDesc: 'Niveles De Niveles 需要你的相机来拍摄事件的照片.',
+    activateCameraDesc:
+      'Niveles De Niveles 需要您的精确位置来自动检查您是否处于危险之中。.',
     homeNoLocation:
-      'Niveles De Niveles 需要您的位置才能发挥作用。单击此处更改权限!',
+      'Niveles De Niveles 需要您的精确位置才能发挥作用。 单击此处更改权限!',
     recommendationsForZoneTitle: '建议： {0}',
     recommendationsForSafe: '它位于安全区域，无需担心！',
     recommendationsForRisk: '您处于危险区域，请确保手头有急救箱并建立疏散路线.',
@@ -285,5 +295,8 @@ export const Localizations = new LocalizedStrings({
     activateNotificationsTitle: '激活通知',
     activateNotificationsDesc:
       'Niveles De Niveles 希望向您发送通知，以便在您处于安全、风险或危险区域时自动提醒您!',
+    activateBackgroundLocationTitle: '背景位置',
+    activateBackgroundLocationDesc:
+      'Niveles De Niveles 希望在后台访问您的位置，以便在您的安全受到威胁时向您发送通知。 您可以通过编辑级别位置权限来激活此功能！',
   },
 });

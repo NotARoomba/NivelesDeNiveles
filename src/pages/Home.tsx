@@ -8,8 +8,6 @@ import {
   Linking,
   TouchableOpacity,
   Keyboard,
-  Modal,
-  Image,
 } from 'react-native';
 import {
   DangerLevel,
@@ -46,7 +44,6 @@ import {Localizations} from '../utils/Localizations';
 import STATUS_CODES from '../../backend/models/status';
 import Incident from '../../backend/models/incident';
 import {OneSignal} from 'react-native-onesignal';
-import {platform} from 'os';
 import PermissionsModal from '../components/PermissionsModal';
 
 export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
@@ -56,6 +53,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   const [cameraOpen, setCameraOpen] = useState(false);
   const [notificationsModal, setNotificationsModal] = useState(false);
   const [locationModal, setLocationModal] = useState(false);
+  const [bglocationModal, setBGLocationModal] = useState(false);
   const [region, setRegion] = useState({
     latitude: 0,
     longitude: 0,
@@ -69,15 +67,29 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   });
   useEffect(() => {
     async function updateMap() {
-      let locationStatus = null;
-    if (Platform.OS == 'ios')
-        locationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-      else if (Platform.OS == 'android')
-        locationStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-      if (locationStatus != RESULTS.GRANTED) {
+      let bgLocationStatus = null;
+      let curLocationStatus = null;
+      if (Platform.OS == 'ios') {
+        curLocationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+        bgLocationStatus = await check(PERMISSIONS.IOS.LOCATION_ALWAYS);
+      } else if (Platform.OS == 'android') {
+        curLocationStatus = await check(
+          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+        );
+        bgLocationStatus = await check(
+          PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+        );
+      }
+      if (
+        curLocationStatus != RESULTS.GRANTED &&
+        bgLocationStatus != RESULTS.GRANTED
+      ) {
         setLocationModal(true);
       } else {
         setLocationPerms(true);
+        if (bgLocationStatus !== RESULTS.GRANTED) {
+          setTimeout(() => setBGLocationModal(true), 3000);
+        }
       }
       const userNumber = (await getData('number')) as string;
       const res = await callAPI('/users/' + userNumber, 'GET');
@@ -115,7 +127,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       }
     });
     return () => unsubscribe();
-  }, []);
+  }, [locationPerms]);
   useEffect(() => {
     if (u) {
       setRegion({
@@ -140,18 +152,46 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
           setTimeout(() => setNotificationsModal(true), 1000);
         }
       }
-    }
+    };
     if (locationPerms) {
       updateNotifications();
+      setLocationModal(false);
     }
-  }, [locationPerms])
+  }, [locationPerms, bglocationModal]);
   const locationModalFunction = async () => {
     let locationStatus = null;
     if (Platform.OS == 'ios')
-        locationStatus = await check(PERMISSIONS.IOS.LOCATION_ALWAYS);
+      locationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+    else if (Platform.OS == 'android')
+      locationStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+    if (locationStatus === RESULTS.GRANTED) {
+      setLocationPerms(true);
+      OneSignal.Location.requestPermission();
+      try {
+        const location = await GetLocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 60000,
+        });
+        if (location)
+          callAPI('/users/', 'POST', {
+            number: await getData('number'),
+            location: {
+              coordinates: [location.longitude, location.latitude],
+              type: 'Point',
+            },
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (locationStatus === RESULTS.DENIED) {
+      let requestLocation = null;
+      if (Platform.OS == 'ios')
+        requestLocation = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
       else if (Platform.OS == 'android')
-        locationStatus = await check(PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION);
-      if (locationStatus === RESULTS.GRANTED) {
+        requestLocation = await request(
+          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+        );
+      if (requestLocation === RESULTS.GRANTED) {
         setLocationPerms(true);
         OneSignal.Location.requestPermission();
         try {
@@ -167,61 +207,53 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
                 type: 'Point',
               },
             });
-        } catch (e) { console.log(e)}
-      } else if (locationStatus === RESULTS.DENIED) {
-        console.log('denied')
-        let requestLocation = null;
-        if (Platform.OS == 'ios')
-          requestLocation = await request(PERMISSIONS.IOS.LOCATION_ALWAYS);
-        else if (Platform.OS == 'android')
-          requestLocation = await request(
-            PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
-          );
-        if (requestLocation === RESULTS.GRANTED) {
-          console.log('granted')
-          setLocationPerms(true);
-          OneSignal.Location.requestPermission();
-          try {
-            const location = await GetLocation.getCurrentPosition({
-              enableHighAccuracy: true,
-              timeout: 60000,
-            });
-            if (location)
-              callAPI('/users/', 'POST', {
-                number: await getData('number'),
-                location: {
-                  coordinates: [location.longitude, location.latitude],
-                  type: 'Point',
-                },
-              });
-          } catch {}
-        } else {
-          Alert.alert(
-            Localizations.activateLocationTitle,
-            Localizations.activateLocationDesc,
-            [
-              {
-                text: Localizations.cancel,
-                onPress: () => 1,
-                style: 'cancel',
-              },
-              {
-                text: Localizations.grant,
-                onPress: () => Linking.openSettings(),
-              },
-            ],
-          );
-        }
+        } catch {}
       } else {
-        Linking.openSettings();
+        Alert.alert(
+          Localizations.activateLocationTitle,
+          Localizations.activateLocationDesc,
+          [
+            {
+              text: Localizations.cancel,
+              onPress: () => 1,
+              style: 'cancel',
+            },
+            {
+              text: Localizations.grant,
+              onPress: () => Linking.openSettings(),
+            },
+          ],
+        );
       }
-  }
+    } else {
+      Linking.openSettings();
+    }
+  };
   return (
     <View className=" bg-light">
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <View className="flex justify-center align-middle text-center justify-items-center">
-        <PermissionsModal title={Localizations.activateNotificationsTitle} description={Localizations.activateNotificationsDesc} isActive={notificationsModal} setActive={setNotificationsModal} yesFunction={Linking.openSettings} />
-        <PermissionsModal title={Localizations.activateLocationTitle} description={Localizations.activateLocationDesc} isActive={locationModal} setActive={setLocationModal} yesFunction={locationModalFunction} />
+        <PermissionsModal
+          title={Localizations.activateNotificationsTitle}
+          description={Localizations.activateNotificationsDesc}
+          isActive={notificationsModal && !bglocationModal}
+          setActive={setNotificationsModal}
+          yesFunction={Linking.openSettings}
+        />
+        <PermissionsModal
+          title={Localizations.activateLocationTitle}
+          description={Localizations.activateLocationDesc}
+          isActive={locationModal}
+          setActive={setLocationModal}
+          yesFunction={locationModalFunction}
+        />
+        <PermissionsModal
+          title={Localizations.activateBackgroundLocationTitle}
+          description={Localizations.activateBackgroundLocationDesc}
+          isActive={bglocationModal}
+          setActive={setBGLocationModal}
+          yesFunction={Linking.openSettings}
+        />
         {locationPerms ? (
           <View>
             <TouchableOpacity
