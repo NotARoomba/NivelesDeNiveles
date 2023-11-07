@@ -36,12 +36,16 @@ verifyRouter.post('/send', async (req: Request, res: Response) => {
       res.send({status: STATUS_CODES.ERROR_SENDING_CODE});
     }
   } catch (status: any) {
-    console.log(status);
     if (status.status === 429) {
       return res.send({
         status: STATUS_CODES.TOO_MANY_ATTEMPTS,
       });
+    } else if (status.code === 60200) {
+      return res.send({
+        status: STATUS_CODES.NUMBER_NOT_EXIST,
+      });
     }
+    console.log(status);
     res.send({status: STATUS_CODES.ERROR_SENDING_CODE});
   }
 });
