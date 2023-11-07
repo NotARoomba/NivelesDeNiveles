@@ -311,7 +311,7 @@ export async function connectToDatabase(io: Server) {
             console.log(e.body);
           }
         }
-        // need to check for all the users that once were in the zone to then notify them that they are now in a safe zone
+        // need to check for all the users that once were in the danger zone to then notify them that they are now in a safe zone
         console.log(
           updatedIncident.numberOfReports,
           beforeIncident.numberOfReports,
@@ -341,13 +341,27 @@ export async function connectToDatabase(io: Server) {
               },
             })
             .toArray()) as unknown as User[];
-          const users = outerUsers.filter(u => !innerUsers.includes(u));
+          let users = outerUsers.filter(u => !innerUsers.includes(u));
+          // need to check if there are any users in that radius and then 
           for (let user of users) {
             notification.filters[0].radius = 20;
             notification.filters[0].lat = user.location.coordinates[1];
             notification.filters[0].long = user.location.coordinates[0];
             try {
               await onesignal.createNotification(notification);
+              const otherUsers = (await collections.users
+            ?.find({
+              location: {
+                $geoWithin: {
+                  $centerSphere: [
+                    user.location.coordinates,
+                    20 / 6378100,
+                  ],
+                },
+              },
+            })
+            .toArray()) as unknown as User[];
+            users = users.filter(u => !otherUsers.includes(u));
               // console.log(response.body);
             } catch (e) {
               if (e instanceof OneSignal.HTTPError) {
