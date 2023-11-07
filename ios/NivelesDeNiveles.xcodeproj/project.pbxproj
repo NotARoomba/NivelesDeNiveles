@@ -692,7 +692,7 @@
 				CODE_SIGN_ENTITLEMENTS = NivelesDeNiveles/NivelesDeNiveles.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 3YY5ZGX52B;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = NivelesDeNiveles/Info.plist;
@@ -703,7 +703,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.5.3;
+				MARKETING_VERSION = 2.5.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -727,7 +727,7 @@
 				CODE_SIGN_ENTITLEMENTS = NivelesDeNiveles/NivelesDeNiveles.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 3YY5ZGX52B;
 				INFOPLIST_FILE = NivelesDeNiveles/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NivelesDeNiveles;
@@ -737,7 +737,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.5.3;
+				MARKETING_VERSION = 2.5.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
