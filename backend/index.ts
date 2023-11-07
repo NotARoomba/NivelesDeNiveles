@@ -142,6 +142,13 @@ connectToDatabase(io)
     // });
     prune();
     setInterval(() => prune(), 1000 * 3600 * 2); // update data every so seconds
+    setInterval(
+      () => {
+        io.emit(NivelesEvents.UPDATE_LOCATION_DATA);
+        console.log('UPDATING LOCATION DATA');
+      },
+      1000 * 60 * 5,
+    );
     httpServer.listen(port);
     console.log('Server Started!');
   })
