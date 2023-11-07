@@ -344,7 +344,7 @@ export async function connectToDatabase(io: Server) {
           let users = outerUsers.filter(u => !innerUsers.includes(u));
           // need to check if there are any users in that radius and then
           for (let user of users) {
-            notification.filters[0].radius = 20;
+            notification.filters[0].radius = 5;
             notification.filters[0].lat = user.location.coordinates[1];
             notification.filters[0].long = user.location.coordinates[0];
             try {
@@ -353,7 +353,7 @@ export async function connectToDatabase(io: Server) {
                 ?.find({
                   location: {
                     $geoWithin: {
-                      $centerSphere: [user.location.coordinates, 20 / 6378100],
+                      $centerSphere: [user.location.coordinates, 5 / 6378100],
                     },
                   },
                 })
