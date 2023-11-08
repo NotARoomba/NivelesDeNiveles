@@ -42,7 +42,7 @@ export default function PermissionsModal({
           <View className="flex flex-row justify-center gap-4 mb-8">
             <TouchableOpacity
               onPress={() => setActive(!isActive)}
-              className=" bg-dark  flex justify-center align-middle p-2 rounded w-28">
+              className=" bg-dark  flex justify-center align-middle p-2 rounded w-32">
               <Text className="text-xl text-light m-auto font-bold">
                 {Localizations.cancel}
               </Text>
@@ -52,7 +52,7 @@ export default function PermissionsModal({
                 await yesFunction();
                 setActive(!isActive);
               }}
-              className="flex bg-highlight  justify-center align-middle p-2 rounded w-28">
+              className="flex bg-highlight  justify-center align-middle p-2 rounded w-32">
               <Text className="text-lg text-light m-auto font-bold">
                 {Localizations.grant}
               </Text>

@@ -32,7 +32,7 @@ import {
   RESULTS,
 } from 'react-native-permissions';
 import {callAPI, getData} from '../utils/Functions';
-import GetLocation from 'react-native-get-location';
+import Geolocation from '@react-native-community/geolocation';
 import Config from 'react-native-config';
 import {io} from 'socket.io-client';
 import NivelesEvents from '../../backend/models/events';
@@ -72,6 +72,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       if (Platform.OS == 'ios') {
         curLocationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
         bgLocationStatus = await check(PERMISSIONS.IOS.LOCATION_ALWAYS);
+        console.log(bgLocationStatus);
       } else if (Platform.OS == 'android') {
         curLocationStatus = await check(
           PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
@@ -87,7 +88,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         setLocationModal(true);
       } else {
         setLocationPerms(true);
-        if (bgLocationStatus !== RESULTS.GRANTED) {
+        if (bgLocationStatus !== RESULTS.GRANTED && bgLocationStatus !== RESULTS.UNAVAILABLE) {
           setTimeout(() => setBGLocationModal(true), 3000);
         }
       }
@@ -126,7 +127,16 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       } else {
       }
     });
-    return () => unsubscribe();
+    const geoWatch = Geolocation.watchPosition(async (position) => {
+      callAPI('/users/', 'POST', {
+        number: await getData('number'),
+        location: {
+          coordinates: [position.coords.longitude, position.coords.latitude],
+          type: 'Point',
+        },
+      });
+    }, () => null,{enableHighAccuracy: true, maximumAge: 0, distanceFilter: 10} )
+    return () => {unsubscribe(); Geolocation.clearWatch(geoWatch)};
   }, [locationPerms]);
   useEffect(() => {
     if (u) {
@@ -168,18 +178,17 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       setLocationPerms(true);
       OneSignal.Location.requestPermission();
       try {
-        const location = await GetLocation.getCurrentPosition({
-          enableHighAccuracy: true,
-          timeout: 60000,
-        });
-        if (location)
+        Geolocation.getCurrentPosition(async info => {
+          console.log(info);
+          if (info.coords)
           callAPI('/users/', 'POST', {
-            number: await getData('number'),
-            location: {
-              coordinates: [location.longitude, location.latitude],
-              type: 'Point',
-            },
-          });
+          number: await getData('number'),
+          location: {
+            coordinates: [info.coords.longitude, info.coords.latitude],
+            type: 'Point',
+          },
+        });
+        });
       } catch (e) {
         console.log(e);
       }
@@ -195,18 +204,17 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         setLocationPerms(true);
         OneSignal.Location.requestPermission();
         try {
-          const location = await GetLocation.getCurrentPosition({
-            enableHighAccuracy: true,
-            timeout: 60000,
-          });
-          if (location)
-            callAPI('/users/', 'POST', {
-              number: await getData('number'),
-              location: {
-                coordinates: [location.longitude, location.latitude],
-                type: 'Point',
-              },
-            });
+          Geolocation.getCurrentPosition(async info => {
+          console.log(info);
+          if (info.coords)
+          callAPI('/users/', 'POST', {
+          number: await getData('number'),
+          location: {
+            coordinates: [info.coords.longitude, info.coords.latitude],
+            type: 'Point',
+          },
+        });
+        });
         } catch {}
       } else {
         Alert.alert(
@@ -264,18 +272,19 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
               onPress={async e => {
                 e.preventDefault();
                 try {
-                  if (mapRef.current) {
-                    const location = await GetLocation.getCurrentPosition({
-                      enableHighAccuracy: true,
-                      timeout: 60000,
+                    Geolocation.getCurrentPosition(async info => {
+                      console.log(info);
+                      if (info.coords) {                      
+                        if (mapRef.current) {
+                          mapRef.current.animateToRegion({
+                            latitude: info.coords.latitude,
+                            longitude: info.coords.longitude,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421,
+                          });}
+                      }
                     });
-                    mapRef.current.animateToRegion({
-                      latitude: location.latitude,
-                      longitude: location.longitude,
-                      latitudeDelta: 0.0922,
-                      longitudeDelta: 0.0421,
-                    });
-                  }
+                  
                 } catch {}
               }}>
               <Icon name="navigation" size={40} color="#f1eeff" />
