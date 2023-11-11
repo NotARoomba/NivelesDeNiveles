@@ -72,7 +72,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       if (Platform.OS == 'ios') {
         curLocationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
         bgLocationStatus = await check(PERMISSIONS.IOS.LOCATION_ALWAYS);
-        console.log(bgLocationStatus);
+        // console.log(bgLocationStatus);
       } else if (Platform.OS == 'android') {
         curLocationStatus = await check(
           PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
@@ -88,7 +88,10 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         setLocationModal(true);
       } else {
         setLocationPerms(true);
-        if (bgLocationStatus !== RESULTS.GRANTED && bgLocationStatus !== RESULTS.UNAVAILABLE) {
+        if (
+          bgLocationStatus !== RESULTS.GRANTED &&
+          bgLocationStatus !== RESULTS.UNAVAILABLE
+        ) {
           setTimeout(() => setBGLocationModal(true), 3000);
         }
       }
@@ -127,16 +130,23 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       } else {
       }
     });
-    const geoWatch = Geolocation.watchPosition(async (position) => {
-      callAPI('/users/', 'POST', {
-        number: await getData('number'),
-        location: {
-          coordinates: [position.coords.longitude, position.coords.latitude],
-          type: 'Point',
-        },
-      });
-    }, () => null,{enableHighAccuracy: true, maximumAge: 0, distanceFilter: 10} )
-    return () => {unsubscribe(); Geolocation.clearWatch(geoWatch)};
+    const geoWatch = Geolocation.watchPosition(
+      async position => {
+        callAPI('/users/', 'POST', {
+          number: await getData('number'),
+          location: {
+            coordinates: [position.coords.longitude, position.coords.latitude],
+            type: 'Point',
+          },
+        });
+      },
+      () => null,
+      {enableHighAccuracy: true, maximumAge: 0, distanceFilter: 10},
+    );
+    return () => {
+      unsubscribe();
+      Geolocation.clearWatch(geoWatch);
+    };
   }, [locationPerms]);
   useEffect(() => {
     if (u) {
@@ -179,15 +189,15 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       OneSignal.Location.requestPermission();
       try {
         Geolocation.getCurrentPosition(async info => {
-          console.log(info);
+          // console.log(info);
           if (info.coords)
-          callAPI('/users/', 'POST', {
-          number: await getData('number'),
-          location: {
-            coordinates: [info.coords.longitude, info.coords.latitude],
-            type: 'Point',
-          },
-        });
+            callAPI('/users/', 'POST', {
+              number: await getData('number'),
+              location: {
+                coordinates: [info.coords.longitude, info.coords.latitude],
+                type: 'Point',
+              },
+            });
         });
       } catch (e) {
         console.log(e);
@@ -205,16 +215,16 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         OneSignal.Location.requestPermission();
         try {
           Geolocation.getCurrentPosition(async info => {
-          console.log(info);
-          if (info.coords)
-          callAPI('/users/', 'POST', {
-          number: await getData('number'),
-          location: {
-            coordinates: [info.coords.longitude, info.coords.latitude],
-            type: 'Point',
-          },
-        });
-        });
+            // console.log(info);
+            if (info.coords)
+              callAPI('/users/', 'POST', {
+                number: await getData('number'),
+                location: {
+                  coordinates: [info.coords.longitude, info.coords.latitude],
+                  type: 'Point',
+                },
+              });
+          });
         } catch {}
       } else {
         Alert.alert(
@@ -272,19 +282,19 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
               onPress={async e => {
                 e.preventDefault();
                 try {
-                    Geolocation.getCurrentPosition(async info => {
-                      console.log(info);
-                      if (info.coords) {                      
-                        if (mapRef.current) {
-                          mapRef.current.animateToRegion({
-                            latitude: info.coords.latitude,
-                            longitude: info.coords.longitude,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421,
-                          });}
+                  Geolocation.getCurrentPosition(async info => {
+                    // console.log(info);
+                    if (info.coords) {
+                      if (mapRef.current) {
+                        mapRef.current.animateToRegion({
+                          latitude: info.coords.latitude,
+                          longitude: info.coords.longitude,
+                          latitudeDelta: 0.0922,
+                          longitudeDelta: 0.0421,
+                        });
                       }
-                    });
-                  
+                    }
+                  });
                 } catch {}
               }}>
               <Icon name="navigation" size={40} color="#f1eeff" />
