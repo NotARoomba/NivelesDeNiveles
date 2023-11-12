@@ -11,3 +11,18 @@ export interface AdvancementCardProps {
   link: string;
   imagePath: string;
 }
+
+export interface SectionHeaderProps {
+  title: string;
+  subtitle: string;
+}
+
+export interface PersonCardProps {
+  name: string;
+  role: string;
+  image: string;
+  github: string;
+  insta: string;
+  linkedin?: string;
+  delay: number;
+}

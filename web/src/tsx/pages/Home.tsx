@@ -1,15 +1,19 @@
 import {motion} from 'framer-motion';
 import NavBar from '../components/NavBar';
 import {Link} from 'react-scroll';
-import 'boxicons';
 import DisasterCard from '../components/DisasterCard';
 import AdvancementCard from '../components/AdvancementCard';
+import SectionHeader from '../components/SectionHeader';
+import PersonCard from '../components/PersonCard';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 
 export default function Home() {
   const fadein = {
     visible: {opacity: 1, scale: 1, transition: {duration: 1}},
     hidden: {opacity: 0, scale: 0},
   };
+  const technologies = ['/clients/arduino-logo.png', '/clients/express.png', '/clients/git.png', '/clients/nativewind.jpeg', '/clients/react.png', '/clients/Socket-io.svg.png', '/clients/Twilio_logo.png', '/clients/vs.png', '/clients/xcode.png'];
   return (
     <div className="text-black">
       <NavBar />
@@ -108,13 +112,7 @@ export default function Home() {
       </div>
       <div className="w-full bg-accent-900/70 pb-12">
         <div className="w-7/12 mx-auto justify-center py-10">
-          <p className="text-neutral-400 text-center text-2xl my-2 font-bold">
-            Desastres Naturales
-          </p>
-          <p className="text-neutral-700 text-center text-4xl my-2 font-bold">
-            Los desastres que prevenimos son
-          </p>
-          <hr className="bg-accent w-24 h-1 my-5 justify-center mx-auto" />
+          <SectionHeader title='Desastres Naturales' subtitle='Los desastres que prevenimos son' />
           <div className="flex flex-row gap-8">
             <DisasterCard
               icon="bx-water"
@@ -142,13 +140,9 @@ export default function Home() {
       </div>
       <div className="w-full bg-white pb-12">
         <div className="w-7/12 mx-auto justify-center py-10">
-          <p className="text-neutral-400 text-center text-2xl my-2 font-bold">
-            Recursos
-          </p>
-          <p className="text-neutral-700 text-center text-4xl my-2 font-bold">
-            ¿Te interesa? Mira un poco de nuestros avances
-          </p>
-          <hr className="bg-accent w-24 h-1 my-5 justify-center mx-auto mb-12" />
+          <SectionHeader title='Recursos' subtitle='¿Te interesa? Mira un poco de nuestros avances' />
+          <motion.div initial={{opacity: 0, y: 75}}
+    whileInView={{opacity: 1, y: 0, transition: {duration: 0.75, delay: 0.25}}}>
           <iframe
             className="mx-auto"
             width="560"
@@ -156,7 +150,8 @@ export default function Home() {
             src="https://www.youtube.com/embed/a1bNz8M6Sew?si=hCeSToOI6zhFPqWr"
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
-          <div className="my-8">
+          </motion.div>
+          <div className="flex flex-row jutify-center mx-auto w-full gap-3 my-8">
             <AdvancementCard
               title="GitHub"
               subtitle="Nuestro Repositorio"
@@ -164,6 +159,25 @@ export default function Home() {
               imagePath="/portfolio/hub.png"
             />
           </div>
+        </div>
+        <div className="w-7/12 mx-auto justify-center py-10">
+          <SectionHeader title='Equipo' subtitle='Cónoce al equipo Hacks Costeños' />
+          <div className='flex flex-row gap-8'>
+          <PersonCard name="Nathan Alspaugh"role="Programación y Hardware" image="/team/nathan.jpg" github="https://github.com/NotARoomba" insta="https://www.instagram.com/notaroomba" delay={.25} />
+          <PersonCard name="Ashlee Yin"role="Diseño y Planeación" image="/team/ash.jpg" github="https://github.com/awangran" insta="https://www.instagram.com/ashlee_yin" linkedin='https://co.linkedin.com/in/ashlee-yin-romero-63204223a' delay={0}/>
+          <PersonCard name="Felipe Ochoa"role="Edición y Diseño" image="/team/pipe.jpg" github="https://github.com/felipeochoat" insta="https://www.instagram.com/felipeochoat" delay={.25} />
+          </div>
+         
+        </div>
+      </div>
+      <div className="w-full bg-accent-900/70 pb-12">
+        <div className="w-7/12 mx-auto justify-center py-10">
+        <SectionHeader title='Herramientas' subtitle='Tecnologías que utilizamos' />
+        <Carousel renderThumbs={() => technologies.map((_t, i) => (<i key={i} className='bx bx-md text-dark bx-radio-circle' />))}>
+          {technologies.map((img, i) => (
+            <img key={i} className='mx-12 h-48 ' src={img} />
+          ))}
+        </Carousel>
         </div>
       </div>
     </div>
