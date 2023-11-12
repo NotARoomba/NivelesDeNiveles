@@ -32,7 +32,8 @@ import {
   RESULTS,
 } from 'react-native-permissions';
 import {callAPI, getData} from '../utils/Functions';
-import Geolocation from '@react-native-community/geolocation';
+import WatchGeoLocation from '@react-native-community/geolocation';
+import GetLocation from 'react-native-get-location';
 import Config from 'react-native-config';
 import {io} from 'socket.io-client';
 import NivelesEvents from '../../backend/models/events';
@@ -130,9 +131,9 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       } else {
       }
     });
-    const geoWatch = Geolocation.watchPosition(
+    const geoWatch = WatchGeoLocation.watchPosition(
       async position => {
-        callAPI('/users/', 'POST', {
+        await callAPI('/users/', 'POST', {
           number: await getData('number'),
           location: {
             coordinates: [position.coords.longitude, position.coords.latitude],
@@ -145,7 +146,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
     );
     return () => {
       unsubscribe();
-      Geolocation.clearWatch(geoWatch);
+      WatchGeoLocation.clearWatch(geoWatch);
     };
   }, [locationPerms]);
   useEffect(() => {
@@ -188,16 +189,17 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       setLocationPerms(true);
       OneSignal.Location.requestPermission();
       try {
-        Geolocation.getCurrentPosition(async info => {
-          // console.log(info);
-          if (info.coords)
-            callAPI('/users/', 'POST', {
-              number: await getData('number'),
-              location: {
-                coordinates: [info.coords.longitude, info.coords.latitude],
-                type: 'Point',
-              },
-            });
+        const location = await GetLocation.getCurrentPosition({
+          enableHighAccuracy: true,
+          timeout: 60000,
+        });
+        // console.log(location);
+        await callAPI('/users/', 'POST', {
+          number: await getData('number'),
+          location: {
+            coordinates: [location.longitude, location.latitude],
+            type: 'Point',
+          },
         });
       } catch (e) {
         console.log(e);
@@ -214,16 +216,16 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         setLocationPerms(true);
         OneSignal.Location.requestPermission();
         try {
-          Geolocation.getCurrentPosition(async info => {
-            // console.log(info);
-            if (info.coords)
-              callAPI('/users/', 'POST', {
-                number: await getData('number'),
-                location: {
-                  coordinates: [info.coords.longitude, info.coords.latitude],
-                  type: 'Point',
-                },
-              });
+          const location = await GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 60000,
+          });
+          await callAPI('/users/', 'POST', {
+            number: await getData('number'),
+            location: {
+              coordinates: [location.longitude, location.latitude],
+              type: 'Point',
+            },
           });
         } catch {}
       } else {
@@ -280,22 +282,23 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
                 (!cameraOpen ? 'z-10' : '')
               }
               onPress={async e => {
-                e.preventDefault();
+                // e.preventDefault();
                 try {
-                  Geolocation.getCurrentPosition(async info => {
-                    // console.log(info);
-                    if (info.coords) {
-                      if (mapRef.current) {
-                        mapRef.current.animateToRegion({
-                          latitude: info.coords.latitude,
-                          longitude: info.coords.longitude,
-                          latitudeDelta: 0.0922,
-                          longitudeDelta: 0.0421,
-                        });
-                      }
-                    }
+                  const location = await GetLocation.getCurrentPosition({
+                    enableHighAccuracy: true,
+                    timeout: 60000,
                   });
-                } catch {}
+                  if (mapRef.current) {
+                    mapRef.current.animateToRegion({
+                      latitude: location.latitude,
+                      longitude: location.longitude,
+                      latitudeDelta: 0.0922,
+                      longitudeDelta: 0.0421,
+                    });
+                  }
+                } catch (e) {
+                  console.log(e);
+                }
               }}>
               <Icon name="navigation" size={40} color="#f1eeff" />
             </TouchableOpacity>
