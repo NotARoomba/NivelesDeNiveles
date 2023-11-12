@@ -25,6 +25,7 @@ export default {
       },
       colors: {
         turple: '#5335A9',
+        lightText: '#6189a2',
         accent: {
           DEFAULT: '#9de5ff',
           100: '#003d53',

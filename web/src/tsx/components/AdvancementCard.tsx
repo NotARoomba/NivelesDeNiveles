@@ -6,6 +6,7 @@ export default function AdvancementCard({
   subtitle,
   link,
   imagePath,
+  textColor
 }: AdvancementCardProps) {
   return (
     <motion.div
@@ -15,10 +16,10 @@ export default function AdvancementCard({
         y: 0,
         transition: {duration: 0.75, delay: 0.25},
       }}
-      className="w-2/5 h-auto rounded-xl justify-center mx-auto relative group z-20 overflow-hidden">
+      className="sm:w-96 h-auto rounded-xl justify-center mx-auto mt-8 relative group z-20 overflow-hidden">
       <img src={imagePath} className="rounded-xl -z-20" />
       <div className="w-full h-full bg-accent-700/30 absolute bottom-0 -right-full group-hover:right-0 rounded-xl transition-all duration-500 z-10" />
-      <p className="absolute top-5 font-bold text-2xl text-white left-1/2 -translate-x-1/2 z-30 -translate-y-16 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+      <p className={"absolute top-5 w-96 text-center font-bold text-2xl left-1/2 -translate-x-1/2 z-30 -translate-y-16 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 " + textColor}>
         {title}
       </p>
       <a
@@ -30,7 +31,7 @@ export default function AdvancementCard({
           }
         />
       </a>
-      <p className="absolute bottom-3 text-xl text-white w-48 left-1/2 -translate-x-1/2 z-30 translate-y-16 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+      <p className={"absolute bottom-3 text-xl text-center w-96 left-1/2 -translate-x-1/2 z-30 translate-y-16 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 " + textColor}>
         {subtitle}
       </p>
     </motion.div>

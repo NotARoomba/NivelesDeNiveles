@@ -12,7 +12,7 @@ export default function DisasterCard({
       opacity: 1,
       scale: 1,
       y: 0,
-      transition: {duration: 0.75, delay, ease: 'easeInOut'},
+      transition: {duration: 0.5, delay, ease: 'easeInOut'},
     },
     hover: {y: -15, transition: {duration: 0, ease: 'linear'}},
     hidden: {opacity: 1, scale: 0, y: 25},
@@ -23,7 +23,7 @@ export default function DisasterCard({
       whileInView="visible"
       variants={fadein}
       whileHover="hover"
-      className=" bg-white shadow-lg rounded-xl border-4 hover:border-b-dark transition-all duration-300 w-1/3 p-6">
+      className=" bg-white shadow-lg rounded-xl border-4 hover:border-b-dark transition-all duration-300 w-full xl:w-1/3 p-6 mt-12">
       <div className="mx-auto flex justify-center">
         <i className={'bx bx-lg text-dark-600 text-center  ' + icon} />
       </div>

@@ -10,6 +10,7 @@ export interface AdvancementCardProps {
   subtitle: string;
   link: string;
   imagePath: string;
+  textColor: string;
 }
 
 export interface SectionHeaderProps {

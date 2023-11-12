@@ -5,5 +5,5 @@
 html,
 body {
   font: Raleway;
-  height: 100%;
+  overflow-x: hidden;
 }

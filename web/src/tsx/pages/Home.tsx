@@ -1,12 +1,12 @@
 import {motion} from 'framer-motion';
-import NavBar from '../components/NavBar';
 import {Link} from 'react-scroll';
 import DisasterCard from '../components/DisasterCard';
 import AdvancementCard from '../components/AdvancementCard';
 import SectionHeader from '../components/SectionHeader';
 import PersonCard from '../components/PersonCard';
-import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
-import {Carousel} from 'react-responsive-carousel';
+import 'react-slideshow-image/dist/styles.css';
+import {Slide} from 'react-slideshow-image';
+import SVG from 'react-inlinesvg';
 
 export default function Home() {
   const fadein = {
@@ -14,27 +14,65 @@ export default function Home() {
     hidden: {opacity: 0, scale: 0},
   };
   const technologies = [
-    '/clients/arduino-logo.png',
-    '/clients/express.png',
-    '/clients/git.png',
-    '/clients/nativewind.jpeg',
-    '/clients/react.png',
-    '/clients/Socket-io.svg.png',
-    '/clients/Twilio_logo.png',
-    '/clients/vs.png',
-    '/clients/xcode.png',
+    {
+      title: 'Arduino',
+      link: 'https://cdn.svgporn.com/logos/arduino.svg',
+    },
+    {
+      title: 'TailwindCSS',
+      link: 'https://cdn.svgporn.com/logos/tailwindcss.svg',
+    },
+    {
+      title: 'Git',
+      link: 'https://cdn.svgporn.com/logos/git.svg',
+    },
+    {
+      title: 'Twilio',
+      link: 'https://cdn.svgporn.com/logos/twilio.svg',
+    },
+    {
+      title: 'ExpressJS',
+      link: 'https://cdn.svgporn.com/logos/express.svg',
+    },
+    {
+      title: 'React',
+      link: 'https://cdn.svgporn.com/logos/react.svg',
+    },
+    {
+      title: 'Socket.io',
+      link: 'https://cdn.svgporn.com/logos/socket.io.svg',
+    },
+    {
+      title: 'VS Code',
+      link: 'https://cdn.svgporn.com/logos/visual-studio-code.svg',
+    },
+    {
+      title: 'XCode',
+      link: 'https://cdn.svgporn.com/logos/xcode.svg',
+    },
+    // '/clients/git.png',
+    // '/clients/nativewind.jpeg',
+    // '/clients/react.png',
+    // '/clients/Socket-io.svg.png',
+    // '/clients/Twilio_logo.png',
+    // '/clients/vs.png',
+    // '/clients/xcode.png',
   ];
   return (
-    <div className="text-black">
-      <NavBar />
-      <div className=" bg-light-600 mx-auto my-auto justify-center flex flex-row h-auto p-52">
-        <div className="justify-center my-auto align-middle mr-0 w-6/12 mx-auto">
+    <div id="home" className="text-black">
+      <div className=" bg-light-600 mx-auto my-auto justify-center flex-col lg:flex lg:flex-row-reverse h-auto py-32 px-2 lg:p-52">
+        <div className="justify-center lg:justify-start my-auto mx-auto lg:mr-auto ">
+          <img
+            src="/img/logo.png"
+            className="h-48 sm:h-80 z-10 animate animate-slowBounce mx-auto"
+          />
+        </div>
+        <div className="justify-center mt-12 lg:my-auto align-middle mr-0 w-full text-center lg:text-start lg:w-6/12 mx-auto">
           <p className="text-5xl text-dark font-bold">Niveles De Niveles</p>
           <p className="text-2xl text-neutral-600 my-4 mb-8">
             Llevando la seguridad de los Colombianos a otro nivel
           </p>
           <Link
-            activeClass="active"
             className="text-lg bg-accent-500 text-dark hover:bg-dark hover:text-light hover:cursor-pointer transition-all duration-300 p-3 px-5 rounded"
             to="about"
             spy={true}
@@ -43,29 +81,24 @@ export default function Home() {
             Conóce nuestro proyecto
           </Link>
         </div>
-        <div className="justify-start my-auto mr-auto">
-          <img
-            src="/logo.png"
-            className="h-80 z-10 animate animate-slowBounce"
-          />
-        </div>
       </div>
+      <div className='w-full bg-white'>
       <div
         id="about"
-        className="flex flex-row w-9/12 mx-auto py-32 h-fit justify-between ">
+        className="flex-col bg-white lg:flex lg:flex-row w-9/12 mx-auto py-32 h-fit justify-between ">
         <motion.img
-          src="/about-img.svg"
-          className=" h-[400px] mt-0 mr-12 w-1/2"
+          src="/img/about-img.svg"
+          className=" h-[400px] mx-auto lg:mt-0 lg:mr-12 lg:w-1/2 my-auto align-middle"
           variants={fadein}
           initial="hidden"
           whileInView="visible"
         />
-        <div className="w-1/2">
+        <div className="w-full lg:w-1/2">
           <div>
             <motion.p
               initial={{opacity: 0, y: 75}}
               whileInView={{opacity: 1, y: 0, transition: {duration: 0.75}}}
-              className="font-bold text-dark text-4xl">
+              className="font-bold text-dark text-4xl mt-8 text-center lg:text-start">
               La prevención y la información es la clave
             </motion.p>
             <motion.p
@@ -120,13 +153,13 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="w-full bg-accent-900/70 pb-12">
-        <div className="w-7/12 mx-auto justify-center py-10">
+      <div id="disasters" className="w-full bg-accent-900/70 pb-12">
+        <div className="w-10/12 lg:9/12 2xl:w-8/12 mx-auto justify-center py-10">
           <SectionHeader
             title="Desastres Naturales"
             subtitle="Los desastres que prevenimos son"
           />
-          <div className="flex flex-row gap-8">
+          <div className="flex-col lg:flex-row lg:flex  lg:gap-8 lg:gap-y-8">
             <DisasterCard
               icon="bx-water"
               title="Desbordamientos"
@@ -140,19 +173,19 @@ export default function Home() {
               icon="bxs-hot"
               title="Incendios Forestales"
               description="En el Caribe colombiano se han reportado 150 incendios forestales este año y su causa principal son las altas temperaturas y las escasas lluvias. Una vez que estos llegan a un punto que su magnitud es tan grande que puede llevar días para detenerlo, por lo que si logramos reportar estos en el menor tiempo posible, será más fácil evitar la destrucción de la fauna a su alrededor."
-              delay={0.25}
+              delay={screenX > 1024 ? 0.25 : 0}
             />
             <DisasterCard
               icon="bx-landscape"
               title="Deslizamientos"
               description="Entre 1920 y 2020, se registraron más de 11.800 deslizamientos de tierra, pero solamente en 2022 se dieron 813. Esto es una prueba de cómo el cambio climático está afectando al país. Hay muchas personas que no saben que están en una zona de riesgo por lo que el tener una alerta sobre el movimiento de la tierra puede ayudar a las comunidades a evitar catástrofes. Utilizamos acelerómetros para medir el movimiento de la tierra."
-              delay={0.5}
+              delay={screenX > 1024 ? 0.25 : 0}
             />
           </div>
         </div>
       </div>
-      <div className="w-full bg-white pb-12">
-        <div className="w-7/12 mx-auto justify-center py-10">
+      <div id="resources" className="w-full bg-white pb-12">
+        <div className="w-10/12 lg:7/12 mx-auto justify-center py-10">
           <SectionHeader
             title="Recursos"
             subtitle="¿Te interesa? Mira un poco de nuestros avances"
@@ -165,40 +198,46 @@ export default function Home() {
               transition: {duration: 0.75, delay: 0.25},
             }}>
             <iframe
-              className="mx-auto"
-              width="560"
-              height="315"
+              className="mx-auto w-full max-w-2xl h-full aspect-video"
               src="https://www.youtube.com/embed/a1bNz8M6Sew?si=hCeSToOI6zhFPqWr"
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
           </motion.div>
-          <div className="flex flex-row jutify-center mx-auto w-full gap-3 my-8">
+          <div className=" flex-row md:flex md:flex-row jutify-center mx-auto w-full gap-3 my-8">
             <AdvancementCard
               title="GitHub"
               subtitle="Nuestro Repositorio"
               link="https://github.com/NotARoomba/NivelesDeNiveles"
-              imagePath="/portfolio/hub.png"
+              imagePath="/img/portfolio/hub.png"
+              textColor='text-light'
+            />
+            <AdvancementCard
+              title="Política de Privacidad"
+              subtitle=""
+              link="https://nivelesdeniveles.org/policy_es.pdf"
+              imagePath="/img/portfolio/blog.png"
+              textColor='text-dark'
             />
           </div>
         </div>
-        <div className="w-7/12 mx-auto justify-center py-10">
+        <div id="us" className=" w-full lg:w-7/12 mx-auto justify-center py-10">
           <SectionHeader
             title="Equipo"
             subtitle="Cónoce al equipo Hacks Costeños"
           />
-          <div className="flex flex-row gap-8">
+          <div className="lg:flex lg:flex-row gap-8">
             <PersonCard
               name="Nathan Alspaugh"
               role="Programación y Hardware"
-              image="/team/nathan.jpg"
+              image="/img/team/nathan.jpg"
               github="https://github.com/NotARoomba"
               insta="https://www.instagram.com/notaroomba"
-              delay={0.25}
+              delay={screenX > 1024 ? 0.25 : 0}
             />
             <PersonCard
               name="Ashlee Yin"
               role="Diseño y Planeación"
-              image="/team/ash.jpg"
+              image="/img/team/ash.jpg"
               github="https://github.com/awangran"
               insta="https://www.instagram.com/ashlee_yin"
               linkedin="https://co.linkedin.com/in/ashlee-yin-romero-63204223a"
@@ -207,32 +246,132 @@ export default function Home() {
             <PersonCard
               name="Felipe Ochoa"
               role="Edición y Diseño"
-              image="/team/pipe.jpg"
+              image="/img/team/pipe.jpg"
               github="https://github.com/felipeochoat"
               insta="https://www.instagram.com/felipeochoat"
-              delay={0.25}
+              delay={screenX > 1024 ? 0.25 : 0}
             />
           </div>
         </div>
       </div>
-      <div className="w-full bg-accent-900/70 pb-12">
-        <div className="w-7/12 mx-auto justify-center py-10">
+      <div className="w-full bg-accent-900/70">
+        <div className="w-11/12 md:w-7/12 mx-auto justify-center py-10">
           <SectionHeader
             title="Herramientas"
             subtitle="Tecnologías que utilizamos"
           />
-          <Carousel
-            renderThumbs={() =>
-              technologies.map((_t, i) => (
-                <i key={i} className="bx bx-md text-dark bx-radio-circle" />
-              ))
-            }>
+          <Slide autoplay slidesToShow={1}>
             {technologies.map((img, i) => (
-              <img key={i} className="mx-12 h-48 " src={img} />
+              <div
+                key={i}
+                className="my-auto mx-auto h-full justify-center align-middle">
+                <SVG
+                  className="mx-auto my-auto align-middle justify-center"
+                  src={img.link}
+                  width={300}
+                  height={100}
+                  title={img.title}
+                />
+                {i > 3 && (
+                  <p className="text-center font-bold text-3xl mt-3">
+                    {img.title}
+                  </p>
+                )}
+              </div>
             ))}
-          </Carousel>
+          </Slide>
         </div>
       </div>
+      <div className="w-full bg-white pb-12 px-8">
+        <div className="md:w-7/12 mx-auto justify-center py-10">
+          <div className="flex flex-row">
+            <div className="justify-center mx-auto">
+              <p className="mb-2 text-4xl">Niveles De Niveles</p>
+              <p className=" text-lightText">Barranquilla, Colombia</p>
+              <p className=" text-lightText">Hacks Costeños</p>
+              <br />
+              <a
+                href="mailto:nivelesdniveles@gmail.com"
+                className="my-9 underline text-lightText">
+                nivelesdniveles@gmail.com
+              </a>
+              <br />
+              <a
+                href="https://github.com/NotARoomba/NivelesDeNiveles"
+                className="my-9 underline text-lightText">
+                GitHub
+              </a>
+              <br />
+              <a
+                href="https://nivelesdeniveles.org/policy_es.pdf"
+                className="my-9 underline text-lightText">
+                Política de Privacidad
+              </a>
+            </div>
+            <div className="justify-left mx-auto">
+              <p className="text-2xl">Enlaces</p>
+              <Link
+                className=" cursor-pointer underline"
+                activeClass="active"
+                to="home"
+                href="#home"
+                spy={true}
+                smooth={true}
+                duration={500}>
+                Inicio
+              </Link>
+              <br />
+              <Link
+                className=" cursor-pointer underline"
+                activeClass="active"
+                to="about"
+                href="#about"
+                spy={true}
+                smooth={true}
+                duration={500}>
+                Nuestra Misión
+              </Link>
+              <br />
+              <Link
+                className=" cursor-pointer underline"
+                activeClass="active"
+                to="disasters"
+                href="#disasters"
+                offset={-60}
+                spy={true}
+                smooth={true}
+                duration={500}>
+                Desastres
+              </Link>
+              <br />
+              <Link
+                className=" cursor-pointer underline"
+                activeClass="active"
+                to="resources"
+                href="#resources"
+                offset={-60}
+                spy={true}
+                smooth={true}
+                duration={500}>
+                Recursos
+              </Link>
+              <br />
+              <Link
+                className=" cursor-pointer underline"
+                activeClass="active"
+                to="us"
+                href="#us"
+                offset={-60}
+                spy={true}
+                smooth={true}
+                duration={500}>
+                Nosotros
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     </div>
   );
 }
