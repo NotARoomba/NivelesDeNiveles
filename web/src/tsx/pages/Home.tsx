@@ -7,6 +7,8 @@ import PersonCard from '../components/PersonCard';
 import 'react-slideshow-image/dist/styles.css';
 import {Slide} from 'react-slideshow-image';
 import SVG from 'react-inlinesvg';
+import SmartBanner from 'react-smartbanner';
+import 'react-smartbanner/dist/main.css';
 
 export default function Home() {
   const fadein = {
@@ -60,6 +62,7 @@ export default function Home() {
   ];
   return (
     <div id="home" className="text-black">
+      <SmartBanner title={'Niveles De Niveles'} />
       <div className=" bg-light-600 mx-auto my-auto justify-center flex-col lg:flex lg:flex-row-reverse h-auto py-32 px-2 lg:p-52">
         <div className="justify-center lg:justify-start my-auto mx-auto lg:mr-auto ">
           <img
