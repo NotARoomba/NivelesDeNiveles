@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './css/index.css';
+import './css/app-banner.css'
 import Home from './tsx/pages/Home';
 import Error from './tsx/pages/Error';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';

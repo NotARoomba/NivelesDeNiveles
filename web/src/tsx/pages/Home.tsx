@@ -8,7 +8,6 @@ import 'react-slideshow-image/dist/styles.css';
 import {Slide} from 'react-slideshow-image';
 import SVG from 'react-inlinesvg';
 import SmartBanner from 'react-smartbanner';
-import 'react-smartbanner/dist/main.css';
 import {AppStoreButton, GooglePlayButton} from 'react-mobile-app-button';
 
 export default function Home() {
@@ -228,8 +227,9 @@ export default function Home() {
                 textColor="text-dark"
               />
             </div>
-            <div className="flex flex-wrap justify-center mx-auto gap-8">
+            <div className="flex flex-wrap justify-center w-full mx-auto gap-8">
               <motion.div
+                className="mx-auto"
                 initial={{opacity: 0, y: 75}}
                 whileInView={{
                   opacity: 1,
@@ -246,6 +246,7 @@ export default function Home() {
                 />
               </motion.div>
               <motion.div
+                className="mx-auto"
                 initial={{opacity: 0, y: 75}}
                 whileInView={{
                   opacity: 1,
@@ -258,7 +259,7 @@ export default function Home() {
                   height={60}
                   width={200}
                   title="Descárgalo en"
-                  className="justify-center mx-auto mt-8"
+                  className="justify-center mx-auto mt-8 "
                 />
               </motion.div>
             </div>

@@ -1,6 +1,5 @@
 import {Link} from 'react-router-dom';
 import SmartBanner from 'react-smartbanner';
-import 'react-smartbanner/dist/main.css';
 
 export default function Error() {
   return (
