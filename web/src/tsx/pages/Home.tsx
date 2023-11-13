@@ -266,7 +266,7 @@ export default function Home() {
           </div>
           <div
             id="us"
-            className=" w-full lg:w-7/12 mx-auto justify-center py-10">
+            className=" w-full md:w-9/12 mx-auto justify-center py-10">
             <SectionHeader
               title="Equipo"
               subtitle="Cónoce al equipo Hacks Costeños"

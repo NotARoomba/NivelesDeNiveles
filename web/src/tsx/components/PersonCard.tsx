@@ -18,17 +18,17 @@ export default function PersonCard({
         y: 0,
         transition: {duration: 1, delay, ease: 'easeInOut'},
       }}>
-      <div className="w-3/5 lg:w-full h-auto aspect-square rounded-xl justify-center mx-auto relative group z-20 overflow-hidden">
+      <div className="w-4/5 sm:w-3/5 lg:w-full h-auto aspect-square rounded-xl justify-center mx-auto relative group z-20 overflow-hidden">
         <img src={image} className="rounded-xl -z-20" />
         <div className="w-full h-24 bg-accent-700/80 absolute -bottom-full group-hover:bottom-0 rounded-xl transition-all duration-500 z-10" />
 
         {/* <a href={github} className='absolute bottom-1/2 w-12 h-12 translate-y-1/2 font-bold text-xl bg-light left-1/2 -translate-x-1/2  z-30 opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-full justify-center'>
         <i className={'bx bx-md text-dark bx-link-alt justify-center mx-1.5 my-1.5'} />
       </a> */}
-        <p className="absolute bottom-8 font-bold text-2xl w-64 text-center text-neutral-800 left-1/2 -translate-x-1/2 z-30 translate-y-32 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+        <p className="absolute  bottom-10 font-bold text-xl xl:text-2xl w-full text-center text-neutral-800 left-1/2 -translate-x-1/2 z-30 translate-y-32 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
           {name}
         </p>
-        <p className="absolute bottom-3 text-lg lg:text-xl px-2 font-semibold text-neutral-800 w-64 left-1/2 text-center -translate-x-1/2 z-30 translate-y-32 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
+        <p className="absolute bottom-5 text-lg w-full xl:text-xl px-2 text-neutral-800 left-1/2 text-center -translate-x-1/2 z-30 translate-y-32 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
           {role}
         </p>
       </div>
