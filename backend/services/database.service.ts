@@ -9,6 +9,7 @@ import NivelesEvents from '../models/events';
 import haversine from 'haversine-distance';
 import * as OneSignal from 'onesignal-node';
 import User from '../models/user';
+import { CreateNotificationBody } from 'onesignal-node/lib/types';
 
 const env = dotenv.load({
   MONGODB: String,
@@ -255,7 +256,7 @@ export async function connectToDatabase(io: Server) {
         );
         // need to send a notification warning the users if they are in a risk zone, safe zone (from a danger zone), or a danger zone
         const currentLevel = getLevel(updatedIncident.numberOfReports);
-        let notification = {
+        let notification: CreateNotificationBody = {
           contents: {
             en: `You are now in a ${
               currentLevel === DangerLevel.SAFE
@@ -292,14 +293,15 @@ export async function connectToDatabase(io: Server) {
             fr: `Niveles De Niveles`,
             'zh-Hans': `Niveles De Niveles`,
           },
-          filters: [
-            {
-              field: 'location',
-              radius: getRange(updatedIncident.numberOfReports),
-              lat: updatedIncident.location.coordinates[1],
-              long: updatedIncident.location.coordinates[0],
-            },
-          ],
+          external_id: '',
+          // filters: [
+          //   {
+          //     field: 'location',
+          //     radius: getRange(updatedIncident.numberOfReports),
+          //     lat: updatedIncident.location.coordinates[1],
+          //     long: updatedIncident.location.coordinates[0],
+          //   },
+          // ],
         };
         try {
           await onesignal.createNotification(notification);
@@ -344,21 +346,22 @@ export async function connectToDatabase(io: Server) {
           let users = outerUsers.filter(u => !innerUsers.includes(u));
           // need to check if there are any users in that radius and then
           for (let user of users) {
-            notification.filters[0].radius = 5;
-            notification.filters[0].lat = user.location.coordinates[1];
-            notification.filters[0].long = user.location.coordinates[0];
+            notification.external_id = user.number;
+            // notification.filters[0].radius = 5;
+            // notification.filters[0].lat = user.location.coordinates[1];
+            // notification.filters[0].long = user.location.coordinates[0];
             try {
               await onesignal.createNotification(notification);
-              const otherUsers = (await collections.users
-                ?.find({
-                  location: {
-                    $geoWithin: {
-                      $centerSphere: [user.location.coordinates, 5 / 6378100],
-                    },
-                  },
-                })
-                .toArray()) as unknown as User[];
-              users = users.filter(u => !otherUsers.includes(u));
+              // const otherUsers = (await collections.users
+              //   ?.find({
+              //     location: {
+              //       $geoWithin: {
+              //         $centerSphere: [user.location.coordinates, 5 / 6378100],
+              //       },
+              //     },
+              //   })
+              //   .toArray()) as unknown as User[];
+              // users = users.filter(u => !otherUsers.includes(u));
               // console.log(response.body);
             } catch (e) {
               if (e instanceof OneSignal.HTTPError) {

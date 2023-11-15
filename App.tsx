@@ -8,12 +8,20 @@ import {callAPI, getData, storeData} from './src/utils/Functions';
 import STATUS_CODES from './backend/models/status';
 import Config from 'react-native-config';
 export default function App() {
-  const [logged, setLogged] = useState(false);
+  const [logged, setL] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [isDarkMode, _setDarkMode] = useState(
     // Appearance.getColorScheme() === 'dark',
     false,
   );
+  const setLogged = async (l: boolean) => {
+    if (l) {
+      OneSignal.login(await getData('number') ?? '');
+    } else {
+      OneSignal.logout();
+    }
+    setL(l)
+  }
   // const updateDarkMode = (v: boolean) =>
   // Appearance.setColorScheme(v ? 'light' : 'dark');
   useEffect(() => {
