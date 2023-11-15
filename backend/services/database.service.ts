@@ -256,7 +256,7 @@ export async function connectToDatabase(io: Server) {
         );
         // need to send a notification warning the users if they are in a risk zone, safe zone (from a danger zone), or a danger zone
         const currentLevel = getLevel(updatedIncident.numberOfReports);
-        let notification: CreateNotificationBody = {
+        let notification = {
           contents: {
             en: `You are now in a ${
               currentLevel === DangerLevel.SAFE
@@ -293,7 +293,8 @@ export async function connectToDatabase(io: Server) {
             fr: `Niveles De Niveles`,
             'zh-Hans': `Niveles De Niveles`,
           },
-          external_id: '',
+          // external_id: '',
+          include_aliases: { "external_id": ['']}
           // filters: [
           //   {
           //     field: 'location',
@@ -316,7 +317,7 @@ export async function connectToDatabase(io: Server) {
           })
           .toArray()) as unknown as User[];
           for (const user of usersInZone) {
-            notification.external_id = user.number;
+            notification.include_aliases.external_id[0] = user.number;
             try {
               await onesignal.createNotification(notification);
               // console.log(response.body);
@@ -361,7 +362,7 @@ export async function connectToDatabase(io: Server) {
           let users = outerUsers.filter(u => !innerUsers.includes(u));
           // need to check if there are any users in that radius and then
           for (let user of users) {
-            notification.external_id = user.number;
+            notification.include_aliases.external_id[0] = user.number;
             // notification.filters[0].radius = 5;
             // notification.filters[0].lat = user.location.coordinates[1];
             // notification.filters[0].long = user.location.coordinates[0];
