@@ -294,6 +294,7 @@ export async function connectToDatabase(io: Server) {
             'zh-Hans': `Niveles De Niveles`,
           },
           // external_id: '',
+          included_segments: ['Subscribed Users'],
           include_aliases: { "external_id": ['']}
           // filters: [
           //   {
