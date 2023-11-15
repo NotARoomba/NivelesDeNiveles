@@ -303,16 +303,31 @@ export async function connectToDatabase(io: Server) {
           //   },
           // ],
         };
-        try {
-          await onesignal.createNotification(notification);
-          // console.log(response.body);
-        } catch (e) {
-          if (e instanceof OneSignal.HTTPError) {
-            // When status code of HTTP response is not 2xx, HTTPError is thrown.
-            console.log(e.statusCode);
-            console.log(e.body);
+        const usersInZone = (await collections.users
+          ?.find({
+            location: {
+              $geoWithin: {
+                $centerSphere: [
+                  updatedIncident.location.coordinates,
+                  getRange(updatedIncident.numberOfReports) / 6378100,
+                ],
+              },
+            },
+          })
+          .toArray()) as unknown as User[];
+          for (const user of usersInZone) {
+            notification.external_id = user.number;
+            try {
+              await onesignal.createNotification(notification);
+              // console.log(response.body);
+            } catch (e) {
+              if (e instanceof OneSignal.HTTPError) {
+                // When status code of HTTP response is not 2xx, HTTPError is thrown.
+                console.log(e.statusCode);
+                console.log(e.body);
+              }
+            }
           }
-        }
         // need to check for all the users that once were in the danger zone to then notify them that they are now in a safe zone
         console.log(
           updatedIncident.numberOfReports,
