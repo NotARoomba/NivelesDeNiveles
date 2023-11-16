@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@bam.tech/react-native-make": "^3.0.3",
+    "@mauron85/react-native-background-geolocation": "^0.6.3",
     "@powerdesigninc/react-native-prompt": "^0.1.2",
     "@react-native-async-storage/async-storage": "^1.19.4",
     "@react-native-community/geolocation": "^3.1.0",
@@ -25,7 +26,6 @@
     "react-native-config": "^1.5.1",
     "react-native-country-codes-picker": "^2.3.4",
     "react-native-fs": "^2.20.0",
-    "react-native-get-location": "^4.0.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-loading-spinner-overlay": "^3.0.1",
     "react-native-localization": "^2.3.2",

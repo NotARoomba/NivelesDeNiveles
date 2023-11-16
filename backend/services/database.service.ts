@@ -295,7 +295,8 @@ export async function connectToDatabase(io: Server) {
           },
           // external_id: '',
           included_segments: ['Total Subscriptions'],
-          include_aliases: { "external_id": ['']}
+          include_aliases: { "external_id": ['']},
+          target_channel: 'push'
           // filters: [
           //   {
           //     field: 'location',
