@@ -177,10 +177,6 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         // execute long running task
         // eg. ajax post location
         // IMPORTANT: task has to be ended by endTask
-      Alert.alert('location still');
-
-      console.log(stationaryLocation)
-
         await callAPI('/users/', 'POST', {
                 number: await getData('number'),
                 location: {
@@ -195,8 +191,6 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       // handle your locations here
       // to perform long running operation on iOS
       // you need to create background task
-      console.log(location)
-      Alert.alert('location changes');
       BackgroundGeolocation.startTask(async taskKey => {
         // execute long running task
         // eg. ajax post location
