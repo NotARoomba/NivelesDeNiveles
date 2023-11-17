@@ -363,7 +363,7 @@ export async function connectToDatabase(io: Server) {
             })
             .toArray()) as unknown as User[];
           let users = outerUsers.filter(u => !innerUsers.includes(u));
-          users = users.filter(u => !usersInZone.includes(u));
+          users = users.filter(u => usersInZone.filter(uz => uz.number === u.number).length === 0);
           // need to check if there are any users in that radius and then
           for (let user of users) {
             // console.log(user);
