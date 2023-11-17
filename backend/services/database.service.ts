@@ -334,9 +334,9 @@ export async function connectToDatabase(io: Server) {
         }
         // need to check for all the users that once were in the danger zone to then notify them that they are now in a safe zone
         console.log(
-          updatedIncident.numberOfReports,
-          beforeIncident.numberOfReports,
-        );
+          `Updated Incident Number: ${updatedIncident.numberOfReports}, Before Incident Number: 
+          ${beforeIncident.numberOfReports}
+        `);
         if (updatedIncident.numberOfReports < beforeIncident.numberOfReports) {
           const outerUsers = (await collections.users
             ?.find({
