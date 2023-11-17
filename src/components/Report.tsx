@@ -132,7 +132,7 @@ export default function Report({
         </Text>
         <View className="w-1/3 align-middle flex">
           <TouchableOpacity
-            onPress={logoutFunction}
+            onPress={() => {logoutFunction();OneSignal.logout()}}
             className="-mt-0.5 pr-1 mr-2 max-w-[47px] justify-self-end ml-auto">
             <Icon name="log-out" color="#180155" size={40} />
           </TouchableOpacity>

@@ -17,8 +17,6 @@ export default function App() {
   const setLogged = async (l: boolean) => {
     if (l) {
       OneSignal.login(await getData('number') ?? '');
-    } else {
-      OneSignal.logout();
     }
     setL(l)
   }
