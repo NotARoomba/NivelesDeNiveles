@@ -10,6 +10,8 @@ usersRouter.use(express.json());
 usersRouter.post('/', async (req: Request, res: Response) => {
   const data: User = req.body;
   try {
+    //need to check if user moved into a danger zone
+    // maybe move that check into a function
     if (collections.users) {
       await collections.users.updateOne(
         {number: data.number},
