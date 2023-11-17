@@ -84,7 +84,7 @@ export default function Login({
     SplashScreen.hide();
   });
   return (
-    <SafeAreaView className=" bg-light">
+    <SafeAreaView className=" bg-light text-light dark:text-dark">
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <ScrollView className="pb-[1000px]">
         <Spinner
