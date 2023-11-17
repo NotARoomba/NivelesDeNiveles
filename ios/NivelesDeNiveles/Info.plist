@@ -43,6 +43,8 @@
     <string>$(PRODUCT_NAME) needs your location to automatically check if you are in danger.</string>
     <key>NSLocationAlwaysUsageDescription</key>
     <string>$(PRODUCT_NAME) needs your location to automatically check if you are in danger.</string>
+    <key>NSMotionUsageDescription</key>
+    <string>$(PRODUCT_NAME) needs your motion data to automatically check if you are in danger.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Feather.ttf</string>

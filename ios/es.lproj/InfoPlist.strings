@@ -9,3 +9,4 @@ NSCameraUsageDescription = "Niveles De Niveles necesita su cámara para tomar un
 NSLocationWhenInUseUsageDescription = "Niveles De Niveles necesita tu ubicación para comprobar automáticamente si estás en peligro.";
 NSLocationAlwaysUsageDescription = "Niveles De Niveles necesita tu ubicación para comprobar automáticamente si estás en peligro.";
 NSLocationAlwaysAndWhenInUseUsageDescription = "Niveles De Niveles necesita tu ubicación para comprobar automáticamente si estás en peligro.";
+NSMotionUsageDescription = "Niveles De Niveles necesita tus datos de movimiento para comprobar automáticamente si estás en peligro.";
