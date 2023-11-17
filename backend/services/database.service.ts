@@ -40,7 +40,7 @@ export const collections: {
 // (# of reports * 250) + 500)
 
 function getRange(n: number) {
-  return n * 500 + 250;
+  return n * 50 + 50;
 }
 
 function getLevel(n: number) {
