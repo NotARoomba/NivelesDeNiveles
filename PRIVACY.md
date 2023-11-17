@@ -1,4 +1,5 @@
 # Privacy Policy
+
 Last updated: October 31, 2023
 
 ### 1. Introduction
@@ -11,9 +12,9 @@ This Privacy Policy governs the collection, use, and protection of your personal
    We collect your location data only when you grant us permission through your device settings. This data is used for providing location-based services.
 
 2. Phone Number:
-   We may collect your phone number when you voluntarily provide it for account registration and  verification purposes.
+   We may collect your phone number when you voluntarily provide it for account registration and verification purposes.
 
-3. Pictures: 
+3. Pictures:
    We may collect pictures that you upload or share within the App for reporting disasters.
 
 ### 3. How We Use Your Information
@@ -24,7 +25,7 @@ This Privacy Policy governs the collection, use, and protection of your personal
 2. Phone Number:
    We use your phone number for the following purpose: user account verification.
 
-3. Pictures: 
+3. Pictures:
    We use the pictures you upload or share for the following purposes: display content or verify disasters information.
 
 ### 4. Data Sharing
@@ -38,11 +39,12 @@ We employ reasonable security measures to protect your personal information from
 ### 6. Your Rights
 
 You have the following rights with respect to your personal information:
-   - Access: You can request access to your personal data and details about how we use it.
-   - Rectification: You can request corrections to inaccurate or incomplete data.
-   - Erasure: You can request the deletion of your data under certain circumstances.
-   - Objection: You can object to the processing of your data for specific purposes.
-   - Data Portability: You can request a copy of your data in a commonly used format.
+
+- Access: You can request access to your personal data and details about how we use it.
+- Rectification: You can request corrections to inaccurate or incomplete data.
+- Erasure: You can request the deletion of your data under certain circumstances.
+- Objection: You can object to the processing of your data for specific purposes.
+- Data Portability: You can request a copy of your data in a commonly used format.
 
 ### 7. Changes to this Policy
 

@@ -91,15 +91,22 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       } else {
         setLocationPerms(true);
         try {
-          GeoLocation.getCurrentPosition(async (location) => {
-            await callAPI('/users/', 'POST', {
-              number: await getData('number'),
-              location: {
-                coordinates: [location.coords.longitude, location.coords.latitude],
-                type: 'Point',
-              },
-            });
-          }, () => null, {enableHighAccuracy: true, maximumAge: 0});
+          GeoLocation.getCurrentPosition(
+            async location => {
+              await callAPI('/users/', 'POST', {
+                number: await getData('number'),
+                location: {
+                  coordinates: [
+                    location.coords.longitude,
+                    location.coords.latitude,
+                  ],
+                  type: 'Point',
+                },
+              });
+            },
+            () => null,
+            {enableHighAccuracy: true, maximumAge: 0},
+          );
         } catch (e) {
           console.log(e);
         }
@@ -171,23 +178,26 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
     //   () => null,
     //   {enableHighAccuracy: true, maximumAge: 0, distanceFilter: 10},
     // );
-    BackgroundGeolocation.on('stationary', (stationaryLocation) => {
+    BackgroundGeolocation.on('stationary', stationaryLocation => {
       // handle stationary locations here
       BackgroundGeolocation.startTask(async taskKey => {
         // execute long running task
         // eg. ajax post location
         // IMPORTANT: task has to be ended by endTask
         await callAPI('/users/', 'POST', {
-                number: await getData('number'),
-                location: {
-                  coordinates: [stationaryLocation.longitude, stationaryLocation.latitude],
-                  type: 'Point',
-                },
-              });
+          number: await getData('number'),
+          location: {
+            coordinates: [
+              stationaryLocation.longitude,
+              stationaryLocation.latitude,
+            ],
+            type: 'Point',
+          },
+        });
         BackgroundGeolocation.endTask(taskKey);
       });
     });
-    BackgroundGeolocation.on('location', (location) => {
+    BackgroundGeolocation.on('location', location => {
       // handle your locations here
       // to perform long running operation on iOS
       // you need to create background task
@@ -196,17 +206,17 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         // eg. ajax post location
         // IMPORTANT: task has to be ended by endTask
         await callAPI('/users/', 'POST', {
-                number: await getData('number'),
-                location: {
-                  coordinates: [location.longitude, location.latitude],
-                  type: 'Point',
-                },
-              });
+          number: await getData('number'),
+          location: {
+            coordinates: [location.longitude, location.latitude],
+            type: 'Point',
+          },
+        });
         BackgroundGeolocation.endTask(taskKey);
       });
     });
     if (bgLocationStatus === RESULTS.GRANTED) {
-      BackgroundGeolocation.start(); 
+      BackgroundGeolocation.start();
     }
     return () => {
       unsubscribe();
@@ -254,16 +264,23 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       setLocationPerms(true);
       OneSignal.Location.requestPermission();
       try {
-        GeoLocation.getCurrentPosition(async (location) => {
-          // console.log(location);
-          await callAPI('/users/', 'POST', {
-            number: await getData('number'),
-            location: {
-              coordinates: [location.coords.longitude, location.coords.latitude],
-              type: 'Point',
-            },
-          });
-        }, () => null, {enableHighAccuracy: true, maximumAge: 0});
+        GeoLocation.getCurrentPosition(
+          async location => {
+            // console.log(location);
+            await callAPI('/users/', 'POST', {
+              number: await getData('number'),
+              location: {
+                coordinates: [
+                  location.coords.longitude,
+                  location.coords.latitude,
+                ],
+                type: 'Point',
+              },
+            });
+          },
+          () => null,
+          {enableHighAccuracy: true, maximumAge: 0},
+        );
       } catch (e) {
         console.log(e);
       }
@@ -279,16 +296,23 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         setLocationPerms(true);
         OneSignal.Location.requestPermission();
         try {
-          GeoLocation.getCurrentPosition(async (location) => {
-            // console.log(location);
-            await callAPI('/users/', 'POST', {
-              number: await getData('number'),
-              location: {
-                coordinates: [location.coords.longitude, location.coords.latitude],
-                type: 'Point',
-              },
-            });
-          }, () => null, {enableHighAccuracy: true, maximumAge: 0});
+          GeoLocation.getCurrentPosition(
+            async location => {
+              // console.log(location);
+              await callAPI('/users/', 'POST', {
+                number: await getData('number'),
+                location: {
+                  coordinates: [
+                    location.coords.longitude,
+                    location.coords.latitude,
+                  ],
+                  type: 'Point',
+                },
+              });
+            },
+            () => null,
+            {enableHighAccuracy: true, maximumAge: 0},
+          );
         } catch (e) {
           console.log(e);
         }
@@ -336,7 +360,12 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
           description={Localizations.activateBackgroundLocationDesc}
           isActive={bglocationModal}
           setActive={setBGLocationModal}
-          yesFunction={Linking.openSettings}
+          yesFunction={async () => {
+            if (
+              (await check(PERMISSIONS.IOS.LOCATION_ALWAYS)) !== RESULTS.GRANTED
+            )
+              Linking.openSettings();
+          }}
         />
         {locationPerms ? (
           <View>
@@ -348,16 +377,20 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
               onPress={async e => {
                 // e.preventDefault();
                 try {
-                  GeoLocation.getCurrentPosition(async (location) => {
-                    if (mapRef.current) {
-                      mapRef.current.animateToRegion({
-                        latitude: location.coords.latitude,
-                        longitude: location.coords.longitude,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                      });
-                    }
-                  }, () => null, {enableHighAccuracy: true, maximumAge: 0});
+                  GeoLocation.getCurrentPosition(
+                    async location => {
+                      if (mapRef.current) {
+                        mapRef.current.animateToRegion({
+                          latitude: location.coords.latitude,
+                          longitude: location.coords.longitude,
+                          latitudeDelta: 0.0922,
+                          longitudeDelta: 0.0421,
+                        });
+                      }
+                    },
+                    () => null,
+                    {enableHighAccuracy: true, maximumAge: 0},
+                  );
                 } catch (e) {
                   console.log(e);
                 }

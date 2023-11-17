@@ -7,6 +7,7 @@ import Login from './src/pages/Login';
 import {callAPI, getData, storeData} from './src/utils/Functions';
 import STATUS_CODES from './backend/models/status';
 import Config from 'react-native-config';
+import { Localizations } from './src/utils/Localizations';
 export default function App() {
   const [logged, setL] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -16,14 +17,15 @@ export default function App() {
   );
   const setLogged = async (l: boolean) => {
     if (l) {
-      OneSignal.login(await getData('number') ?? '');
+      OneSignal.login((await getData('number')) ?? '');
+      OneSignal.User.setLanguage(Localizations.getLanguage());
     }
-    setL(l)
-  }
+    setL(l);
+  };
   // const updateDarkMode = (v: boolean) =>
   // Appearance.setColorScheme(v ? 'light' : 'dark');
   useEffect(() => {
-    OneSignal.Debug.setLogLevel(LogLevel.Verbose);
+    // OneSignal.Debug.setLogLevel(LogLevel.Verbose);
     // OneSignal Initialization
     OneSignal.initialize(Config.ONESIGNAL_APP_ID);
 

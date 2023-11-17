@@ -9,7 +9,7 @@ import NivelesEvents from '../models/events';
 import haversine from 'haversine-distance';
 import * as OneSignal from 'onesignal-node';
 import User from '../models/user';
-import { CreateNotificationBody } from 'onesignal-node/lib/types';
+import {CreateNotificationBody} from 'onesignal-node/lib/types';
 
 const env = dotenv.load({
   MONGODB: String,
@@ -294,8 +294,8 @@ export async function connectToDatabase(io: Server) {
             'zh-Hans': `Niveles De Niveles`,
           },
           // external_id: '',
-          include_aliases: { "external_id": ['']},
-          target_channel: 'push'
+          include_aliases: {external_id: ['']},
+          target_channel: 'push',
           // filters: [
           //   {
           //     field: 'location',
@@ -317,21 +317,21 @@ export async function connectToDatabase(io: Server) {
             },
           })
           .toArray()) as unknown as User[];
-          for (const user of usersInZone) {
-            // console.log(user);
-            notification.include_aliases.external_id[0] = user.number;
-            try {
-              await onesignal.createNotification(notification);
-              // console.log(response.body);
-            } catch (e) {
-              // console.log(e);
-              if (e instanceof OneSignal.HTTPError) {
-                // When status code of HTTP response is not 2xx, HTTPError is thrown.
-                console.log(e.statusCode);
-                console.log(e.body);
-              }
+        for (const user of usersInZone) {
+          // console.log(user);
+          notification.include_aliases.external_id[0] = user.number;
+          try {
+            await onesignal.createNotification(notification);
+            // console.log(response.body);
+          } catch (e) {
+            // console.log(e);
+            if (e instanceof OneSignal.HTTPError) {
+              // When status code of HTTP response is not 2xx, HTTPError is thrown.
+              console.log(e.statusCode);
+              console.log(e.body);
             }
           }
+        }
         // need to check for all the users that once were in the danger zone to then notify them that they are now in a safe zone
         console.log(
           updatedIncident.numberOfReports,
@@ -363,7 +363,9 @@ export async function connectToDatabase(io: Server) {
             })
             .toArray()) as unknown as User[];
           let users = outerUsers.filter(u => !innerUsers.includes(u));
-          users = users.filter(u => usersInZone.filter(uz => uz.number === u.number).length === 0);
+          users = users.filter(
+            u => usersInZone.filter(uz => uz.number === u.number).length === 0,
+          );
           // need to check if there are any users in that radius and then
           for (let user of users) {
             // console.log(user);
