@@ -11,7 +11,8 @@ usersRouter.post('/', async (req: Request, res: Response) => {
   const data: User = req.body;
   try {
     //need to check if user moved into a danger zone
-    // maybe move that check into a function
+    // maybe move that check into a function later
+    console.log(data, Date.now().toString());
     if (collections.users) {
       await collections.users.updateOne(
         {number: data.number},
