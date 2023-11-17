@@ -156,7 +156,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
       stationaryRadius: 50,
       distanceFilter: 10,
-      debug: true,
+      debug: false,
       startOnBoot: true,
       stopOnTerminate: false,
       locationProvider: BackgroundGeolocation.DISTANCE_FILTER_PROVIDER,
