@@ -318,13 +318,13 @@ export async function connectToDatabase(io: Server) {
           })
           .toArray()) as unknown as User[];
           for (const user of usersInZone) {
-            console.log(user);
+            // console.log(user);
             notification.include_aliases.external_id[0] = user.number;
             try {
               await onesignal.createNotification(notification);
               // console.log(response.body);
             } catch (e) {
-              console.log(e);
+              // console.log(e);
               if (e instanceof OneSignal.HTTPError) {
                 // When status code of HTTP response is not 2xx, HTTPError is thrown.
                 console.log(e.statusCode);
@@ -363,9 +363,10 @@ export async function connectToDatabase(io: Server) {
             })
             .toArray()) as unknown as User[];
           let users = outerUsers.filter(u => !innerUsers.includes(u));
+          users = users.filter(u => !usersInZone.includes(u));
           // need to check if there are any users in that radius and then
           for (let user of users) {
-            console.log(user);
+            // console.log(user);
             notification.include_aliases.external_id[0] = user.number;
             // notification.filters[0].radius = 5;
             // notification.filters[0].lat = user.location.coordinates[1];
