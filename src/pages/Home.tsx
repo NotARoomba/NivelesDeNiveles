@@ -181,7 +181,6 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         ) {
           setTimeout(() => setBGLocationModal(true), 3000);
         } else if (bgLocationStatus === RESULTS.GRANTED) {
-          console.log('ssasd');
           BackgroundGeolocation.start();
         }
       }
