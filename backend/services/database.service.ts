@@ -336,7 +336,8 @@ export async function connectToDatabase(io: Server) {
         console.log(
           `Updated Incident Number: ${updatedIncident.numberOfReports}, Before Incident Number: 
           ${beforeIncident.numberOfReports}
-        `);
+        `,
+        );
         if (updatedIncident.numberOfReports < beforeIncident.numberOfReports) {
           const outerUsers = (await collections.users
             ?.find({

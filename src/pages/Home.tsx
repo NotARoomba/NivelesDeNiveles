@@ -68,93 +68,10 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
     sensors: [],
   });
   useEffect(() => {
-    let bgLocationStatus: string = RESULTS.DENIED;
-    async function updateMap() {
-      let curLocationStatus = null;
-      if (Platform.OS == 'ios') {
-        curLocationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-        bgLocationStatus = await check(PERMISSIONS.IOS.LOCATION_ALWAYS);
-        // console.log(bgLocationStatus);
-      } else if (Platform.OS == 'android') {
-        curLocationStatus = await check(
-          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-        );
-        bgLocationStatus = await check(
-          PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
-        );
-      }
-      if (
-        curLocationStatus != RESULTS.GRANTED &&
-        bgLocationStatus != RESULTS.GRANTED
-      ) {
-        setLocationModal(true);
-      } else {
-        setLocationPerms(true);
-        try {
-          GeoLocation.getCurrentPosition(
-            async location => {
-              await callAPI('/users/', 'POST', {
-                number: await getData('number'),
-                location: {
-                  coordinates: [
-                    location.coords.longitude,
-                    location.coords.latitude,
-                  ],
-                  type: 'Point',
-                },
-              });
-            },
-            () => null,
-            {enableHighAccuracy: true, maximumAge: 0},
-          );
-        } catch (e) {
-          console.log(e);
-        }
-        if (
-          bgLocationStatus !== RESULTS.GRANTED &&
-          bgLocationStatus !== RESULTS.UNAVAILABLE
-        ) {
-          setTimeout(() => setBGLocationModal(true), 3000);
-        }
-      }
-      const userNumber = (await getData('number')) as string;
-      const res = await callAPI('/users/' + userNumber, 'GET');
-      if (res.status !== STATUS_CODES.SUCCESS) {
-        if (res.status === STATUS_CODES.NO_CONNECTION)
-          Alert.alert(Localizations.error, Localizations.NO_CONNECTION);
-        else Alert.alert(Localizations.error, Localizations.GENERIC_ERROR);
-      } else {
-        setUser(res.user);
-        //get location and update database with location
-        //then open a websocket connecton listening for updates around the location
-        const socket = io(Config.API_URL);
-        // socket.emit(NivelesEvents.CONNECT)
-        // console.log(user)
-        socket.on(NivelesEvents.UPDATE_LOCATION_DATA, () => {
-          socket.emit(
-            NivelesEvents.REQUEST_LOCATION_DATA,
-            res.user.number,
-            (locationData: LocationData, user: User) => {
-              setLocationData(locationData);
-              setUser(user);
-              // console.log(locationData)
-            },
-          );
-        });
-      }
-      SplashScreen.hide();
-    }
-    updateMap();
-
-    const unsubscribe = NetInfo.addEventListener(async state => {
-      if (state.isInternetReachable) {
-        updateMap();
-      } else {
-      }
-    });
+    let isUpdating = false;
     BackgroundGeolocation.configure({
       desiredAccuracy: BackgroundGeolocation.HIGH_ACCURACY,
-      stationaryRadius: 10,
+      stationaryRadius: 50,
       distanceFilter: 10,
       debug: false,
       startOnBoot: true,
@@ -215,15 +132,99 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         BackgroundGeolocation.endTask(taskKey);
       });
     });
-    if (bgLocationStatus === RESULTS.GRANTED) {
-      BackgroundGeolocation.start();
+    let bgLocationStatus: string = RESULTS.DENIED;
+    async function updateMap() {
+      isUpdating = true;
+      let curLocationStatus = null;
+      if (Platform.OS == 'ios') {
+        curLocationStatus = await check(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+        bgLocationStatus = await check(PERMISSIONS.IOS.LOCATION_ALWAYS);
+        // console.log(bgLocationStatus);
+      } else if (Platform.OS == 'android') {
+        curLocationStatus = await check(
+          PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
+        );
+        bgLocationStatus = await check(
+          PERMISSIONS.ANDROID.ACCESS_BACKGROUND_LOCATION,
+        );
+      }
+      if (
+        curLocationStatus != RESULTS.GRANTED &&
+        bgLocationStatus != RESULTS.GRANTED
+      ) {
+        setLocationModal(true);
+      } else {
+        setLocationPerms(true);
+        try {
+          GeoLocation.getCurrentPosition(
+            async location => {
+              await callAPI('/users/', 'POST', {
+                number: await getData('number'),
+                location: {
+                  coordinates: [
+                    location.coords.longitude,
+                    location.coords.latitude,
+                  ],
+                  type: 'Point',
+                },
+              });
+            },
+            () => null,
+            {enableHighAccuracy: true, maximumAge: 0},
+          );
+        } catch (e) {
+          console.log(e);
+        }
+        if (
+          bgLocationStatus !== RESULTS.GRANTED &&
+          bgLocationStatus !== RESULTS.UNAVAILABLE
+        ) {
+          setTimeout(() => setBGLocationModal(true), 3000);
+        } else if (bgLocationStatus === RESULTS.GRANTED) {
+          console.log('ssasd');
+          BackgroundGeolocation.start();
+        }
+      }
+      const userNumber = (await getData('number')) as string;
+      const res = await callAPI('/users/' + userNumber, 'GET');
+      if (res.status !== STATUS_CODES.SUCCESS) {
+        if (res.status === STATUS_CODES.NO_CONNECTION)
+          Alert.alert(Localizations.error, Localizations.NO_CONNECTION);
+        else Alert.alert(Localizations.error, Localizations.GENERIC_ERROR);
+      } else {
+        setUser(res.user);
+        //get location and update database with location
+        //then open a websocket connecton listening for updates around the location
+        const socket = io(Config.API_URL);
+        // socket.emit(NivelesEvents.CONNECT)
+        // console.log(user)
+        socket.on(NivelesEvents.UPDATE_LOCATION_DATA, () => {
+          socket.emit(
+            NivelesEvents.REQUEST_LOCATION_DATA,
+            res.user.number,
+            (locationData: LocationData, user: User) => {
+              setLocationData(locationData);
+              setUser(user);
+              // console.log(locationData)
+            },
+          );
+        });
+      }
+      SplashScreen.hide();
     }
+    updateMap();
+
+    const unsubscribe = NetInfo.addEventListener(async state => {
+      if (state.isInternetReachable && !isUpdating) {
+        updateMap();
+      }
+    });
     return () => {
       unsubscribe();
       // WatchGeoLocation.clearWatch(geoWatch);
       BackgroundGeolocation.removeAllListeners();
     };
-  }, [locationPerms]);
+  }, []);
   useEffect(() => {
     if (u) {
       setRegion({
