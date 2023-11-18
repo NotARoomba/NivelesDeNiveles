@@ -16,7 +16,7 @@ usersRouter.post('/', async (req: Request, res: Response) => {
   try {
     //need to check if user moved into a danger zone
     // maybe move that check into a function later
-    console.log(data, Date.now().toString());
+    // console.log(data, Date.now().toString());
     //need to check if currently in incident and then check if previous location is in incident
     if (data.location) {
       let incidents = (await collections.incidents
