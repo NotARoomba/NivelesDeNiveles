@@ -9,7 +9,6 @@ import NivelesEvents from '../models/events';
 import haversine from 'haversine-distance';
 import * as OneSignal from 'onesignal-node';
 import User from '../models/user';
-import {CreateNotificationBody} from 'onesignal-node/lib/types';
 
 const env = dotenv.load({
   MONGODB: String,
@@ -24,7 +23,7 @@ const env = dotenv.load({
   ONESIGNAL_API_KEY: String,
 });
 
-const onesignal = new OneSignal.Client(
+export const onesignal = new OneSignal.Client(
   env.ONESIGNAL_APP_ID,
   env.ONESIGNAL_API_KEY,
 );
@@ -49,6 +48,58 @@ function getLevel(n: number) {
     : n < 6
     ? DangerLevel.RISK
     : DangerLevel.DANGER;
+}
+
+export function getNotification(currentLevel: DangerLevel, number: string) {
+  return {
+    contents: {
+      en: `You are now in a ${
+        currentLevel === DangerLevel.SAFE
+          ? 'safe'
+          : currentLevel === DangerLevel.RISK
+          ? 'risk'
+          : 'danger'
+      } zone!`,
+      es: `Ahora se encuentra en una zona ${
+        currentLevel === DangerLevel.SAFE
+          ? 'segura'
+          : currentLevel === DangerLevel.RISK
+          ? 'de riesgo'
+          : 'de peligro'
+      }!`,
+      fr: `Vous êtes dans une zone de ${
+        currentLevel === DangerLevel.SAFE
+          ? 'sûr'
+          : currentLevel === DangerLevel.RISK
+          ? 'risque'
+          : 'danger'
+      }!`,
+      'zh-Hans': `该地区的状态${
+        currentLevel === DangerLevel.SAFE
+          ? '安全'
+          : currentLevel === DangerLevel.RISK
+          ? '风险'
+          : '危险'
+      }!`,
+    },
+    headings: {
+      en: `Niveles De Niveles`,
+      es: `Niveles De Niveles`,
+      fr: `Niveles De Niveles`,
+      'zh-Hans': `Niveles De Niveles`,
+    },
+    // external_id: '',
+    include_aliases: {external_id: [number]},
+    target_channel: 'push',
+    // filters: [
+    //   {
+    //     field: 'location',
+    //     radius: getRange(updatedIncident.numberOfReports),
+    //     lat: updatedIncident.location.coordinates[1],
+    //     long: updatedIncident.location.coordinates[0],
+    //   },
+    // ],
+  };
 }
 
 export async function connectToDatabase(io: Server) {
@@ -256,55 +307,6 @@ export async function connectToDatabase(io: Server) {
         );
         // need to send a notification warning the users if they are in a risk zone, safe zone (from a danger zone), or a danger zone
         const currentLevel = getLevel(updatedIncident.numberOfReports);
-        let notification = {
-          contents: {
-            en: `You are now in a ${
-              currentLevel === DangerLevel.SAFE
-                ? 'safe'
-                : currentLevel === DangerLevel.RISK
-                ? 'risk'
-                : 'danger'
-            } zone!`,
-            es: `Ahora se encuentra en una zona ${
-              currentLevel === DangerLevel.SAFE
-                ? 'segura'
-                : currentLevel === DangerLevel.RISK
-                ? 'de riesgo'
-                : 'de peligro'
-            }!`,
-            fr: `Vous êtes dans une zone de ${
-              currentLevel === DangerLevel.SAFE
-                ? 'sûr'
-                : currentLevel === DangerLevel.RISK
-                ? 'risque'
-                : 'danger'
-            }!`,
-            'zh-Hans': `该地区的状态${
-              currentLevel === DangerLevel.SAFE
-                ? '安全'
-                : currentLevel === DangerLevel.RISK
-                ? '风险'
-                : '危险'
-            }!`,
-          },
-          headings: {
-            en: `Niveles De Niveles`,
-            es: `Niveles De Niveles`,
-            fr: `Niveles De Niveles`,
-            'zh-Hans': `Niveles De Niveles`,
-          },
-          // external_id: '',
-          include_aliases: {external_id: ['']},
-          target_channel: 'push',
-          // filters: [
-          //   {
-          //     field: 'location',
-          //     radius: getRange(updatedIncident.numberOfReports),
-          //     lat: updatedIncident.location.coordinates[1],
-          //     long: updatedIncident.location.coordinates[0],
-          //   },
-          // ],
-        };
         const usersInZone = (await collections.users
           ?.find({
             location: {
@@ -319,9 +321,8 @@ export async function connectToDatabase(io: Server) {
           .toArray()) as unknown as User[];
         for (const user of usersInZone) {
           // console.log(user);
-          notification.include_aliases.external_id[0] = user.number;
           try {
-            await onesignal.createNotification(notification);
+            await onesignal.createNotification(getNotification(currentLevel, user.number));
             // console.log(response.body);
           } catch (e) {
             // console.log(e);
@@ -370,12 +371,11 @@ export async function connectToDatabase(io: Server) {
           // need to check if there are any users in that radius and then
           for (let user of users) {
             // console.log(user);
-            notification.include_aliases.external_id[0] = user.number;
             // notification.filters[0].radius = 5;
             // notification.filters[0].lat = user.location.coordinates[1];
             // notification.filters[0].long = user.location.coordinates[0];
             try {
-              await onesignal.createNotification(notification);
+              await onesignal.createNotification(getNotification(currentLevel, user.number));
               // const otherUsers = (await collections.users
               //   ?.find({
               //     location: {
