@@ -13,6 +13,8 @@ import com.facebook.soloader.SoLoader;
 import com.onesignal.Continue;
 import com.onesignal.OneSignal;
 
+import com.marianhello.bgloc.react.BackgroundGeolocationPackage;
+
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
