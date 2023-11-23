@@ -356,7 +356,7 @@ export async function connectToDatabase(io: Server) {
           if (beforeIncident.level !== DangerLevel.SAFE && updatedIncident.level === DangerLevel.SAFE) {
             for (let user of outerUsers) {
               try {
-                await onesignal.createNotification(getNotification(currentLevel, user.number));
+                await onesignal.createNotification(getNotification(DangerLevel.SAFE, user.number));
               } catch (e) {
                 console.log(e);
                 if (e instanceof OneSignal.HTTPError) {
