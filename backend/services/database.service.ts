@@ -210,12 +210,12 @@ export async function connectToDatabase(io: Server) {
             if (incident.level !== updatedSensor.status) {
               await incidentsCollection.updateOne(
                 {location: incident.location},
-                {$set: {level: updatedSensor.status, timestamp: Date.now(), numberOfReports: updatedSensor.status === DangerLevel.SAFE ? 0 : updatedSensor.status === DangerLevel.RISK ? 3 : 6}},
+                {$set: {level: updatedSensor.status, range: getRange(updatedSensor.status === DangerLevel.SAFE ? 0 : updatedSensor.status === DangerLevel.RISK ? 3 : 6), timestamp: Date.now(), numberOfReports: updatedSensor.status === DangerLevel.SAFE ? 0 : updatedSensor.status === DangerLevel.RISK ? 3 : 6}},
               );
             } else {
               await incidentsCollection.updateOne(
                 {location: incident.location},
-                {$inc: {numberOfReports: 1}, timestamp: Date.now()},
+                {$inc: {numberOfReports: 1}, range: getRange(incident.numberOfReports+1), timestamp: Date.now()},
               );
             }
           }
