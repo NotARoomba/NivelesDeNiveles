@@ -353,6 +353,20 @@ export async function connectToDatabase(io: Server) {
               },
             })
             .toArray()) as unknown as User[];
+          if (beforeIncident.level !== DangerLevel.SAFE && updatedIncident.level === DangerLevel.SAFE) {
+            for (let user of outerUsers) {
+              try {
+                await onesignal.createNotification(getNotification(currentLevel, user.number));
+              } catch (e) {
+                console.log(e);
+                if (e instanceof OneSignal.HTTPError) {
+                  // When status code of HTTP response is not 2xx, HTTPError is thrown.
+                  console.log(e.statusCode);
+                  console.log(e.body);
+                }
+              }
+            }
+          } else {          
           const innerUsers = (await collections.users
             ?.find({
               location: {
@@ -397,6 +411,7 @@ export async function connectToDatabase(io: Server) {
               }
             }
           }
+        }
         }
         // check for merges of inidents
         let incidents = (await collections.incidents
