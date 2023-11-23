@@ -210,7 +210,7 @@ export async function connectToDatabase(io: Server) {
             if (incident.level !== updatedSensor.status) {
               await incidentsCollection.updateOne(
                 {location: incident.location},
-                {$set: {level: updatedSensor.status, timestamp: Date.now()}},
+                {$set: {level: updatedSensor.status, timestamp: Date.now(), numberOfReports: updatedSensor.status === DangerLevel.SAFE ? 0 : updatedSensor.status === DangerLevel.RISK ? 3 : 6}},
               );
             } else {
               await incidentsCollection.updateOne(
