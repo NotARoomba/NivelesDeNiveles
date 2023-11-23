@@ -1,0 +1,10 @@
+AT+SAPBR=?
+
++SAPBR: (0-4),(1-3),"ConParamTag","ConParamValue"
+
+OK
+APN: internet.movistar.com.co
+TYPE: "Default"
+AUTH: PAP
+
+

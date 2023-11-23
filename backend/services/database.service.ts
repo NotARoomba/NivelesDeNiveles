@@ -292,7 +292,8 @@ export async function connectToDatabase(io: Server) {
       if (
         next.operationType === 'update' &&
         next.updateDescription.updatedFields?.numberOfReports
-      ) {
+      ) { 
+        console.log('UPDATED INCIDENT');
         let updatedIncident = next.fullDocument as Incident;
         let beforeIncident = next.fullDocumentBeforeChange as Incident;
         // console.log(next);
