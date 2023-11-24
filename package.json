@@ -9,8 +9,7 @@
     "start": "react-native start",
     "test": "jest",
     "splashcon": "react-native set-icon --path ./public/icon.png && react-native set-splash --path ./public/splash.png --background \"#F1EEFF\"",
-    "postinstall": "react-native setup-ios-permissions && pod-install",
-    "preinstall": "git init && git submodule add https://github.com/darron1217/background-geolocation-android node_modules/@darron1217/react-native-background-geolocation/android/common"
+    "postinstall": "react-native setup-ios-permissions && pod-install"
   },
   "dependencies": {
     "@bam.tech/react-native-make": "^3.0.3",
