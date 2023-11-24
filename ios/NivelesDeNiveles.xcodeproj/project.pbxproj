@@ -29,6 +29,7 @@
 		FE5771322AF5FAB400C3C942 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = FE5771312AF5FAB400C3C942 /* NotificationService.m */; };
 		FE5771362AF5FAB400C3C942 /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE57712E2AF5FAB300C3C942 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		FE653DA32AB34B7600FB36C7 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE653DA22AB34B7600FB36C7 /* SplashScreen.storyboard */; };
+		FE7EDA6D2B10F264008E819A /* libRCTBackgroundGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE7EDA6A2B10F222008E819A /* libRCTBackgroundGeolocation.a */; };
 		FEA38C192AEE1707005BBCDC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FEA38C1B2AEE1707005BBCDC /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +47,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = FE57712D2AF5FAB300C3C942;
 			remoteInfo = OneSignalNotificationServiceExtension;
+		};
+		FE7EDA692B10F222008E819A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE7EDA652B10F222008E819A /* RCTBackgroundGeolocation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 418F75461D02DC3D0045FEA0;
+			remoteInfo = RCTBackgroundGeolocation;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -101,6 +109,8 @@
 		FE57713B2AF5FB6A00C3C942 /* NivelesDeNiveles.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = NivelesDeNiveles.entitlements; path = NivelesDeNiveles/NivelesDeNiveles.entitlements; sourceTree = "<group>"; };
 		FE653DA22AB34B7600FB36C7 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 		FE74C3662AF19005004DC05C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		FE7EDA652B10F222008E819A /* RCTBackgroundGeolocation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBackgroundGeolocation.xcodeproj; path = "../node_modules/@darron1217/react-native-background-geolocation/ios/RCTBackgroundGeolocation.xcodeproj"; sourceTree = "<group>"; };
+		FE7EDA6B2B10F252008E819A /* lib@darron1217_react-native-background-geolocation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "lib@darron1217_react-native-background-geolocation.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FEA38C1A2AEE1707005BBCDC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FEA38C1C2AEE170B005BBCDC /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FEA38C1D2AEE170F005BBCDC /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -120,6 +130,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE7EDA6D2B10F264008E819A /* libRCTBackgroundGeolocation.a in Frameworks */,
 				24C27F8663D84411EC6AF3E5 /* libPods-NivelesDeNiveles.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -170,6 +181,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FE7EDA6B2B10F252008E819A /* lib@darron1217_react-native-background-geolocation.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				8C08835F4F099DE0A42F3648 /* libPods-NivelesDeNiveles.a */,
 				DB27F7075EEEF959874424EC /* libPods-NivelesDeNiveles-NivelesDeNivelesTests.a */,
@@ -181,6 +193,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				FE7EDA652B10F222008E819A /* RCTBackgroundGeolocation.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -252,6 +265,14 @@
 				FE5771332AF5FAB400C3C942 /* Info.plist */,
 			);
 			path = OneSignalNotificationServiceExtension;
+			sourceTree = "<group>";
+		};
+		FE7EDA662B10F222008E819A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FE7EDA6A2B10F222008E819A /* libRCTBackgroundGeolocation.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -354,6 +375,12 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = FE7EDA662B10F222008E819A /* Products */;
+					ProjectRef = FE7EDA652B10F222008E819A /* RCTBackgroundGeolocation.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* NivelesDeNiveles */,
@@ -362,6 +389,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		FE7EDA6A2B10F222008E819A /* libRCTBackgroundGeolocation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTBackgroundGeolocation.a;
+			remoteRef = FE7EDA692B10F222008E819A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {
@@ -820,10 +857,7 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 			};
@@ -893,10 +927,7 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
