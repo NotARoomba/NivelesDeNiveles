@@ -20,7 +20,7 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
     Animated.timing(flipValue, {
       toValue: isOpen ? 0 : 1,
       duration: 250,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
     Animated.timing(growValue, {
       // todo hae to set values for each text sadly
