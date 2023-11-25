@@ -2,10 +2,37 @@ import LocalizedStrings from 'react-localization';
 
 export const Localizations = new LocalizedStrings({
  es:{
-   how:"How do you want your egg today?",
-   boiledEgg:"Boiled egg",
-   softBoiledEgg:"Soft-boiled egg",
-   choice:"How to choose the egg"
+   slogan: "",
+   knowButton: "",
+   header1: "",
+   p1: "",
+   sensorsHeader: "",
+   sendorText:"",
+   crowdHeader: "",
+   crowdText: "",
+   desastres: "",
+   desastresHeader: "",
+   desbordamientoHead: "",
+   desbordamientoText: "",
+   incendioHead: "",
+   incendioText: "",
+   deslizamientoHead: "",
+   deslizamientoText: "",
+   recursos:"",
+   recursosHead:"",
+   repo:"",
+   politica:"",
+   equipo:"",
+   equipoHead:"",
+   nathan:"",
+   ashlee:"",
+   felipe:"",
+   herramientas:"",
+   herramientasHead:"",
+   enlaces:"",
+   inicio:"",
+   mision:"",
+   nosotros:""
  },
  en: {
  },
@@ -13,6 +40,6 @@ export const Localizations = new LocalizedStrings({
 
  },
  zh: {
-     
+
  }
 });
