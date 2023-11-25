@@ -87,8 +87,8 @@ export const Localizations = new LocalizedStrings({
     moreInformationSafe: '',
     moreInformationRisk: '',
     moreInformationDanger: '',
-    moreInformationButton: 'More Information',
-    close: 'Close'
+    moreInformation: 'Mas Información',
+    close: 'Cierra'
   },
   en: {
     fire: 'Fire',
@@ -162,8 +162,8 @@ export const Localizations = new LocalizedStrings({
     activateBackgroundLocationTitle: 'Background Location',
     activateBackgroundLocationDesc:
       'Niveles De Niveles would like to access your background location to send you notifications if your safety is at risk! You can activate this by editing the location permissions for Niveles De Niveles!',
-    moreInformation: 'Mas Información',
-    close: 'Cierra'
+    moreInformationButton: 'More Information',
+    close: 'Close'
   },
   fr: {
     fire: 'Feu',
