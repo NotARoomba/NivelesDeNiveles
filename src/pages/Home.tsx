@@ -34,7 +34,7 @@ import {
 import {callAPI, getData} from '../utils/Functions';
 import GeoLocation from '@react-native-community/geolocation';
 // import GetLocation from 'react-native-get-location';
-import BackgroundGeolocation from '@darron1217/react-native-background-geolocation';
+import BackgroundGeolocation from '@mak12/react-native-background-geolocation';
 import Config from 'react-native-config';
 import {io} from 'socket.io-client';
 import NivelesEvents from '../../backend/models/events';
