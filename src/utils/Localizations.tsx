@@ -177,12 +177,7 @@ export const Localizations = new LocalizedStrings({
     activateBackgroundLocationTitle: 'Background Location',
     activateBackgroundLocationDesc:
       'Niveles De Niveles would like to access your background location to send you notifications if your safety is at risk! You can activate this by editing the location permissions for Niveles De Niveles!',
-    moreInformationSafe: 'Emergency Lines \
-    111 Disaster Response \
-    123 National Emergencies \
-    132 Red Cross \
-    119 Firefighters \
-    Prepare emergency kits, identify evacuation routes, and create emergency plans. See the complete prevention information here.',
+    moreInformationSafe: 'Emergency Lines \n Disaster Response 111 \n National Emergencies 123 \n Red Cross 132 \n Firefighters 119  \n Prepare emergency kits, identify evacuation routes, and create emergency plans. See the complete prevention information here.',
     moreInformationRisk: '',
     moreInformationDanger: '',
     moreInformation: 'More Information',
@@ -263,8 +258,8 @@ export const Localizations = new LocalizedStrings({
     moreInformationSafe: '',
     moreInformationRisk: '',
     moreInformationDanger: '',
-    moreInformationButton: 'More Information',
-    close: 'Close'
+    moreInformationButton: "Plus d'information",
+    close: 'fermer'
   },
   zh: {
     fire: '火',
@@ -342,7 +337,7 @@ export const Localizations = new LocalizedStrings({
     准备紧急救援包，确定撤离路线，制定紧急计划。在这里查看完整的预防信息。',
     moreInformationRisk: '',
     moreInformationDanger: '',
-    moreInformationButton: 'More Information',
-    close: 'Close'
+    moreInformationButton: '更多信息',
+    close: '关闭'
     },
 });

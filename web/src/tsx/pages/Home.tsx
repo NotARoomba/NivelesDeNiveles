@@ -1,5 +1,6 @@
 import {motion} from 'framer-motion';
 import {Link} from 'react-scroll';
+import {Link as BrowserLink} from "react-router-dom";
 import DisasterCard from '../components/DisasterCard';
 import AdvancementCard from '../components/AdvancementCard';
 import SectionHeader from '../components/SectionHeader';
@@ -146,11 +147,11 @@ export default function Home() {
                 desastres naturales. Creamos un ambiente seguro donde los
                 usuarios tienen la opción de reportar, ser alertados y estar
                 informados sobre los niveles de riesgo de desastres naturales a
-                su alrededor. Prepárate utilizando nuestra <Link
+                su alrededor. Prepárate utilizando nuestra <BrowserLink
         to="/advice"
         className="text-lg transition justify-center mx-auto text-cyan-300 my-auto text-dark hover:underline hover:text-dark hover:text-underline hover:cursor-pointer ">
         guía para desastres.
-      </Link>
+      </BrowserLink>
               </motion.p>
             </div>
             <div className="flex flex-row h-full">
