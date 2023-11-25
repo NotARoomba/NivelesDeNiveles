@@ -1,4 +1,4 @@
-import React, {View, Text, TouchableOpacity, Animated, Image, Modal} from 'react-native';
+import React, {View, Text, TouchableOpacity, Animated, Image, Modal, Linking} from 'react-native';
 import {AdviceProps, DangerLevel} from '../utils/Types';
 import Icon from 'react-native-vector-icons/Feather';
 import {useEffect, useRef, useState} from 'react';
@@ -20,7 +20,7 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
     Animated.timing(flipValue, {
       toValue: isOpen ? 0 : 1,
       duration: 250,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start();
     Animated.timing(growValue, {
       // todo hae to set values for each text sadly
@@ -28,20 +28,15 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
       toValue: isOpen
         ? 0
         : status === DangerLevel.SAFE
-        ? 64
+        ? 108
         : status === DangerLevel.RISK
-        ? 64
-        : 64,
+        ? 108
+        : 108,
       duration: 250,
       useNativeDriver: false,
     }).start();
   };
-  const title = useState('');
-  const description = useState('');
   const [modalOpen, setModalOpen] = useState(false);
-  useEffect(() => {
-    console.log(Localizations.getLanguage())
-  }, [status])
   return (
     <TouchableOpacity className="mt-3" onPress={changeOpen}>
       <View className="bg-highlight p-2 py-3 rounded-xl w-11/12 m-auto justify-center">
@@ -63,40 +58,6 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
             <Icon name="chevron-down" size={30} />
           </Animated.View>
         </View>
-        <Modal
-      animationType="fade"
-      visible={modalOpen}
-      style={{backgroundColor: '#000000'}}
-      transparent
-      onRequestClose={() => {
-        setModalOpen(!modalOpen);
-      }}>
-      <View className="flex justify-center bg-light/70 h-screen">
-        <View className="flex jutify-center align-middle m-auto bg-light w-9/12 rounded-xl shadow-xl">
-          <Image
-            source={require('../../public/icon.png')}
-            className="h-32 aspect-square mx-auto mt-4"
-          />
-          <View className="flex flex-col">
-            <Text className="m-auto mt-2 text-2xl font-bold text-dark  ">
-              "asdasd"
-            </Text>
-            <Text className="m-auto mt-2 text-black text-center text-lg my-2 mb-8 px-8">
-              "asd"
-            </Text>
-          </View>
-          <View className="flex flex-row justify-center gap-4 mb-8">
-            <TouchableOpacity
-              onPress={() => setOpen(!isOpen)}
-              className=" bg-dark  flex justify-center align-middle p-2 rounded w-32">
-              <Text className="text-xl text-light m-auto font-bold">
-                "sss"
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    </Modal>
         <Animated.View
           style={{height: growValue}}
           className="justify-center px-1">
@@ -107,8 +68,73 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
               ? Localizations.recommendationsForRisk
               : Localizations.recommendationsForDanger}
           </Text>
+          <TouchableOpacity className={'mx-auto rounded-xl mt-2 ' +  (status === DangerLevel.SAFE
+                ? 'bg-green-500'
+                : status === DangerLevel.RISK
+                ? 'bg-yellow-500'
+                : 'bg-red-500')} onPress={() => setModalOpen(!modalOpen)}>
+            <Text className='text-lg py-1 px-5  font-semibold text-light'>
+            {Localizations.moreInformation}
+            </Text>
+          </TouchableOpacity>
         </Animated.View>
       </View>
+      <Modal
+      animationType="fade"
+      visible={modalOpen}
+      style={{backgroundColor: '#000000'}}
+      transparent
+      onRequestClose={() => {
+        setModalOpen(!modalOpen);
+      }}>
+      <View className="flex justify-center bg-light/70 h-screen">
+        <View className="flex jutify-center align-middle m-auto bg-light w-10/12 rounded-xl shadow-xl p-3">
+          {/* <Image
+            source={require('../../public/icon.png')}
+            className="h-32 aspect-square mx-auto mt-4"
+          /> */}
+          <View className='justify-center mx-auto'>
+          <Icon color={status === DangerLevel.SAFE
+                ? '#22c55e'
+                : status === DangerLevel.RISK
+                ? '#eab308'
+                : '#ef4444'} size={100} name="info" />
+          </View>
+          <View className="flex flex-col">
+            <Text className="m-auto mt-2 text-3xl text-center font-bold text-dark  ">
+            {Localizations.formatString(
+              Localizations.recommendationsForZoneTitle,
+              status === DangerLevel.SAFE
+                ? Localizations.safe
+                : status === DangerLevel.RISK
+                ? Localizations.risk
+                : Localizations.danger,
+            )}
+            </Text>
+            <Text className="m-auto mt-2 text-black text-center text-lg my-2 mb-8 px-8">
+            {status === DangerLevel.SAFE
+              ? Localizations.moreInformationSafe
+              : status === DangerLevel.RISK
+              ? Localizations.moreInformationRisk
+              : Localizations.moreInformationDanger}{" "}<Text className='underline'
+      onPress={() => Linking.openURL('https://nivelesdeniveles.org/advice')}>
+  {Localizations.moreInformation}
+  </Text>
+            </Text>
+           
+          </View>
+          <View className="flex flex-row justify-center gap-4 mb-8">
+            <TouchableOpacity
+              onPress={() => setModalOpen(!modalOpen)}
+              className=" bg-dark  flex justify-center align-middle p-2 rounded w-32">
+              <Text className="text-xl text-light m-auto font-bold">
+                {Localizations.close}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
     </TouchableOpacity>
   );
 }
