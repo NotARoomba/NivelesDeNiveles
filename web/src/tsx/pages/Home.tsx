@@ -313,7 +313,7 @@ export default function Home() {
               />
               <PersonCard
                 name="Ashlee Yin"
-                role="Diseño y Planeación"
+                role="Web y Planeación"
                 image="/img/team/ash.jpg"
                 github="https://github.com/awangran"
                 insta="https://www.instagram.com/ashlee_yin"
