@@ -15,64 +15,12 @@ import ChartsEmbedSDK from '@mongodb-js/charts-embed-dom';
 
 
 
-export default function Home() {
+export default function Advice() {
   const fadein = {
     visible: {opacity: 1, scale: 1, transition: {duration: 1}},
     hidden: {opacity: 0, scale: 0},
   };
-  const technologies = [
-    {
-      title: 'Arduino',
-      link: 'https://cdn.svgporn.com/logos/arduino.svg',
-    },
-    {
-      title: 'TailwindCSS',
-      link: 'https://cdn.svgporn.com/logos/tailwindcss.svg',
-    },
-    {
-      title: 'Git',
-      link: 'https://cdn.svgporn.com/logos/git.svg',
-    },
-    {
-      title: 'Twilio',
-      link: 'https://cdn.svgporn.com/logos/twilio.svg',
-    },
-    {
-      title: 'OneSignal',
-      link: 'https://cdn.svgporn.com/logos/onesignal.svg',
-    },
-    {
-      title: 'ExpressJS',
-      link: 'https://cdn.svgporn.com/logos/express.svg',
-    },
-    {
-      title: 'React',
-      link: 'https://cdn.svgporn.com/logos/react.svg',
-    },
-    {
-      title: 'Socket.io',
-      link: 'https://cdn.svgporn.com/logos/socket.io.svg',
-    },
-    {
-      title: 'Figma',
-      link: 'https://cdn.svgporn.com/logos/figma.svg',
-    },
-    {
-      title: 'VS Code',
-      link: 'https://cdn.svgporn.com/logos/visual-studio-code.svg',
-    },
-    {
-      title: 'XCode',
-      link: 'https://cdn.svgporn.com/logos/xcode.svg',
-    },
-    // '/clients/git.png',
-    // '/clients/nativewind.jpeg',
-    // '/clients/react.png',
-    // '/clients/Socket-io.svg.png',
-    // '/clients/Twilio_logo.png',
-    // '/clients/vs.png',
-    // '/clients/xcode.png',
-  ];
+  
   const sdk = new ChartsEmbedSDK({
     baseUrl: 'https://charts.mongodb.com/charts-nivelesdeniveles-temwe',
     widthMode: "scale",
@@ -86,24 +34,13 @@ export default function Home() {
       if (chartDiv.current) chart.render(chartDiv.current).then(async () => {if (((await chart.getData()) as any).documents.length == 0) setVisible(false)}).catch(err => {setVisible(false); console.log(err)});
   }, [chart, chartDiv]);
   return (
-    <div id="home" className="text-black">
-      <SmartBanner
-        title={'Niveles De Niveles'}
-        daysHidden={0}
-        daysReminder={0}
-      />
+    <div id="advice" className="text-black">
+      
       <div className=" bg-light-600 mx-auto my-auto justify-center flex-col lg:flex lg:flex-row-reverse h-screen py-32 px-2 lg:p-52">
         <div className="justify-center lg:justify-start my-auto mx-auto lg:mr-auto ">
-          <img
-            src="/img/logo.png"
-            className="h-48 sm:h-80 z-10 animate animate-slowBounce mx-auto"
-          />
         </div>
         <div className="justify-center mt-12 lg:my-auto align-middle mr-0 w-full text-center lg:text-start lg:w-6/12 mx-auto">
-          <p className="text-5xl text-dark font-bold">Niveles De Niveles</p>
-          <p className="text-2xl text-neutral-600 my-4 mb-8">
-            Llevando la seguridad de los Colombianos a otro nivel!
-          </p>
+          <p className="text-5xl text-dark font-bold">Guía de Prevención</p>
           <Link
             className="text-lg bg-accent-500 text-dark hover:bg-dark hover:text-light hover:cursor-pointer transition-all duration-300 p-3 px-5 rounded"
             to="about"
@@ -146,11 +83,7 @@ export default function Home() {
                 desastres naturales. Creamos un ambiente seguro donde los
                 usuarios tienen la opción de reportar, ser alertados y estar
                 informados sobre los niveles de riesgo de desastres naturales a
-                su alrededor. Prepárate utilizando nuestra <Link
-        to="/advice"
-        className="text-lg transition justify-center mx-auto text-cyan-300 my-auto text-dark hover:underline hover:text-dark hover:text-underline hover:cursor-pointer ">
-        guía para desastres.
-      </Link>
+                su alrededor.
               </motion.p>
             </div>
             <div className="flex flex-row h-full">
@@ -330,34 +263,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="w-full bg-accent-900/70">
-          <div className="w-11/12 md:w-7/12 mx-auto justify-center py-10">
-            <SectionHeader
-              title="Herramientas"
-              subtitle="Tecnologías que utilizamos"
-            />
-            <Slide autoplay slidesToShow={1}>
-              {technologies.map((img, i) => (
-                <div
-                  key={i}
-                  className="my-auto mx-auto h-full justify-center align-middle">
-                  <SVG
-                    className="mx-auto my-auto align-middle justify-center"
-                    src={img.link}
-                    width={300}
-                    height={100}
-                    title={img.title}
-                  />
-                  {i > 3 && (
-                    <p className="text-center font-bold text-3xl mt-3">
-                      {img.title}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </Slide>
-          </div>
-        </div>
+        
         <div className="w-full bg-white pb-12 px-8">
           <div className="md:w-7/12 mx-auto justify-center py-10">
             <div className="flex flex-row">

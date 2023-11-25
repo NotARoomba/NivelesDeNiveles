@@ -162,6 +162,24 @@ export const Localizations = new LocalizedStrings({
     activateBackgroundLocationTitle: 'Background Location',
     activateBackgroundLocationDesc:
       'Niveles De Niveles would like to access your background location to send you notifications if your safety is at risk! You can activate this by editing the location permissions for Niveles De Niveles!',
+    moreInformationSafe: 'Lineas de emergencia \
+    111 Atención de Desastres \
+    123 Nacional Emergencias \
+    132 Cruz Roja \
+    119 Bomberos \
+    Prepara kits de emergencia, identifica rutas de evacuación y realiza planes de emergencia. Mira la información de prevención completa aquí.',
+    moreInformationRisk: "Lineas de emergencia \
+    111 Atención de Desastres \
+    123 Nacional Emergencias \
+    132 Cruz Roja \
+    119 Bomberos \
+    Mantente alerta a las posibles noticias, identifica la zona de riesgo y rutas de evacuación, prepara kits y planes de emergencia. Mira la información de prevención completa: ",
+    moreInformationDanger: 'Lineas de emergencia \
+    111 Atención de Desastres \
+    123 Nacional Emergencias \
+    132 Cruz Roja \
+    119 Bomberos \
+    Manten la calma, identifica la ruta de evacuación más cercana lo antes posible y dirigete a ella. Revisa la información específica de cada desastre aquí.',
     moreInformationButton: 'More Information',
     close: 'Close'
   },
@@ -237,6 +255,11 @@ export const Localizations = new LocalizedStrings({
     activateBackgroundLocationTitle: 'Emplacement en arrière-plan',
     activateBackgroundLocationDesc:
       "Niveles De Niveles souhaite accéder à votre position en arrière-plan pour vous envoyer des notifications si votre sécurité est menacée. Vous pouvez l'activer en modifiant les autorisations de localisation des niveaux ! ",
+    moreInformationSafe: '',
+    moreInformationRisk: '',
+    moreInformationDanger: '',
+    moreInformationButton: 'More Information',
+    close: 'Close'
   },
   zh: {
     fire: '火',
@@ -305,5 +328,10 @@ export const Localizations = new LocalizedStrings({
     activateBackgroundLocationTitle: '背景位置',
     activateBackgroundLocationDesc:
       'Niveles De Niveles 希望在后台访问您的位置，以便在您的安全受到威胁时向您发送通知。 您可以通过编辑级别位置权限来激活此功能！',
-  },
+    moreInformationSafe: '',
+    moreInformationRisk: '',
+    moreInformationDanger: '',
+    moreInformationButton: 'More Information',
+    close: 'Close'
+    },
 });

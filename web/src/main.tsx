@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './css/index.css';
 import './css/app-banner.css';
 import Home from './tsx/pages/Home';
+import Advice from './tsx/pages/Advice';
 import Error from './tsx/pages/Error';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
@@ -11,6 +12,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} errorElement={<Error />} />
+        <Route path="/advice" element={<Advice />} errorElement={<Error />}  />
         <Route path="*" element={<Error />} />
       </Routes>
     </BrowserRouter>
