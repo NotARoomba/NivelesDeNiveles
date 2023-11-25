@@ -84,11 +84,26 @@ export const Localizations = new LocalizedStrings({
     activateBackgroundLocationTitle: 'Ubicación de Fondo',
     activateBackgroundLocationDesc:
       'Niveles De Niveles desea acceder a tu ubicación en segundo plano para enviarte notificaciones si tu seguridad está en riesgo. ¡Puedes activar esto editando los permisos de ubicación de Niveles De Niveles!',
-    moreInformationSafe: '',
-    moreInformationRisk: '',
-    moreInformationDanger: '',
-    moreInformation: 'Mas Información',
-    close: 'Cierra'
+      moreInformationSafe: 'Lineas de emergencia \
+      111 Atención de Desastres \
+      123 Nacional Emergencias \
+      132 Cruz Roja \
+      119 Bomberos \
+      Prepara kits de emergencia, identifica rutas de evacuación y realiza planes de emergencia. Mira la información de prevención completa aquí.',
+      moreInformationRisk: "Lineas de emergencia \
+      111 Atención de Desastres \
+      123 Nacional Emergencias \
+      132 Cruz Roja \
+      119 Bomberos \
+      Mantente alerta a las posibles noticias, identifica la zona de riesgo y rutas de evacuación, prepara kits y planes de emergencia. Mira la información de prevención completa: ",
+      moreInformationDanger: 'Lineas de emergencia \
+      111 Atención de Desastres \
+      123 Nacional Emergencias \
+      132 Cruz Roja \
+      119 Bomberos \
+      Manten la calma, identifica la ruta de evacuación más cercana lo antes posible y dirigete a ella. Revisa la información específica de cada desastre aquí.',
+      moreInformation: 'Más Información',
+      close: 'Cerrar'
   },
   en: {
     fire: 'Fire',
@@ -162,25 +177,15 @@ export const Localizations = new LocalizedStrings({
     activateBackgroundLocationTitle: 'Background Location',
     activateBackgroundLocationDesc:
       'Niveles De Niveles would like to access your background location to send you notifications if your safety is at risk! You can activate this by editing the location permissions for Niveles De Niveles!',
-    moreInformationSafe: 'Lineas de emergencia \
-    111 Atención de Desastres \
-    123 Nacional Emergencias \
-    132 Cruz Roja \
-    119 Bomberos \
-    Prepara kits de emergencia, identifica rutas de evacuación y realiza planes de emergencia. Mira la información de prevención completa aquí.',
-    moreInformationRisk: "Lineas de emergencia \
-    111 Atención de Desastres \
-    123 Nacional Emergencias \
-    132 Cruz Roja \
-    119 Bomberos \
-    Mantente alerta a las posibles noticias, identifica la zona de riesgo y rutas de evacuación, prepara kits y planes de emergencia. Mira la información de prevención completa: ",
-    moreInformationDanger: 'Lineas de emergencia \
-    111 Atención de Desastres \
-    123 Nacional Emergencias \
-    132 Cruz Roja \
-    119 Bomberos \
-    Manten la calma, identifica la ruta de evacuación más cercana lo antes posible y dirigete a ella. Revisa la información específica de cada desastre aquí.',
-    moreInformationButton: 'More Information',
+    moreInformationSafe: 'Emergency Lines \
+    111 Disaster Response \
+    123 National Emergencies \
+    132 Red Cross \
+    119 Firefighters \
+    Prepare emergency kits, identify evacuation routes, and create emergency plans. See the complete prevention information here.',
+    moreInformationRisk: '',
+    moreInformationDanger: '',
+    moreInformation: 'More Information',
     close: 'Close'
   },
   fr: {
@@ -328,7 +333,13 @@ export const Localizations = new LocalizedStrings({
     activateBackgroundLocationTitle: '背景位置',
     activateBackgroundLocationDesc:
       'Niveles De Niveles 希望在后台访问您的位置，以便在您的安全受到威胁时向您发送通知。 您可以通过编辑级别位置权限来激活此功能！',
-    moreInformationSafe: '',
+    moreInformationSafe: '安全\
+    紧急热线 \
+    111 灾害响应 \
+    123 国家紧急情况 \
+    132 红十字会 \
+    119 消防员 \
+    准备紧急救援包，确定撤离路线，制定紧急计划。在这里查看完整的预防信息。',
     moreInformationRisk: '',
     moreInformationDanger: '',
     moreInformationButton: 'More Information',
