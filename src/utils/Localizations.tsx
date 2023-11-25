@@ -84,6 +84,11 @@ export const Localizations = new LocalizedStrings({
     activateBackgroundLocationTitle: 'Ubicación de Fondo',
     activateBackgroundLocationDesc:
       'Niveles De Niveles desea acceder a tu ubicación en segundo plano para enviarte notificaciones si tu seguridad está en riesgo. ¡Puedes activar esto editando los permisos de ubicación de Niveles De Niveles!',
+    moreInformationSafe: '',
+    moreInformationRisk: '',
+    moreInformationDanger: '',
+    moreInformationButton: 'More Information',
+    close: 'Close'
   },
   en: {
     fire: 'Fire',
@@ -157,6 +162,8 @@ export const Localizations = new LocalizedStrings({
     activateBackgroundLocationTitle: 'Background Location',
     activateBackgroundLocationDesc:
       'Niveles De Niveles would like to access your background location to send you notifications if your safety is at risk! You can activate this by editing the location permissions for Niveles De Niveles!',
+    moreInformation: 'Mas Información',
+    close: 'Cierra'
   },
   fr: {
     fire: 'Feu',

@@ -15,7 +15,6 @@ import Incident from './models/incident';
 import {DangerLevel} from './models/types';
 import Sensor from './models/sensor';
 import haversine from 'haversine-distance';
-import { adviceRouter } from './routers/advice.router';
 const app = express();
 const httpServer = createServer(app);
 const port = 3001;
@@ -44,7 +43,6 @@ connectToDatabase(io)
     app.use('/sensors', sensorsRouter);
     app.use('/verify', verifyRouter);
     app.use('/report', reportRouter);
-    app.use('/advice', adviceRouter);
     //socket data
 
     io.on(NivelesEvents.CONNECT, (socket: Socket) => {

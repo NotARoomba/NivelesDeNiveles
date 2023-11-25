@@ -38,8 +38,9 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
   };
   const title = useState('');
   const description = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
   useEffect(() => {
-
+    console.log(Localizations.getLanguage())
   }, [status])
   return (
     <TouchableOpacity className="mt-3" onPress={changeOpen}>
@@ -64,11 +65,11 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
         </View>
         <Modal
       animationType="fade"
-      visible={isOpen}
+      visible={modalOpen}
       style={{backgroundColor: '#000000'}}
       transparent
       onRequestClose={() => {
-        setOpen(!isOpen);
+        setModalOpen(!modalOpen);
       }}>
       <View className="flex justify-center bg-light/70 h-screen">
         <View className="flex jutify-center align-middle m-auto bg-light w-9/12 rounded-xl shadow-xl">
@@ -78,10 +79,10 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
           />
           <View className="flex flex-col">
             <Text className="m-auto mt-2 text-2xl font-bold text-dark  ">
-              {title}
+              "asdasd"
             </Text>
             <Text className="m-auto mt-2 text-black text-center text-lg my-2 mb-8 px-8">
-              {description}
+              "asd"
             </Text>
           </View>
           <View className="flex flex-row justify-center gap-4 mb-8">
@@ -89,24 +90,24 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
               onPress={() => setOpen(!isOpen)}
               className=" bg-dark  flex justify-center align-middle p-2 rounded w-32">
               <Text className="text-xl text-light m-auto font-bold">
-                {Localizations.done}
+                "sss"
               </Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
     </Modal>
-        {/* <Animated.View
+        <Animated.View
           style={{height: growValue}}
           className="justify-center px-1">
-          <Text className="text-dark text-left text-lg">
+          <Text className="text-dark text-center text-lg">
             {status === DangerLevel.SAFE
               ? Localizations.recommendationsForSafe
               : status === DangerLevel.RISK
               ? Localizations.recommendationsForRisk
               : Localizations.recommendationsForDanger}
           </Text>
-        </Animated.View> */}
+        </Animated.View>
       </View>
     </TouchableOpacity>
   );
