@@ -9,6 +9,11 @@ import {Slide} from 'react-slideshow-image';
 import SVG from 'react-inlinesvg';
 import SmartBanner from 'react-smartbanner';
 import {AppStoreButton, GooglePlayButton} from 'react-mobile-app-button';
+import { useEffect, useRef, useState } from 'react';
+import ChartsEmbedSDK from '@mongodb-js/charts-embed-dom';
+
+
+
 
 export default function Home() {
   const fadein = {
@@ -33,6 +38,10 @@ export default function Home() {
       link: 'https://cdn.svgporn.com/logos/twilio.svg',
     },
     {
+      title: 'OneSignal',
+      link: 'https://cdn.svgporn.com/logos/onesignal.svg',
+    },
+    {
       title: 'ExpressJS',
       link: 'https://cdn.svgporn.com/logos/express.svg',
     },
@@ -43,6 +52,10 @@ export default function Home() {
     {
       title: 'Socket.io',
       link: 'https://cdn.svgporn.com/logos/socket.io.svg',
+    },
+    {
+      title: 'Figma',
+      link: 'https://cdn.svgporn.com/logos/figma.svg',
     },
     {
       title: 'VS Code',
@@ -60,6 +73,18 @@ export default function Home() {
     // '/clients/vs.png',
     // '/clients/xcode.png',
   ];
+  const sdk = new ChartsEmbedSDK({
+    baseUrl: 'https://charts.mongodb.com/charts-nivelesdeniveles-temwe',
+    widthMode: "scale",
+    heightMode: "scale"
+  }); 
+  
+  const chartDiv = useRef<HTMLDivElement>(null); 
+  const [isVisible, setVisible] = useState(true);
+  const [chart] = useState(sdk.createChart({maxDataAge: 60, autoRefresh: true, background: "transparent", chartId: "65541c60-1ebd-424a-8c44-f5162670e372",  theme: "light"}));
+  useEffect(() => {
+      if (chartDiv.current) chart.render(chartDiv.current).then(async () => {if (((await chart.getData()) as any).documents.length == 0) setVisible(false)}).catch(err => {setVisible(false); console.log(err)});
+  }, [chart, chartDiv]);
   return (
     <div id="home" className="text-black">
       <SmartBanner
@@ -191,6 +216,7 @@ export default function Home() {
               />
             </div>
           </div>
+         {isVisible && <div className='w-10/12 mx-auto h-96' ref={chartDiv}/>} ;
         </div>
         <div id="resources" className="w-full bg-white pb-12">
           <div className="w-10/12 lg:7/12 mx-auto justify-center py-10">

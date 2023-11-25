@@ -1,0 +1,6 @@
+./node_modules
+./web/node_modules
+./backend/node_modules
+./.bundle
+./__tests__
+./docs
