@@ -103,7 +103,7 @@ export default function Home() {
         <div className="justify-center mt-12 lg:my-auto align-middle mr-0 w-full text-center lg:text-start lg:w-6/12 mx-auto">
           <p className="text-5xl text-dark font-bold">Niveles De Niveles</p>
           <p className="text-2xl text-neutral-600 my-4 mb-8">
-            Llevando la seguridad de los Colombianos a otro nivel!
+            Llevando la seguridad de los colombianos a otro nivel!
           </p>
           <Link
             className="text-lg bg-accent-500 text-dark hover:bg-dark hover:text-light hover:cursor-pointer transition-all duration-300 p-3 px-5 rounded"
