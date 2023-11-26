@@ -12,6 +12,7 @@ import SmartBanner from 'react-smartbanner';
 import {AppStoreButton, GooglePlayButton} from 'react-mobile-app-button';
 import { useEffect, useRef, useState } from 'react';
 import ChartsEmbedSDK from '@mongodb-js/charts-embed-dom';
+import { Localizations } from '../utils/Localizations';
 
 
 
@@ -84,6 +85,7 @@ export default function Home() {
   const [isVisible, setVisible] = useState(true);
   const [chart] = useState(sdk.createChart({maxDataAge: 60, autoRefresh: true, background: "transparent", chartId: "65541c60-1ebd-424a-8c44-f5162670e372",  theme: "light"}));
   useEffect(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (chartDiv.current) chart.render(chartDiv.current).then(async () => {if (((await chart.getData()) as any).documents.length == 0) setVisible(false)}).catch(err => {setVisible(false); console.log(err)});
   }, [chart, chartDiv]);
   return (
@@ -103,7 +105,7 @@ export default function Home() {
         <div className="justify-center mt-12 lg:my-auto align-middle mr-0 w-full text-center lg:text-start lg:w-6/12 mx-auto">
           <p className="text-5xl text-dark font-bold">Niveles De Niveles</p>
           <p className="text-2xl text-neutral-600 my-4 mb-8">
-            Llevando la seguridad de los colombianos a otro nivel!
+            {Localizations.slogan}
           </p>
           <Link
             className="text-lg bg-accent-500 text-dark hover:bg-dark hover:text-light hover:cursor-pointer transition-all duration-300 p-3 px-5 rounded"
@@ -111,7 +113,7 @@ export default function Home() {
             spy={true}
             smooth={true}
             duration={500}>
-            Conóce nuestro proyecto
+            {Localizations.knowButton}
           </Link>
         </div>
       </div>
@@ -132,7 +134,7 @@ export default function Home() {
                 initial={{opacity: 0, y: 75}}
                 whileInView={{opacity: 1, y: 0, transition: {duration: 0.75}}}
                 className="font-bold text-dark text-4xl mt-8 text-center lg:text-start">
-                La prevención y la información es la clave
+                {Localizations.header1}
               </motion.p>
               <motion.p
                 initial={{opacity: 0, y: 75}}
@@ -142,16 +144,11 @@ export default function Home() {
                   transition: {duration: 0.75, delay: 0.25},
                 }}
                 className="text-neutral-600 my-5">
-                Niveles de Niveles es una plataforma que utiliza la prevención y
-                la información como la herramienta más importante para combatir
-                desastres naturales. Creamos un ambiente seguro donde los
-                usuarios tienen la opción de reportar, ser alertados y estar
-                informados sobre los niveles de riesgo de desastres naturales a
-                su alrededor. Prepárate utilizando nuestra <BrowserLink
+                {Localizations.p1}{" "}<BrowserLink
         to="/advice"
-        className="text-lg transition justify-center mx-auto text-cyan-300 my-auto text-dark hover:underline hover:text-dark hover:text-underline hover:cursor-pointer ">
-        guía para desastres.
-      </BrowserLink>
+        className="transition justify-center mx-auto  my-auto text-cyan-600 hover:underline hover:text-dark hover:text-underline hover:cursor-pointer duration-200">
+   {Localizations.guia}
+      </BrowserLink>.
               </motion.p>
             </div>
             <div className="flex flex-row h-full">
@@ -165,12 +162,10 @@ export default function Home() {
                 className="w-1/2 h-full">
                 <i className="bx bx-lg bx-receipt text-dark-600" />
                 <p className="text-xl font-bold text-dark-600">
-                  Nuestros Sensores
+                  {Localizations.sensorsHeader}
                 </p>
                 <p className="text-neutral-600">
-                  Utilizamos sensores para medir el nivel del agua y el
-                  movimiento de la tierra y así determinar el riesgo de
-                  desbordamientos y deslizamientos.
+                  {Localizations.sensorText}
                 </p>
               </motion.div>
               <motion.div
@@ -182,10 +177,9 @@ export default function Home() {
                 }}
                 className="w-1/2 h-full">
                 <i className="bx bx-lg bx-cube-alt text-dark-600" />
-                <p className="text-xl font-bold text-dark-600">Crowdsourcing</p>
+                <p className="text-xl font-bold text-dark-600">{Localizations.crowdHeader}</p>
                 <p className="text-neutral-600">
-                  Utilizamos un modelo de colaboración abierta (crowdsourcing)
-                  para obtener los reportes de desastres de la misma población.
+                  {Localizations.crowdText}
                 </p>
               </motion.div>
             </div>
@@ -194,29 +188,26 @@ export default function Home() {
         <div id="disasters" className="w-full bg-accent-900/70 pb-12">
           <div className="w-10/12 lg:9/12 2xl:w-8/12 mx-auto justify-center py-10">
             <SectionHeader
-              title="Desastres Naturales"
-              subtitle="Los desastres que prevenimos son"
+              title={Localizations.desastres}
+              subtitle={Localizations.desastresHeader}
             />
             <div className="flex-col lg:flex-row lg:flex  lg:gap-8 lg:gap-y-8">
               <DisasterCard
                 icon="bx-water"
-                title="Desbordamientos"
-                description="El desbordamiento de ríos, arroyos y otros cuerpos de agua causan inundaciones en
-                diferentes municipios del Atlántico. Tener un mecanismo que alerte sobre estos les daría a las
-                comunidades cercanas tiempo para recoger sus pertenencias más importantes y evitar daños mayores en sus
-                viviendas. Para medir estos, utilizamos sensores ultrasónicos para medir el nivel del agua."
+                title={Localizations.desbordamientoHead}
+                description={Localizations.desbordamientoText}
                 delay={0}
               />
               <DisasterCard
                 icon="bxs-hot"
-                title="Incendios Forestales"
-                description="En el Caribe colombiano se han reportado 150 incendios forestales este año y su causa principal son las altas temperaturas y las escasas lluvias. Una vez que estos llegan a un punto que su magnitud es tan grande que puede llevar días para detenerlo, por lo que si logramos reportar estos en el menor tiempo posible, será más fácil evitar la destrucción de la fauna a su alrededor."
+                title={Localizations.incendioHead}
+                description={Localizations.incendioText}
                 delay={window.screen.width > 1024 ? 0.25 : 0}
               />
               <DisasterCard
                 icon="bx-landscape"
-                title="Deslizamientos"
-                description="Entre 1920 y 2020, se registraron más de 11.800 deslizamientos de tierra, pero solamente en 2022 se dieron 813. Esto es una prueba de cómo el cambio climático está afectando al país. Hay muchas personas que no saben que están en una zona de riesgo por lo que el tener una alerta sobre el movimiento de la tierra puede ayudar a las comunidades a evitar catástrofes. Utilizamos acelerómetros para medir el movimiento de la tierra."
+                title={Localizations.deslizamientoHead}
+                description={Localizations.desbordamientoText}
                 delay={window.screen.width > 1024 ? 0.5 : 0}
               />
             </div>
@@ -226,8 +217,8 @@ export default function Home() {
         <div id="resources" className="w-full bg-white pb-12">
           <div className="w-10/12 lg:7/12 mx-auto justify-center py-10">
             <SectionHeader
-              title="Recursos"
-              subtitle="¿Te interesa? Mira un poco de nuestros avances"
+              title={Localizations.recursos}
+              subtitle={Localizations.recursosHead}
             />
             <motion.div
               initial={{opacity: 0, y: 75}}
@@ -245,15 +236,15 @@ export default function Home() {
             <div className=" flex-row md:flex jutify-center mx-auto w-full gap-3 my-8">
               <AdvancementCard
                 title="GitHub"
-                subtitle="Nuestro Repositorio"
+                subtitle={Localizations.repo}
                 link="https://github.com/NotARoomba/NivelesDeNiveles"
                 imagePath="/img/portfolio/hub.png"
                 textColor="text-light"
               />
               <AdvancementCard
-                title="Política de Privacidad"
+                title={Localizations.politica}
                 subtitle=""
-                link="https://nivelesdeniveles.org/policy_es.pdf"
+                link="https://nivelesdeniveles.org/policy.pdf"
                 imagePath="/img/portfolio/blog.png"
                 textColor="text-dark"
               />
@@ -270,7 +261,7 @@ export default function Home() {
                 <AppStoreButton
                   url="https://apple.co/3SKLZIm"
                   theme={'dark'}
-                  title="Descárgalo en"
+                  title={Localizations.download}
                   height={60}
                   width={200}
                   className="justify-center mx-auto mt-8"
@@ -289,7 +280,7 @@ export default function Home() {
                   theme={'dark'}
                   height={60}
                   width={200}
-                  title="Descárgalo en"
+                  title={Localizations.download}
                   className="justify-center mx-auto mt-8 "
                 />
               </motion.div>
@@ -299,13 +290,13 @@ export default function Home() {
             id="us"
             className=" w-full md:w-9/12 mx-auto justify-center py-10">
             <SectionHeader
-              title="Equipo"
-              subtitle="Cónoce al equipo Hacks Costeños"
+              title={Localizations.equipo}
+              subtitle={Localizations.equipoHead}
             />
             <div className="lg:flex lg:flex-row gap-8">
               <PersonCard
                 name="Nathan Alspaugh"
-                role="Programación y Hardware"
+                role={Localizations.nathan}
                 image="/img/team/nathan.jpg"
                 github="https://github.com/NotARoomba"
                 insta="https://www.instagram.com/notaroomba"
@@ -313,7 +304,7 @@ export default function Home() {
               />
               <PersonCard
                 name="Ashlee Yin"
-                role="Web y Planeación"
+                role={Localizations.ashlee}
                 image="/img/team/ash.jpg"
                 github="https://github.com/awangran"
                 insta="https://www.instagram.com/ashlee_yin"
@@ -322,7 +313,7 @@ export default function Home() {
               />
               <PersonCard
                 name="Felipe Ochoa"
-                role="Edición y Diseño"
+                role={Localizations.felipe}
                 image="/img/team/pipe.jpg"
                 github="https://github.com/felipeochoat"
                 insta="https://www.instagram.com/felipeochoat"
@@ -334,8 +325,8 @@ export default function Home() {
         <div className="w-full bg-accent-900/70">
           <div className="w-11/12 md:w-7/12 mx-auto justify-center py-10">
             <SectionHeader
-              title="Herramientas"
-              subtitle="Tecnologías que utilizamos"
+              title={Localizations.herramientas}
+              subtitle={Localizations.herramientasHead}
             />
             <Slide autoplay slidesToShow={1}>
               {technologies.map((img, i) => (
@@ -382,11 +373,11 @@ export default function Home() {
                 <a
                   href="https://nivelesdeniveles.org/policy_es.pdf"
                   className="my-9 underline text-lightText">
-                  Política de Privacidad
+                  {Localizations.politica}
                 </a>
               </div>
               <div className="justify-left mx-auto">
-                <p className="text-2xl">Enlaces</p>
+                <p className="text-2xl">{Localizations.enlaces}</p>
                 <Link
                   className=" cursor-pointer underline"
                   activeClass="active"
@@ -395,7 +386,7 @@ export default function Home() {
                   spy={true}
                   smooth={true}
                   duration={500}>
-                  Inicio
+                  {Localizations.inicio}
                 </Link>
                 <br />
                 <Link
@@ -406,7 +397,7 @@ export default function Home() {
                   spy={true}
                   smooth={true}
                   duration={500}>
-                  Nuestra Misión
+                  {Localizations.mision}
                 </Link>
                 <br />
                 <Link
@@ -418,7 +409,7 @@ export default function Home() {
                   spy={true}
                   smooth={true}
                   duration={500}>
-                  Desastres
+                  {Localizations.desastres}
                 </Link>
                 <br />
                 <Link
@@ -430,7 +421,7 @@ export default function Home() {
                   spy={true}
                   smooth={true}
                   duration={500}>
-                  Recursos
+                  {Localizations.recursos}
                 </Link>
                 <br />
                 <Link
@@ -442,7 +433,7 @@ export default function Home() {
                   spy={true}
                   smooth={true}
                   duration={500}>
-                  Nosotros
+                  {Localizations.nosotros}
                 </Link>
               </div>
             </div>
