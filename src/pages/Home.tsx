@@ -391,6 +391,20 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
                     () => null,
                     {enableHighAccuracy: false, maximumAge: 0},
                   );
+                  GeoLocation.getCurrentPosition(
+                    async location => {
+                      if (mapRef.current) {
+                        mapRef.current.animateToRegion({
+                          latitude: location.coords.latitude,
+                          longitude: location.coords.longitude,
+                          latitudeDelta: 0.0922,
+                          longitudeDelta: 0.0421,
+                        });
+                      }
+                    },
+                    () => null,
+                    {enableHighAccuracy: true, maximumAge: 0},
+                  );
                 } catch (e) {
                   console.log(e);
                 }
