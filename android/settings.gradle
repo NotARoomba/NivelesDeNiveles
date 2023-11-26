@@ -5,7 +5,7 @@ includeBuild('../node_modules/@react-native/gradle-plugin')
 include ':react-native-fs'
 project(':react-native-fs').projectDir = new File(settingsDir, '../node_modules/react-native-fs/android')
 
-include ':@darron1217_react-native-background-geolocation-common'
-project(':@darron1217_react-native-background-geolocation-common').projectDir = new File(rootProject.projectDir, '../node_modules/@darron1217/react-native-background-geolocation/android/common')
-include ':@darron1217_react-native-background-geolocation'
-project(':@darron1217_react-native-background-geolocation').projectDir = new File(rootProject.projectDir, '../node_modules/@darron1217/react-native-background-geolocation/android/lib')
+include ':@mak12_react-native-background-geolocation-common'
+project(':@mak12_react-native-background-geolocation-common').projectDir = new File(rootProject.projectDir, '../node_modules/@mak12/react-native-background-geolocation/android/common')
+include ':@mak12_react-native-background-geolocation'
+project(':@mak12_react-native-background-geolocation').projectDir = new File(rootProject.projectDir, '../node_modules/@mak12/react-native-background-geolocation/android/lib')
