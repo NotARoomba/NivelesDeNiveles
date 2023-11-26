@@ -1,6 +1,6 @@
 import {motion} from 'framer-motion';
 import {Link} from 'react-scroll';
-import {Link as BrowserLink} from "react-router-dom";
+import {Link as BrowserLink} from 'react-router-dom';
 import DisasterCard from '../components/DisasterCard';
 import AdvancementCard from '../components/AdvancementCard';
 import SectionHeader from '../components/SectionHeader';
@@ -10,12 +10,9 @@ import {Slide} from 'react-slideshow-image';
 import SVG from 'react-inlinesvg';
 import SmartBanner from 'react-smartbanner';
 import {AppStoreButton, GooglePlayButton} from 'react-mobile-app-button';
-import { useEffect, useRef, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import ChartsEmbedSDK from '@mongodb-js/charts-embed-dom';
-import { Localizations } from '../utils/Localizations';
-
-
-
+import {Localizations} from '../utils/Localizations';
 
 export default function Home() {
   const fadein = {
@@ -77,16 +74,34 @@ export default function Home() {
   ];
   const sdk = new ChartsEmbedSDK({
     baseUrl: 'https://charts.mongodb.com/charts-nivelesdeniveles-temwe',
-    widthMode: "scale",
-    heightMode: "scale"
-  }); 
-  
-  const chartDiv = useRef<HTMLDivElement>(null); 
+    widthMode: 'scale',
+    heightMode: 'scale',
+  });
+
+  const chartDiv = useRef<HTMLDivElement>(null);
   const [isVisible, setVisible] = useState(true);
-  const [chart] = useState(sdk.createChart({maxDataAge: 60, autoRefresh: true, background: "transparent", chartId: "65541c60-1ebd-424a-8c44-f5162670e372",  theme: "light"}));
+  const [chart] = useState(
+    sdk.createChart({
+      maxDataAge: 60,
+      autoRefresh: true,
+      background: 'transparent',
+      chartId: '65541c60-1ebd-424a-8c44-f5162670e372',
+      theme: 'light',
+    }),
+  );
   useEffect(() => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if (chartDiv.current) chart.render(chartDiv.current).then(async () => {if (((await chart.getData()) as any).documents.length == 0) setVisible(false)}).catch(err => {setVisible(false); console.log(err)});
+    if (chartDiv.current)
+      chart
+        .render(chartDiv.current)
+        .then(async () => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          if (((await chart.getData()) as any).documents.length == 0)
+            setVisible(false);
+        })
+        .catch(err => {
+          setVisible(false);
+          console.log(err);
+        });
   }, [chart, chartDiv]);
   return (
     <div id="home" className="text-black">
@@ -144,11 +159,13 @@ export default function Home() {
                   transition: {duration: 0.75, delay: 0.25},
                 }}
                 className="text-neutral-600 my-5">
-                {Localizations.p1}{" "}<BrowserLink
-        to="/advice"
-        className="transition justify-center mx-auto  my-auto text-cyan-600 hover:underline hover:text-dark hover:text-underline hover:cursor-pointer duration-200">
-   {Localizations.guia}
-      </BrowserLink>.
+                {Localizations.p1}{' '}
+                <BrowserLink
+                  to="/advice"
+                  className="transition justify-center mx-auto  my-auto text-cyan-600 hover:underline hover:text-dark hover:text-underline hover:cursor-pointer duration-200">
+                  {Localizations.guia}
+                </BrowserLink>
+                .
               </motion.p>
             </div>
             <div className="flex flex-row h-full">
@@ -164,9 +181,7 @@ export default function Home() {
                 <p className="text-xl font-bold text-dark-600">
                   {Localizations.sensorsHeader}
                 </p>
-                <p className="text-neutral-600">
-                  {Localizations.sensorText}
-                </p>
+                <p className="text-neutral-600">{Localizations.sensorText}</p>
               </motion.div>
               <motion.div
                 initial={{opacity: 0, y: 75}}
@@ -177,10 +192,10 @@ export default function Home() {
                 }}
                 className="w-1/2 h-full">
                 <i className="bx bx-lg bx-cube-alt text-dark-600" />
-                <p className="text-xl font-bold text-dark-600">{Localizations.crowdHeader}</p>
-                <p className="text-neutral-600">
-                  {Localizations.crowdText}
+                <p className="text-xl font-bold text-dark-600">
+                  {Localizations.crowdHeader}
                 </p>
+                <p className="text-neutral-600">{Localizations.crowdText}</p>
               </motion.div>
             </div>
           </div>
@@ -212,7 +227,8 @@ export default function Home() {
               />
             </div>
           </div>
-         {isVisible && <div className='w-10/12 mx-auto h-96' ref={chartDiv}/>} ;
+          {isVisible && <div className="w-10/12 mx-auto h-96" ref={chartDiv} />}{' '}
+          ;
         </div>
         <div id="resources" className="w-full bg-white pb-12">
           <div className="w-10/12 lg:7/12 mx-auto justify-center py-10">

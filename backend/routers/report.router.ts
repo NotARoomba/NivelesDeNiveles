@@ -5,6 +5,7 @@ import {DangerType} from '../models/types';
 import axios from 'axios';
 import * as dotenv from 'ts-dotenv';
 import STATUS_CODES from '../models/status';
+import haversine from 'haversine-distance';
 
 export const reportRouter = express.Router();
 
@@ -26,10 +27,25 @@ reportRouter.post('/', async (req: Request, res: Response) => {
       const pastReports: Report[] = (await collections.reports
         .find({reporter: report.reporter, over: false})
         .toArray()) as unknown as Report[];
-      if (pastReports.length >= 1)
-        return res.send({
-          status: STATUS_CODES.ALREADY_REPORTED,
-        });
+      if (pastReports.length >= 1) {
+        let minDistance = Infinity;
+        for (let pastReport of pastReports) {
+          minDistance = Math.min(minDistance, haversine(
+            {
+              lat: report.location.coordinates[1],
+              lon: report.location.coordinates[0],
+            },
+            {
+              lat: pastReport.location.coordinates[1],
+              lon: pastReport.location.coordinates[0],
+            })) 
+        }
+        if (minDistance > 500) 
+          return res.send({
+            status: STATUS_CODES.ALREADY_REPORTED,
+          });
+
+      }
       //fire and water checks
 
       if (isBase64(report.image)) {
