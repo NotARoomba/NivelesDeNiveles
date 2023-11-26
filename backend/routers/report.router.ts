@@ -49,17 +49,17 @@ reportRouter.post('/', async (req: Request, res: Response) => {
       //fire and water checks
 
       if (isBase64(report.image)) {
-        if (
-          report.type === DangerType.FIRE ||
-          report.type === DangerType.FLOOD
-        ) {
+        // if (
+        //   report.type === DangerType.FIRE ||
+        //   report.type === DangerType.FLOOD
+        // ) {
           // console.log(report.image);
           const response = await axios({
             method: 'POST',
             url:
               report.type === DangerType.FIRE
                 ? 'https://detect.roboflow.com/fire-smoke-detection-eozii/1'
-                : 'https://detect.roboflow.com/flood-detection-3susv/1',
+                : report.type === DangerType.FLOOD ? 'https://detect.roboflow.com/flood-detection-3susv/1' : 'https://detect.roboflow.com/landslides-pyn83/1',
             params: {
               api_key: env.AI_AUTH,
             },
@@ -67,7 +67,8 @@ reportRouter.post('/', async (req: Request, res: Response) => {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
             },
-          });
+          }
+          );
           // console.log(response.data);
           if (response.data.predictions.length === 0)
             return res.send({
@@ -86,7 +87,7 @@ reportRouter.post('/', async (req: Request, res: Response) => {
               status: STATUS_CODES.MISMATCHED_IMAGE,
             });
           }
-        }
+        // }
       }
       await collections.reports.insertOne(report);
       res.send({status: STATUS_CODES.SUCCESS});
