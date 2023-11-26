@@ -247,7 +247,7 @@ export const Localizations = new LocalizedStrings({
     moreInformationDanger: "Lignes d'urgence \n Intervention en cas de catastrophe 111 \n Urgences nationales 123 \n Croix-Rouge 132 \n Pompiers 119 \n Restez calme, identifiez la route d'évacuation la plus proche dès que possible et dirigez-vous vers elle.",
     moreInformation: "Plus d'information",
     moreMoreInformation: "Consultez les informations complètes sur la prévention ici.",
-    close: 'fermer'
+    close: 'Fermer'
   },
   zh: {
     fire: '火',
