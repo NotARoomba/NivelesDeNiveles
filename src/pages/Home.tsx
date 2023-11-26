@@ -156,6 +156,22 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       } else {
         setLocationPerms(true);
         try {
+          if (Platform.OS === 'android') GeoLocation.getCurrentPosition(
+           async location => {
+             await callAPI('/users/', 'POST', {
+               number: await getData('number'),
+               location: {
+                 coordinates: [
+                   location.coords.longitude,
+                   location.coords.latitude,
+                 ],
+                 type: 'Point',
+               },
+             });
+           },
+           () => null,
+           {enableHighAccuracy: false, maximumAge: 0},
+         );
           GeoLocation.getCurrentPosition(
             async location => {
               await callAPI('/users/', 'POST', {
@@ -264,6 +280,22 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       setLocationPerms(true);
       OneSignal.Location.requestPermission();
       try {
+        if (Platform.OS === 'android') GeoLocation.getCurrentPosition(
+          async location => {
+            await callAPI('/users/', 'POST', {
+              number: await getData('number'),
+              location: {
+                coordinates: [
+                  location.coords.longitude,
+                  location.coords.latitude,
+                ],
+                type: 'Point',
+              },
+            });
+          },
+          () => null,
+          {enableHighAccuracy: false, maximumAge: 0},
+        );
         GeoLocation.getCurrentPosition(
           async location => {
             // console.log(location);
@@ -296,6 +328,22 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         setLocationPerms(true);
         OneSignal.Location.requestPermission();
         try {
+          if (Platform.OS === 'android') GeoLocation.getCurrentPosition(
+            async location => {
+              await callAPI('/users/', 'POST', {
+                number: await getData('number'),
+                location: {
+                  coordinates: [
+                    location.coords.longitude,
+                    location.coords.latitude,
+                  ],
+                  type: 'Point',
+                },
+              });
+            },
+            () => null,
+            {enableHighAccuracy: false, maximumAge: 0},
+          );
           GeoLocation.getCurrentPosition(
             async location => {
               // console.log(location);
