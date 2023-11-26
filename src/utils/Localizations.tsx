@@ -168,7 +168,6 @@ export const Localizations = new LocalizedStrings({
     moreInformationDanger: 'Emergency Lines \n Disaster Response 111 \n National Emergencies 123 \n Red Cross 132 \n Firefighters 119 \n Keep calm, identify the nearest evacuation route as soon as possible, and head towards it.',
     moreInformation: 'More Information',
     moreMoreInformation: 'See the complete prevention information here.',
-
     close: 'Close'
   },
   fr: {

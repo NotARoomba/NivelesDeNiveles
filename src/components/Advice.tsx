@@ -93,7 +93,7 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
             source={require('../../public/icon.png')}
             className="h-32 aspect-square mx-auto mt-4"
           /> */}
-          <View className='justify-center mx-auto'>
+          <View className='justify-center mx-auto mt-3'>
           <Icon color={status === DangerLevel.SAFE
                 ? '#22c55e'
                 : status === DangerLevel.RISK
@@ -118,7 +118,7 @@ export default function Advice({status, isOpen, setOpen}: AdviceProps) {
               ? Localizations.moreInformationRisk
               : Localizations.moreInformationDanger}{" "}<Text className='underline'
       onPress={() => Linking.openURL('https://nivelesdeniveles.org/advice')}>
-  {Localizations.moreInformation}
+  {Localizations.moreMoreInformation}
   </Text>
             </Text>
            
