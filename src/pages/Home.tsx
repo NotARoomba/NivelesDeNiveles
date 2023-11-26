@@ -389,7 +389,7 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
                       }
                     },
                     () => null,
-                    {enableHighAccuracy: true, maximumAge: 0},
+                    {enableHighAccuracy: false, maximumAge: 0},
                   );
                 } catch (e) {
                   console.log(e);
