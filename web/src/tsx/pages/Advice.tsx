@@ -43,7 +43,7 @@ export default function Advice() {
         Guía para Inundaciones
       </h5>
       <Link
-            className="text-lg bg-light-500 text-dark hover:bg-dark hover:text-light hover:cursor-pointer transition-all duration-300 p-3 px-5 rounded mt-32"
+            className="text-lg bg-violet-300text-dark hover:bg-dark hover:text-light hover:cursor-pointer transition-all duration-300 p-3 px-5 rounded mt-32"
             to="inundaciones"
             spy={true}
             smooth={true}
