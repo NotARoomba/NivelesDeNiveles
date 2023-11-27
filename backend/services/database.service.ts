@@ -366,7 +366,7 @@ export async function connectToDatabase(io: Server) {
                 }
               }
             }
-          } else if (updatedIncident.level !== DangerLevel.SAFE) {          
+          } else if (beforeIncident.numberOfReports !== 1) {          
           const innerUsers = (await collections.users
             ?.find({
               location: {

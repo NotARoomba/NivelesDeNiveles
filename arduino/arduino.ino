@@ -18,7 +18,7 @@ enum TYPE {
 #define ECHO_PIN 5
 #define RST_GPS 0
 #define SENSOR_TYPE 0
-#define MAX_ULTRASONIC_DISTANCE 120
+#define MAX_ULTRASONIC_DISTANCE 24
 #define ULTRASONIC_STATUS_DISTANCE (MAX_ULTRASONIC_DISTANCE / 3)
 #define PAST_DISTANCES_SIZE 30
 
@@ -112,9 +112,9 @@ void loop()
   Serial.print(", \"type\": ");
   Serial.print(SENSOR_TYPE);
   Serial.print(", \"location\": {\"type\": \"Point\", \"coordinates\": [");
-  Serial.print("-74.85107514434424");
+  Serial.print("-74.1048099081874");
   Serial.print(", ");
-  Serial.print("11.015038949229778");
+  Serial.print("4.641750451571789");
   Serial.println("]}}");
   
   delay(10);
