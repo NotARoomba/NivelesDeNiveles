@@ -112,9 +112,9 @@ void loop()
   Serial.print(", \"type\": ");
   Serial.print(SENSOR_TYPE);
   Serial.print(", \"location\": {\"type\": \"Point\", \"coordinates\": [");
-  Serial.print("-74.1048099081874");
+  Serial.print("-74.05646899426195");
   Serial.print(", ");
-  Serial.print("4.641750451571789");
+  Serial.print("4.656617467730898");
   Serial.println("]}}");
   
   delay(10);
