@@ -320,7 +320,7 @@ export async function connectToDatabase(io: Server) {
             },
           })
           .toArray()) as unknown as User[];
-        if (currentLevel !== DangerLevel.SAFE) {
+        // if (currentLevel !== DangerLevel.SAFE) {
           for (const user of usersInZone) {
             // console.log(user);
             try {
@@ -341,7 +341,7 @@ export async function connectToDatabase(io: Server) {
             ${beforeIncident.numberOfReports}
           `,
           );
-        }
+        // }
         if (updatedIncident.numberOfReports < beforeIncident.numberOfReports) {
           console.log("FIRST IF")       
 
