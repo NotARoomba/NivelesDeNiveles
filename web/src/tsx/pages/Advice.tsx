@@ -100,6 +100,29 @@ export default function Advice() {
   </div>
 </div>
 
+<div id="lineas"
+  className="block mt-10 rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] bg-neutral-200">
+  <div
+    className="border-b-2 border-neutral-100 px-6 py-3 dark:border-neutral-300 dark:text-neutral-800">
+    Lineas de emergencia 
+  </div>
+  <div className="p-6">
+    <blockquote>
+    <p className="text-xl">
+        <p className="font-bold">Lineas de emergencia</p>
+        <ul>
+            <li>Línea de emergencia nacional: 123</li>
+            <li>Atención de Desastres: 111</li>
+            <li>Bomberos: 119</li>
+            <li>Cruz Roja: 132</li>
+            <li>Servicio de Ambulancias: 125</li>
+        </ul>
+      </p>
+    </blockquote>
+    
+  </div>
+</div>
+
 
 <div id="inundaciones"
   className="block mt-10 rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] bg-neutral-200">
