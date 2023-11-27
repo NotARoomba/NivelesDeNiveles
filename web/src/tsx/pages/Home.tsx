@@ -37,6 +37,10 @@ export default function Home() {
       link: 'https://cdn.svgporn.com/logos/twilio.svg',
     },
     {
+      title: 'MongoDB',
+      link: 'https://cdn.svgporn.com/logos/mongodb.svg',
+    },
+    {
       title: 'OneSignal',
       link: 'https://cdn.svgporn.com/logos/onesignal.svg',
     },
@@ -356,7 +360,7 @@ export default function Home() {
                     height={100}
                     title={img.title}
                   />
-                  {i > 3 && (
+                  {i > 4 && (
                     <p className="text-center font-bold text-3xl mt-3">
                       {img.title}
                     </p>
