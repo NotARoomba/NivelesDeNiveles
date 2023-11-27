@@ -320,27 +320,31 @@ export async function connectToDatabase(io: Server) {
             },
           })
           .toArray()) as unknown as User[];
-        for (const user of usersInZone) {
-          // console.log(user);
-          try {
-            await onesignal.createNotification(getNotification(currentLevel, user.number));
-            // console.log(response.body);
-          } catch (e) {
-            // console.log(e);
-            if (e instanceof OneSignal.HTTPError) {
-              // When status code of HTTP response is not 2xx, HTTPError is thrown.
-              console.log(e.statusCode);
-              console.log(e.body);
+        if (currentLevel !== DangerLevel.SAFE) {
+          for (const user of usersInZone) {
+            // console.log(user);
+            try {
+              await onesignal.createNotification(getNotification(currentLevel, user.number));
+              // console.log(response.body);
+            } catch (e) {
+              // console.log(e);
+              if (e instanceof OneSignal.HTTPError) {
+                // When status code of HTTP response is not 2xx, HTTPError is thrown.
+                console.log(e.statusCode);
+                console.log(e.body);
+              }
             }
           }
+          // need to check for all the users that once were in the danger zone to then notify them that they are now in a safe zone
+          console.log(
+            `Updated Incident Number: ${updatedIncident.numberOfReports}, Before Incident Number: 
+            ${beforeIncident.numberOfReports}
+          `,
+          );
         }
-        // need to check for all the users that once were in the danger zone to then notify them that they are now in a safe zone
-        console.log(
-          `Updated Incident Number: ${updatedIncident.numberOfReports}, Before Incident Number: 
-          ${beforeIncident.numberOfReports}
-        `,
-        );
         if (updatedIncident.numberOfReports < beforeIncident.numberOfReports) {
+          console.log("FIRST IF")       
+
           const outerUsers = (await collections.users
             ?.find({
               location: {
@@ -366,7 +370,8 @@ export async function connectToDatabase(io: Server) {
                 }
               }
             }
-          } else if (beforeIncident.numberOfReports !== 1) {          
+          } else {   
+            console.log("SECOND IF")       
           const innerUsers = (await collections.users
             ?.find({
               location: {
