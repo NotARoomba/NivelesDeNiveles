@@ -21,8 +21,8 @@ const port = 3001;
 
 export const corsOptions: CorsOptions = {
   origin: [
-    'https://nivelesdeniveles-api.notaroomba.xyz',
-    'http://nivelesdeniveles-api.notaroomba.xyz',
+    'https://nivelesdeniveles-api.notaroomba.dev',
+    'http://nivelesdeniveles-api.notaroomba.dev',
     'http://localhost:5173',
     'http://localhost',
   ],
