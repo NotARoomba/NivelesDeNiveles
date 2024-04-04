@@ -17,6 +17,7 @@
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
+  <a href="https://nivelesdeniveles.org">Website</a> •
   <a href="#how-to-use">How To Use</a> •
   <a href="#download">Download</a> •
   <a href="#credits">Credits</a> •
@@ -54,8 +55,7 @@ $ npm start
 ```
 
 ## Download
-
-Will be able to install from the App Store and Google Play Store.
+Check out the [website](https://nivelesdeniveles.org) for links.
 
 ## Credits
 
