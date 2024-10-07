@@ -171,10 +171,10 @@
 	(net 64 "unconnected-(U3-PD5-Pad19)")
 	(net 65 "unconnected-(U3-PD6-Pad20)")
 	(net 66 "unconnected-(U3-PD7-Pad21)")
-	(net 67 "unconnected-(U3-PC0-Pad22)")
-	(net 68 "unconnected-(U3-PC1-Pad23)")
-	(net 69 "unconnected-(U3-PC2-Pad24)")
-	(net 70 "unconnected-(U3-PC3-Pad25)")
+	(net 67 "Net-(MK1--)")
+	(net 68 "Net-(MK1-+)")
+	(net 69 "Net-(U3-PC0)")
+	(net 70 "Net-(U3-PC1)")
 	(net 71 "unconnected-(U3-PC4-Pad26)")
 	(net 72 "unconnected-(U3-PC5-Pad27)")
 	(net 73 "unconnected-(U3-PC6-Pad28)")
@@ -245,7 +245,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.jae.com/direct/topics/topics_file_download/topics_id=68892&ext_no=06&index=0&_lang=en&v=202003111511468456809"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -257,7 +257,7 @@
 				)
 			)
 		)
-		(property "Description" "Nano-SIM Card (4FF) connector with Detect Switch"
+		(property "Description" ""
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -269,7 +269,9 @@
 				)
 			)
 		)
+		(property ki_fp_filters "JAE*SIM*Card*SF72S006*")
 		(path "/8f009ff7-fb61-42a1-9a69-f8c49d0e31a2")
+		(sheetname "Root")
 		(sheetfile "NivelesDeNivelesSensor.kicad_sch")
 		(attr smd)
 		(fp_line
@@ -727,7 +729,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "http://simcom.ee/documents/SIM800C/SIM800C_Hardware_Design_V1.05.pdf"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -739,7 +741,7 @@
 				)
 			)
 		)
-		(property "Description" "GSM Quad-Band Communication Module, GPRS, Audio Engine, AT Command Set, Bluetooth is Optional"
+		(property "Description" ""
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -751,7 +753,9 @@
 				)
 			)
 		)
+		(property ki_fp_filters "SIMCom*SIM800C*")
 		(path "/582ac329-62e4-4d33-adab-b82f9c2722ed")
+		(sheetname "Root")
 		(sheetfile "NivelesDeNivelesSensor.kicad_sch")
 		(attr smd)
 		(fp_line
@@ -1769,7 +1773,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "http://www.onsemi.com/pub_link/Collateral/MBR0520LT1-D.PDF"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1781,7 +1785,7 @@
 				)
 			)
 		)
-		(property "Description" "20V 0.5A Schottky Power Rectifier Diode, SOD-123"
+		(property "Description" ""
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -1793,7 +1797,9 @@
 				)
 			)
 		)
+		(property ki_fp_filters "D*SOD?123*")
 		(path "/62d147ad-e39b-43d0-96ea-f220da2bb308")
+		(sheetname "Root")
 		(sheetfile "NivelesDeNivelesSensor.kicad_sch")
 		(attr smd)
 		(fp_line
@@ -2059,7 +2065,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "http://ww1.microchip.com/downloads/en/DeviceDoc/doc2503.pdf"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2071,7 +2077,7 @@
 				)
 			)
 		)
-		(property "Description" "8MHz, 32kB Flash, 2kB SRAM, 1kB EEPROM, JTAG, DIP-40"
+		(property "Description" ""
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2083,7 +2089,9 @@
 				)
 			)
 		)
+		(property ki_fp_filters "DIP*W15.24mm*")
 		(path "/839c913a-7e54-4a5a-b0be-c347b30eb300")
+		(sheetname "Root")
 		(sheetfile "NivelesDeNivelesSensor.kicad_sch")
 		(attr through_hole)
 		(fp_line
@@ -2485,7 +2493,7 @@
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 67 "unconnected-(U3-PC0-Pad22)")
+			(net 69 "Net-(U3-PC0)")
 			(pinfunction "PC0")
 			(pintype "bidirectional")
 			(uuid "482e47cd-4c71-4004-8f46-80d552d7346f")
@@ -2496,7 +2504,7 @@
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 68 "unconnected-(U3-PC1-Pad23)")
+			(net 70 "Net-(U3-PC1)")
 			(pinfunction "PC1")
 			(pintype "bidirectional")
 			(uuid "a5341054-c20b-4a56-b80f-5bdcaa676afe")
@@ -2507,7 +2515,7 @@
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 69 "unconnected-(U3-PC2-Pad24)")
+			(net 67 "Net-(MK1--)")
 			(pinfunction "PC2")
 			(pintype "bidirectional")
 			(uuid "2c9975eb-65b8-4731-9e68-7e6165c46581")
@@ -2518,7 +2526,7 @@
 			(drill 0.8)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 70 "unconnected-(U3-PC3-Pad25)")
+			(net 68 "Net-(MK1-+)")
 			(pinfunction "PC3")
 			(pintype "bidirectional")
 			(uuid "37cf98db-9cb1-4486-8eca-2effee3c0f35")
@@ -2740,7 +2748,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "https://www.ftdichip.com/Support/Documents/DataSheets/ICs/DS_FT232R.pdf"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2752,7 +2760,7 @@
 				)
 			)
 		)
-		(property "Description" "USB to Serial Interface, SSOP-28"
+		(property "Description" ""
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -2764,7 +2772,9 @@
 				)
 			)
 		)
+		(property ki_fp_filters "SSOP*5.3x10.2mm*P0.65mm*")
 		(path "/441be93b-6402-40de-a307-9778d1b2a968")
+		(sheetname "Root")
 		(sheetfile "NivelesDeNivelesSensor.kicad_sch")
 		(attr smd)
 		(fp_line
@@ -3236,7 +3246,7 @@
 				)
 			)
 		)
-		(property "Datasheet" ""
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lp3947.pdf"
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3248,7 +3258,7 @@
 				)
 			)
 		)
-		(property "Description" "Single Cell Li-Ion LDO Battery Charger IC, Up to 1A, Support USB charging scheme"
+		(property "Description" ""
 			(at 0 0 0)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -3260,7 +3270,9 @@
 				)
 			)
 		)
+		(property ki_fp_filters "WSON*4.0x4.0mm*P0.5mm*")
 		(path "/b7ad7850-c0ca-4b45-bf86-12922f52dbba")
+		(sheetname "Root")
 		(sheetfile "NivelesDeNivelesSensor.kicad_sch")
 		(attr smd)
 		(fp_line
