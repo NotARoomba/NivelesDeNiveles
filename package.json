@@ -10,7 +10,7 @@
     "test": "jest",
     "splashcon": "react-native set-icon --path ./public/icon.png && react-native set-splash --path ./public/splash.png --background \"#F1EEFF\"",
     "postinstall": "react-native setup-ios-permissions && pod-install",
-    "cloc-src": "cloc --exclude-dir=node_modules,docs,.bundle,__tests__,package.json,package-lock.json,ios,android --fullpath --not-match-d=web/node_modules ."
+    "cloc-src": "npx cloc --exclude-dir=node_modules,docs,.bundle,__tests__,package.json,package-lock.json,ios,android --fullpath --not-match-d=web/node_modules ."
   },
   "dependencies": {
     "@bam.tech/react-native-make": "^3.0.3",
