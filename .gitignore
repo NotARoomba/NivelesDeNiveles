@@ -67,3 +67,4 @@ yarn-error.log
 .env
 ios/Podfile.lock
 *.lck
+*.jks
