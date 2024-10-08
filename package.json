@@ -13,11 +13,11 @@
     "cloc-src": "npx cloc --exclude-dir=node_modules,docs,.bundle,__tests__,package.json,package-lock.json,ios,android --fullpath --not-match-d=web/node_modules ."
   },
   "dependencies": {
-    "@bam.tech/react-native-make": "^3.0.3",
+    "@bam.tech/react-native-make": "^3.0.0",
     "@mak12/react-native-background-geolocation": "^0.7.7",
     "@powerdesigninc/react-native-prompt": "^0.1.2",
     "@react-native-async-storage/async-storage": "^1.19.4",
-    "@react-native-community/cli-platform-android": "^12.1.0",
+    "@react-native-community/cli-platform-android": "^12.3.7",
     "@react-native-community/geolocation": "^3.1.0",
     "@react-native-community/netinfo": "^11.1.0",
     "axios": "^1.6.0",
@@ -25,7 +25,7 @@
     "jsc-android": "^250231.0.0",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
-    "react-native": "0.72.6",
+    "react-native": "^0.72.17",
     "react-native-config": "^1.5.1",
     "react-native-country-codes-picker": "^2.3.4",
     "react-native-fs": "^2.20.0",
@@ -40,7 +40,7 @@
     "react-native-splash-screen": "^3.3.0",
     "react-native-vector-icons": "^10.0.1",
     "react-native-vision-camera": "^3.6.4",
-    "socket.io": "^4.7.2",
+    "socket.io": "^4.8.0",
     "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
@@ -60,6 +60,7 @@
     "metro-react-native-babel-preset": "0.77.0",
     "pod-install": "^0.1.39",
     "prettier": "^3.0.3",
+    "prettier-plugin-organize-imports": "^4.1.0",
     "react-test-renderer": "18.2.0",
     "tailwindcss": "^3.3.2",
     "typescript": "5.2.2"

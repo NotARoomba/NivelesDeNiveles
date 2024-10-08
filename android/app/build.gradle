@@ -126,7 +126,7 @@ dependencies {
 
     implementation 'com.onesignal:OneSignal:[5.0.0, 5.99.99]'
 
-    implementation project(':@mak12_react-native-background-geolocation')
+    implementation project(':@mak12_react-native-background-geolocation-common')
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

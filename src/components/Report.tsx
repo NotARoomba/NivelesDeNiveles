@@ -1,25 +1,16 @@
-import React, {
-  View,
-  TouchableOpacity,
-  Text,
-  TextInput,
-  Alert,
-} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useState} from 'react';
+import React, {Alert, Text, TouchableOpacity, View} from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
+import {OneSignal} from 'react-native-onesignal';
 import Icon from 'react-native-vector-icons/Feather';
+import ReportType from '../../backend/models/report';
+import STATUS_CODES from '../../backend/models/status';
+import {callAPI, getData} from '../utils/Functions';
+import {Localizations} from '../utils/Localizations';
 import {DangerLevel, DangerType, ReportProps} from '../utils/Types';
 import DangerTypeButton from './DangerTypeButton';
-import {useState} from 'react';
-import DangerLevelButton from './DangerLevelButton';
-import {callAPI, getData} from '../utils/Functions';
-import User from '../../backend/models/user';
-import ReportType from '../../backend/models/report';
-import {Camera, useCameraDevice} from 'react-native-vision-camera';
 import Evidence from './Evidence';
-import {Localizations} from '../utils/Localizations';
-import Spinner from 'react-native-loading-spinner-overlay';
-import STATUS_CODES from '../../backend/models/status';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {OneSignal} from 'react-native-onesignal';
 
 export default function Report({
   reportFunction,

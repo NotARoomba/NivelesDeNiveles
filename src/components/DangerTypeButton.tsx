@@ -1,6 +1,6 @@
 import React, {TouchableOpacity, View} from 'react-native';
-import {DangerTypeButtonProps} from '../utils/Types';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import {DangerTypeButtonProps} from '../utils/Types';
 
 export default function DangerTypeButton({
   icon,

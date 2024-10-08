@@ -1,24 +1,24 @@
+import prompt from '@powerdesigninc/react-native-prompt';
 import React, {useEffect, useState} from 'react';
-import {CountryPicker} from 'react-native-country-codes-picker';
 import {
+  Alert,
+  Image,
   SafeAreaView,
+  ScrollView,
   StatusBar,
-  View,
   Text,
   TextInput,
   TouchableOpacity,
-  Image,
-  Alert,
-  ScrollView,
+  View,
 } from 'react-native';
-import {Localizations} from '../utils/Localizations';
-import {FunctionScreenProp, styles} from '../utils/Types';
-import prompt from '@powerdesigninc/react-native-prompt';
-import {callAPI, storeData} from '../utils/Functions';
-import SplashScreen from 'react-native-splash-screen';
-import STATUS_CODES from '../../backend/models/status';
+import {CountryPicker} from 'react-native-country-codes-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {OneSignal} from 'react-native-onesignal';
+import SplashScreen from 'react-native-splash-screen';
+import STATUS_CODES from '../../backend/models/status';
+import {callAPI, storeData} from '../utils/Functions';
+import {Localizations} from '../utils/Localizations';
+import {FunctionScreenProp, styles} from '../utils/Types';
 
 async function checkLogin(
   number: string,

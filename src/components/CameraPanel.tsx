@@ -1,13 +1,13 @@
+import {useRef} from 'react';
 import {Animated, TouchableOpacity, View} from 'react-native';
-import {CameraPanelProps} from '../utils/Types';
-import {useState, useRef, useCallback} from 'react';
+import RNFS from 'react-native-fs';
+import Icon from 'react-native-vector-icons/Feather';
 import {
   Camera,
   useCameraDevice,
   useCameraFormat,
 } from 'react-native-vision-camera';
-import RNFS from 'react-native-fs';
-import Icon from 'react-native-vector-icons/Feather';
+import {CameraPanelProps} from '../utils/Types';
 
 export default function CameraPanel({
   cameraOpen,

@@ -1,8 +1,7 @@
-import {View, Text, ScrollView} from 'react-native';
+import {ScrollView, Text, View} from 'react-native';
 import Sensor from '../../backend/models/sensor';
-import {DangerLevel, DangerType} from '../utils/Types';
-import {PanResponder} from 'react-native';
 import {Localizations} from '../utils/Localizations';
+import {DangerLevel, DangerType} from '../utils/Types';
 
 export default function Sensors({sensors}: {sensors: Sensor[]}) {
   return (

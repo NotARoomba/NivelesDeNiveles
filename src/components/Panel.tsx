@@ -1,6 +1,6 @@
-import {useEffect, useRef, useState} from 'react';
+import {useRef, useState} from 'react';
 import React, {Animated, PanResponder, View} from 'react-native';
-import {DangerLevel, LocationData, PanelProps} from '../utils/Types';
+import {PanelProps} from '../utils/Types';
 import Report from './Report';
 import Status from './Status';
 

@@ -1,11 +1,4 @@
-import {
-  Modal,
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import {Image, Modal, Text, TouchableOpacity, View} from 'react-native';
 import {Localizations} from '../utils/Localizations';
 import {PermissionsModalProps} from '../utils/Types';
 

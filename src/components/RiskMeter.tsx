@@ -1,7 +1,7 @@
-import React, {View, Text, TouchableOpacity} from 'react-native';
+import React, {Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import {DangerLevel, RiskMeterProps} from '../utils/Types';
 import {Localizations} from '../utils/Localizations';
+import {DangerLevel, RiskMeterProps} from '../utils/Types';
 
 export default function RiskMeter({status, reportFunction}: RiskMeterProps) {
   return (

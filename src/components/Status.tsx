@@ -1,10 +1,10 @@
-import React, {View, Text} from 'react-native';
-import {RiskMeterProps, StatusProps} from '../utils/Types';
-import RiskMeter from './RiskMeter';
-import Advice from './Advice';
 import {useState} from 'react';
-import Sensors from './Sensors';
+import React, {Text, View} from 'react-native';
 import {Localizations} from '../utils/Localizations';
+import {StatusProps} from '../utils/Types';
+import Advice from './Advice';
+import RiskMeter from './RiskMeter';
+import Sensors from './Sensors';
 
 export default function Status({reportFunction, locationData}: StatusProps) {
   const [isOpen, setOpen] = useState(false);

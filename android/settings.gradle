@@ -7,5 +7,5 @@ project(':react-native-fs').projectDir = new File(settingsDir, '../node_modules/
 
 include ':@mak12_react-native-background-geolocation-common'
 project(':@mak12_react-native-background-geolocation-common').projectDir = new File(rootProject.projectDir, '../node_modules/@mak12/react-native-background-geolocation/android/common')
-include ':@mak12_react-native-background-geolocation'
-project(':@mak12_react-native-background-geolocation').projectDir = new File(rootProject.projectDir, '../node_modules/@mak12/react-native-background-geolocation/android/lib')
+// include ':@mak12_react-native-background-geolocation'
+// project(':@mak12_react-native-background-geolocation').projectDir = new File(rootProject.projectDir, '../node_modules/@mak12/react-native-background-geolocation/android/lib')

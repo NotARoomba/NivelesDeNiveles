@@ -1,22 +1,16 @@
+import {useEffect, useState} from 'react';
 import {
   Alert,
-  Button,
-  KeyboardAvoidingView,
   Linking,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {
-  useCameraDevice,
-  Camera,
-  useCameraPermission,
-} from 'react-native-vision-camera';
-import {EvidenceProps} from '../utils/Types';
-import {useEffect, useState} from 'react';
-import CameraPanel from './CameraPanel';
+import {useCameraPermission} from 'react-native-vision-camera';
 import {Localizations} from '../utils/Localizations';
+import {EvidenceProps} from '../utils/Types';
+import CameraPanel from './CameraPanel';
 
 export default function Evidence({
   evidence,

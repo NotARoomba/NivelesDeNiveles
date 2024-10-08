@@ -1,52 +1,46 @@
-import React, {createRef, useEffect, useRef, useState} from 'react';
+import GeoLocation from '@react-native-community/geolocation';
+import NetInfo from '@react-native-community/netinfo';
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  View,
-  StatusBar,
   Alert,
-  Platform,
-  Text,
-  Linking,
-  TouchableOpacity,
   Keyboard,
+  Linking,
+  Platform,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import MapView, {Circle, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {
+  PERMISSIONS,
+  RESULTS,
+  check,
+  checkNotifications,
+  request,
+  requestNotifications,
+} from 'react-native-permissions';
+import {callAPI, getData} from '../utils/Functions';
 import {
   DangerLevel,
   DangerType,
   FunctionScreenProp,
   LocationData,
 } from '../utils/Types';
-import MapView, {
-  PROVIDER_GOOGLE,
-  Heatmap,
-  Marker,
-  Circle,
-} from 'react-native-maps';
-import NetInfo, {NetInfoSubscription} from '@react-native-community/netinfo';
-import {
-  check,
-  checkLocationAccuracy,
-  checkNotifications,
-  PERMISSIONS,
-  request,
-  requestNotifications,
-  RESULTS,
-} from 'react-native-permissions';
-import {callAPI, getData} from '../utils/Functions';
-import GeoLocation from '@react-native-community/geolocation';
 // import GetLocation from 'react-native-get-location';
 import BackgroundGeolocation from '@mak12/react-native-background-geolocation';
 import Config from 'react-native-config';
-import {io} from 'socket.io-client';
-import NivelesEvents from '../../backend/models/events';
-import Panel from '../components/Panel';
-import User from '../../backend/models/user';
+import {OneSignal} from 'react-native-onesignal';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/Feather';
-import {Localizations} from '../utils/Localizations';
-import STATUS_CODES from '../../backend/models/status';
+import {io} from 'socket.io-client';
+import NivelesEvents from '../../backend/models/events';
 import Incident from '../../backend/models/incident';
-import {OneSignal} from 'react-native-onesignal';
+import STATUS_CODES from '../../backend/models/status';
+import User from '../../backend/models/user';
+import Panel from '../components/Panel';
 import PermissionsModal from '../components/PermissionsModal';
+import {Localizations} from '../utils/Localizations';
 
 export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
   const [locationPerms, setLocationPerms] = useState(false);
@@ -156,22 +150,23 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       } else {
         setLocationPerms(true);
         try {
-          if (Platform.OS === 'android') GeoLocation.getCurrentPosition(
-           async location => {
-             await callAPI('/users/', 'POST', {
-               number: await getData('number'),
-               location: {
-                 coordinates: [
-                   location.coords.longitude,
-                   location.coords.latitude,
-                 ],
-                 type: 'Point',
-               },
-             });
-           },
-           () => null,
-           {enableHighAccuracy: false, maximumAge: 0},
-         );
+          if (Platform.OS === 'android')
+            GeoLocation.getCurrentPosition(
+              async location => {
+                await callAPI('/users/', 'POST', {
+                  number: await getData('number'),
+                  location: {
+                    coordinates: [
+                      location.coords.longitude,
+                      location.coords.latitude,
+                    ],
+                    type: 'Point',
+                  },
+                });
+              },
+              () => null,
+              {enableHighAccuracy: false, maximumAge: 0},
+            );
           GeoLocation.getCurrentPosition(
             async location => {
               await callAPI('/users/', 'POST', {
@@ -280,22 +275,23 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
       setLocationPerms(true);
       OneSignal.Location.requestPermission();
       try {
-        if (Platform.OS === 'android') GeoLocation.getCurrentPosition(
-          async location => {
-            await callAPI('/users/', 'POST', {
-              number: await getData('number'),
-              location: {
-                coordinates: [
-                  location.coords.longitude,
-                  location.coords.latitude,
-                ],
-                type: 'Point',
-              },
-            });
-          },
-          () => null,
-          {enableHighAccuracy: false, maximumAge: 0},
-        );
+        if (Platform.OS === 'android')
+          GeoLocation.getCurrentPosition(
+            async location => {
+              await callAPI('/users/', 'POST', {
+                number: await getData('number'),
+                location: {
+                  coordinates: [
+                    location.coords.longitude,
+                    location.coords.latitude,
+                  ],
+                  type: 'Point',
+                },
+              });
+            },
+            () => null,
+            {enableHighAccuracy: false, maximumAge: 0},
+          );
         GeoLocation.getCurrentPosition(
           async location => {
             // console.log(location);
@@ -328,22 +324,23 @@ export default function Home({isDarkMode, updateFunction}: FunctionScreenProp) {
         setLocationPerms(true);
         OneSignal.Location.requestPermission();
         try {
-          if (Platform.OS === 'android') GeoLocation.getCurrentPosition(
-            async location => {
-              await callAPI('/users/', 'POST', {
-                number: await getData('number'),
-                location: {
-                  coordinates: [
-                    location.coords.longitude,
-                    location.coords.latitude,
-                  ],
-                  type: 'Point',
-                },
-              });
-            },
-            () => null,
-            {enableHighAccuracy: false, maximumAge: 0},
-          );
+          if (Platform.OS === 'android')
+            GeoLocation.getCurrentPosition(
+              async location => {
+                await callAPI('/users/', 'POST', {
+                  number: await getData('number'),
+                  location: {
+                    coordinates: [
+                      location.coords.longitude,
+                      location.coords.latitude,
+                    ],
+                    type: 'Point',
+                  },
+                });
+              },
+              () => null,
+              {enableHighAccuracy: false, maximumAge: 0},
+            );
           GeoLocation.getCurrentPosition(
             async location => {
               // console.log(location);
