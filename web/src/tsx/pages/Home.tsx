@@ -319,6 +319,7 @@ export default function Home() {
                 role={Localizations.nathan}
                 image="/img/team/nathan.jpg"
                 github="https://github.com/NotARoomba"
+                linkedin="https://www.linkedin.com/in/notaroomba/"
                 insta="https://www.instagram.com/notaroomba"
                 delay={window.screen.width > 1024 ? 0.25 : 0}
               />
