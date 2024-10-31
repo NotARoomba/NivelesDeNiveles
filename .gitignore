@@ -68,3 +68,4 @@ yarn-error.log
 ios/Podfile.lock
 *.lck
 *.jks
+android/app/release/app-release.aab
