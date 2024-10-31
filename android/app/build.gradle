@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
 apply from: project(":react-native-config").projectDir.getPath() + "/dotenv.gradle"
@@ -50,6 +51,8 @@ react {
     //
     //   The list of flags to pass to the Hermes compiler. By default is "-O", "-output-source-map"
     // hermesFlags = ["-O", "-output-source-map"]
+    /* Autolinking */
+    autolinkLibrariesWithApp()
 }
 
 /**
@@ -73,14 +76,15 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 android {
     ndkVersion rootProject.ext.ndkVersion
 
-    compileSdkVersion rootProject.ext.compileSdkVersion
+     buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdk rootProject.ext.compileSdkVersion
 
     namespace "com.notaroomba.ndn"
     defaultConfig {
         applicationId "com.notaroomba.ndn"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 13
+        versionCode 14
         versionName "2.5.9"
     }
     signingConfigs {
@@ -111,13 +115,9 @@ dependencies {
 
     // REACT NATIVE FS
     implementation project(':react-native-fs')
+    
 
-    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
-    debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
-        exclude group:'com.squareup.okhttp3', module:'okhttp'
-    }
-
-    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}")
+   
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
@@ -126,8 +126,15 @@ dependencies {
 
     implementation 'com.onesignal:OneSignal:[5.0.0, 5.99.99]'
 
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+
     implementation project(':@mak12_react-native-background-geolocation-common')
 }
-
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-
+//configurations.all {
+//resolutionStrategy {
+//force 'com.google.android.gms:play-services-gcm:16.1.0'
+//force 'com.google.android.gms:play-services-base:16.1.0'
+//force 'com.google.firebase:firebase-core:16.0.9'
+//force 'com.google.firebase:firebase-messaging:18.0.0'
+//}}
