@@ -1,4 +1,5 @@
 #[macro_use] extern crate rocket;
+use std::env;
 
 #[get("/")]
 fn index() -> &'static str {
@@ -7,5 +8,11 @@ fn index() -> &'static str {
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index])
+    match env::var("PORT") {
+        Ok(port) => rocket::build()
+        .configure(rocket::Config::figment().merge(("port", port)))
+        .mount("/", routes![index]),
+        Err(_) => rocket::build()
+        .mount("/", routes![index]),
+    }
 }
