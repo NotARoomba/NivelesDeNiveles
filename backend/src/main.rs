@@ -1,18 +1,18 @@
-#[macro_use] extern crate rocket;
+use axum::{
+    routing::get,
+    Router,
+};
 use std::env;
+use dotenv::dotenv;
 
-#[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
-}
-
-#[launch]
-fn rocket() -> _ {
-    match env::var("PORT") {
-        Ok(port) => rocket::build()
-        .configure(rocket::Config::figment().merge(("port", port.parse::<u16>().unwrap())))
-        .mount("/", routes![index]),
-        Err(_) => rocket::build()
-        .mount("/", routes![index]),
-    }
+#[tokio::main]
+async fn main() {
+    dotenv().ok();
+    // build our application with a single route
+    let app = Router::new().route("/", get(|| async { "Hello, World!" }));
+    let port = env::var("PORT").unwrap_or("3000".to_string());
+    // run our app with hyper, listening globally on the port
+    println!("Server running on port {}", port);
+    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}")).await.unwrap();
+    axum::serve(listener, app).await.unwrap();
 }
