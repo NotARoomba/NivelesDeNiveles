@@ -1,16 +1,28 @@
 use serde::{ Deserialize, Serialize };
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct Location {
     pub coordinates: [f64; 2],
     #[serde(rename = "type")]
     pub location_type: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct User {
     pub number: String,
     pub location: Location,
+}
+
+impl Default for User {
+    fn default() -> Self {
+        User {
+            number: String::from(""),
+            location: Location {
+                coordinates: [0.0, 0.0],
+                location_type: String::from("Point"),
+            },
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]

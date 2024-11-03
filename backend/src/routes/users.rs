@@ -37,6 +37,15 @@ pub async fn update_user(
     }
     let user = u.clone();
     if user.location.coordinates.len() == 2 {
+        let before_user = collections.users
+            .find_one(doc! { "number": user.number.clone() }).await
+            .unwrap()
+            .unwrap_or(User::default());
+        if before_user == User::default() {
+            return Err(Json(ResponseBody::<u8>::new(STATUS_CODES::USER_NOT_FOUND, None)));
+        } else if before_user == user {
+            return Ok(Json(ResponseBody::<u8>::new(STATUS_CODES::SUCCESS, None)));
+        }
         let mut incidents = collections.incidents.find(doc! { "over": false }).await.unwrap();
         let current_incidents = incidents
             .by_ref()
@@ -57,10 +66,6 @@ pub async fn update_user(
                 ) < (incident.range as f64)
             })
             .collect::<Vec<_>>();
-        let before_user = collections.users
-            .find_one(doc! { "number": user.number.clone() }).await
-            .unwrap()
-            .unwrap();
         let before_incidents = incidents
             .collect::<Vec<_>>().await
             .into_iter()
@@ -106,17 +111,16 @@ pub async fn update_user(
             }
         }
     }
-    let res = collections.users
+    collections.users
         .update_one(
             doc! { "number": user.number },
-            doc! { "location": {"coordinates" : [user.location.coordinates[0], user.location.coordinates[1]], "type": user.location.location_type} }
+            doc! { "$set": {"location.coordinates": [user.location.coordinates[0], user.location.coordinates[1]], "location.type": user.location.location_type } }
         )
         .upsert(true).await
-        .unwrap();
-    match res.upserted_id {
-        Some(_) => Ok(Json(ResponseBody::<u8>::new(STATUS_CODES::SUCCESS, None))),
-        None => Err(Json(ResponseBody::<u8>::new(STATUS_CODES::USER_NOT_FOUND, None))),
-    }
+        .map_err(|_| {
+            return Json(ResponseBody::<u8>::new(STATUS_CODES::GENERIC_ERROR, None));
+        })?;
+    Ok(Json(ResponseBody::<u8>::new(STATUS_CODES::SUCCESS, None)))
 }
 
 pub fn get_routes(collections: Arc<Collections>) -> Router {
