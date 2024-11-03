@@ -10,7 +10,7 @@ fn index() -> &'static str {
 fn rocket() -> _ {
     match env::var("PORT") {
         Ok(port) => rocket::build()
-        .configure(rocket::Config::figment().merge(("port", port)))
+        .configure(rocket::Config::figment().merge(("port", port.parse::<u16>().unwrap())))
         .mount("/", routes![index]),
         Err(_) => rocket::build()
         .mount("/", routes![index]),
