@@ -1,10 +1,10 @@
-use axum::{ extract::{ self, Query }, response::IntoResponse, routing::{ get }, Json, Router };
+use axum::{ extract::{ self, Query }, response::IntoResponse, routing::get, Json, Router };
 use futures::StreamExt;
 use mongodb::bson::doc;
 use serde::Deserialize;
 use std::sync::Arc;
 use crate::{
-    status::{ ResponseBody, STATUS_CODES },
+    status::{ ResponseBody, StatusCodes },
     types::{ DangerLevel, User },
     utils::{ create_configuration, create_notification, Collections },
 };
@@ -21,8 +21,8 @@ pub async fn get_user(
     // println!("Getting user with number: {:?}", params.number);
     let user = collections.users.find_one(doc! { "number": params.number }).await.unwrap_or(None);
     match user {
-        Some(user) => Ok(Json(ResponseBody::new(STATUS_CODES::SUCCESS, Some(user)))),
-        None => Err(Json(ResponseBody::<User>::new(STATUS_CODES::USER_NOT_FOUND, None))),
+        Some(user) => Ok(Json(ResponseBody::new(StatusCodes::Success, Some(user)))),
+        None => Err(Json(ResponseBody::<User>::new(StatusCodes::UserNotFound, None))),
     }
 }
 
@@ -31,9 +31,9 @@ pub async fn update_user(
     collections: &Collections
 ) -> impl IntoResponse {
     if u.location.coordinates.len() != 2 {
-        return Err(Json(ResponseBody::<u8>::new(STATUS_CODES::INVALID_DATA, None)));
+        return Err(Json(ResponseBody::<u8>::new(StatusCodes::InvalidData, None)));
     } else if u.number.len() == 0 {
-        return Err(Json(ResponseBody::<u8>::new(STATUS_CODES::INVALID_NUMBER, None)));
+        return Err(Json(ResponseBody::<u8>::new(StatusCodes::InvalidNumber, None)));
     }
     let user = u.clone();
     if user.location.coordinates.len() == 2 {
@@ -42,9 +42,9 @@ pub async fn update_user(
             .unwrap()
             .unwrap_or(User::default());
         if before_user == User::default() {
-            return Err(Json(ResponseBody::<u8>::new(STATUS_CODES::USER_NOT_FOUND, None)));
+            return Err(Json(ResponseBody::<u8>::new(StatusCodes::UserNotFound, None)));
         } else if before_user == user {
-            return Ok(Json(ResponseBody::<u8>::new(STATUS_CODES::SUCCESS, None)));
+            return Ok(Json(ResponseBody::<u8>::new(StatusCodes::Success, None)));
         }
         let mut incidents = collections.incidents.find(doc! { "over": false }).await.unwrap();
         let current_incidents = incidents
@@ -118,9 +118,9 @@ pub async fn update_user(
         )
         .upsert(true).await
         .map_err(|_| {
-            return Json(ResponseBody::<u8>::new(STATUS_CODES::GENERIC_ERROR, None));
+            return Json(ResponseBody::<u8>::new(StatusCodes::GenericError, None));
         })?;
-    Ok(Json(ResponseBody::<u8>::new(STATUS_CODES::SUCCESS, None)))
+    Ok(Json(ResponseBody::<u8>::new(StatusCodes::Success, None)))
 }
 
 pub fn get_routes(collections: Arc<Collections>) -> Router {
