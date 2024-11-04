@@ -27,6 +27,7 @@ async fn main() {
         .nest("/verify", routes::verify::get_routes());
 
     // Retrieve the PORT environment variable or default to 3000
+
     let port = env::var("PORT").unwrap_or_else(|_| "3000".to_string());
     println!("Server running on port {}", port);
 
