@@ -4,7 +4,6 @@ use std::{ env, sync::Arc };
 use tokio::net::TcpListener;
 
 mod utils;
-mod status;
 mod routes;
 mod types;
 
@@ -24,7 +23,9 @@ async fn main() {
             get(|| async { "You're not supposed to be here!" })
         )
         .nest("/users", routes::users::get_routes(Arc::clone(&collections)))
-        .nest("/verify", routes::verify::get_routes());
+        .nest("/verify", routes::verify::get_routes())
+        .nest("/sensors", routes::sensors::get_routes(Arc::clone(&collections)))
+        .nest("/report", routes::report::get_routes(Arc::clone(&collections)));
 
     // Retrieve the PORT environment variable or default to 3000
 

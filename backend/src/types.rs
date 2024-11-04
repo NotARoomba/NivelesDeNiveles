@@ -25,7 +25,7 @@ impl Default for User {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Report {
     pub reporter: String,
     #[serde(rename = "type")]
@@ -46,14 +46,14 @@ pub struct Sensor {
     pub location: Location,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum DangerType {
     Fire,
     Flood,
-    Earthquake,
+    Landslide,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Clone)]
 pub enum DangerLevel {
     Safe,
     Risk,
@@ -71,4 +71,38 @@ pub struct Incident {
     pub been_notified: bool,
     pub over: bool,
     pub range: i64,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum StatusCodes {
+    Success = 0,
+    GenericError,
+    UserNotFound,
+    InvalidNumber,
+    SentCode,
+    NumberNotExist,
+    ErrorSendingCode,
+    TooManyAttempts,
+    CodeDenied,
+    CodeExpired,
+    CodeFailed,
+    AlreadyReported,
+    MismatchedImage,
+    NoConnection,
+    InvalidData,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ResponseBody<T> {
+    pub status: u8,
+    pub data: Option<T>,
+}
+
+impl<T> ResponseBody<T> {
+    pub fn new(status: StatusCodes, data: Option<T>) -> ResponseBody<T> {
+        ResponseBody {
+            status: status as u8,
+            data,
+        }
+    }
 }

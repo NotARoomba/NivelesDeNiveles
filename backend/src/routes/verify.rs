@@ -3,7 +3,7 @@ use std::env;
 use axum::{ extract::Query, response::IntoResponse, routing::get, Json, Router };
 use serde::Deserialize;
 
-use crate::status::{ ResponseBody, StatusCodes };
+use crate::types::{ ResponseBody, StatusCodes };
 
 #[derive(Debug, Deserialize)]
 pub struct GetParams {
@@ -69,24 +69,20 @@ pub async fn send(Query(params): Query<GetParams>) -> impl IntoResponse {
     if let Ok(response) = res {
         if let Ok(verification) = response.json::<SendResponse>().await {
             if verification.status == "pending" {
-                return Json(ResponseBody::<u8>::new(StatusCodes::Success, None)).into_response();
+                return Json(ResponseBody::<u8>::new(StatusCodes::Success, None));
             } else if !verification.lookup.valid {
-                return Json(
-                    ResponseBody::<u8>::new(StatusCodes::NumberNotExist, None)
-                ).into_response();
+                return Json(ResponseBody::<u8>::new(StatusCodes::NumberNotExist, None));
             }
         }
     } else if let Err(e) = res {
         let status = e.status().unwrap().as_u16();
         if status == 429 {
-            return Json(
-                ResponseBody::<u8>::new(StatusCodes::TooManyAttempts, None)
-            ).into_response();
+            return Json(ResponseBody::<u8>::new(StatusCodes::TooManyAttempts, None));
         } else if status == 60200 {
-            return Json(ResponseBody::<u8>::new(StatusCodes::NumberNotExist, None)).into_response();
+            return Json(ResponseBody::<u8>::new(StatusCodes::NumberNotExist, None));
         }
     }
-    Json(ResponseBody::<u8>::new(StatusCodes::ErrorSendingCode, None)).into_response()
+    Json(ResponseBody::<u8>::new(StatusCodes::ErrorSendingCode, None))
 }
 
 pub async fn check(Json(body): Json<GetParams>) -> impl IntoResponse {
@@ -109,20 +105,20 @@ pub async fn check(Json(body): Json<GetParams>) -> impl IntoResponse {
     if let Ok(response) = res {
         if let Ok(verification) = response.json::<SendResponse>().await {
             if verification.status == "approved" {
-                return Json(ResponseBody::<u8>::new(StatusCodes::Success, None)).into_response();
+                return Json(ResponseBody::<u8>::new(StatusCodes::Success, None));
             } else {
-                return Json(ResponseBody::<u8>::new(StatusCodes::CodeDenied, None)).into_response();
+                return Json(ResponseBody::<u8>::new(StatusCodes::CodeDenied, None));
             }
         }
     } else if let Err(e) = res {
         let status = e.status().unwrap().as_u16();
         if status == 400 && status == 60200 {
-            return Json(ResponseBody::<u8>::new(StatusCodes::CodeDenied, None)).into_response();
+            return Json(ResponseBody::<u8>::new(StatusCodes::CodeDenied, None));
         } else if status == 404 && status == 20404 {
-            return Json(ResponseBody::<u8>::new(StatusCodes::CodeExpired, None)).into_response();
+            return Json(ResponseBody::<u8>::new(StatusCodes::CodeExpired, None));
         }
     }
-    Json(ResponseBody::<u8>::new(StatusCodes::CodeFailed, None)).into_response()
+    Json(ResponseBody::<u8>::new(StatusCodes::CodeFailed, None))
 }
 
 pub fn get_routes() -> Router {

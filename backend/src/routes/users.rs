@@ -4,8 +4,7 @@ use mongodb::bson::doc;
 use serde::Deserialize;
 use std::sync::Arc;
 use crate::{
-    status::{ ResponseBody, StatusCodes },
-    types::{ DangerLevel, User },
+    types::{ DangerLevel, User, ResponseBody, StatusCodes },
     utils::{ create_configuration, create_notification, Collections },
 };
 
@@ -21,8 +20,8 @@ pub async fn get_user(
     // println!("Getting user with number: {:?}", params.number);
     let user = collections.users.find_one(doc! { "number": params.number }).await.unwrap_or(None);
     match user {
-        Some(user) => Ok(Json(ResponseBody::new(StatusCodes::Success, Some(user)))),
-        None => Err(Json(ResponseBody::<User>::new(StatusCodes::UserNotFound, None))),
+        Some(user) => Json(ResponseBody::new(StatusCodes::Success, Some(user))),
+        None => Json(ResponseBody::<User>::new(StatusCodes::UserNotFound, None)),
     }
 }
 
@@ -31,9 +30,9 @@ pub async fn update_user(
     collections: &Collections
 ) -> impl IntoResponse {
     if u.location.coordinates.len() != 2 {
-        return Err(Json(ResponseBody::<u8>::new(StatusCodes::InvalidData, None)));
+        return Json(ResponseBody::<u8>::new(StatusCodes::InvalidData, None));
     } else if u.number.len() == 0 {
-        return Err(Json(ResponseBody::<u8>::new(StatusCodes::InvalidNumber, None)));
+        return Json(ResponseBody::<u8>::new(StatusCodes::InvalidNumber, None));
     }
     let user = u.clone();
     if user.location.coordinates.len() == 2 {
@@ -42,9 +41,9 @@ pub async fn update_user(
             .unwrap()
             .unwrap_or(User::default());
         if before_user == User::default() {
-            return Err(Json(ResponseBody::<u8>::new(StatusCodes::UserNotFound, None)));
+            return Json(ResponseBody::<u8>::new(StatusCodes::UserNotFound, None));
         } else if before_user == user {
-            return Ok(Json(ResponseBody::<u8>::new(StatusCodes::Success, None)));
+            return Json(ResponseBody::<u8>::new(StatusCodes::Success, None));
         }
         let mut incidents = collections.incidents.find(doc! { "over": false }).await.unwrap();
         let current_incidents = incidents
@@ -111,16 +110,22 @@ pub async fn update_user(
             }
         }
     }
-    collections.users
+    let update_result = collections.users
         .update_one(
             doc! { "number": user.number },
             doc! { "$set": {"location.coordinates": [user.location.coordinates[0], user.location.coordinates[1]], "location.type": user.location.location_type } }
         )
-        .upsert(true).await
-        .map_err(|_| {
+        .upsert(true).await;
+    // .map_err(|_| {
+    //     return Json(ResponseBody::<u8>::new(StatusCodes::GenericError, None));
+    // });
+    match update_result {
+        Ok(_) => Json(ResponseBody::<u8>::new(StatusCodes::Success, None)),
+        Err(e) => {
+            println!("Error updating user: {:?}", e);
             return Json(ResponseBody::<u8>::new(StatusCodes::GenericError, None));
-        })?;
-    Ok(Json(ResponseBody::<u8>::new(StatusCodes::Success, None)))
+        }
+    }
 }
 
 pub fn get_routes(collections: Arc<Collections>) -> Router {
