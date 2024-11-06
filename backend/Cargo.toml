@@ -23,8 +23,8 @@ strum = "0.26.3"
 strum_macros = "0.26.4"
 chrono = "0.4.38"
 
-[target.'cfg(unix)'.dependencies]
-openssl = "0.10.68"
+# [target.'cfg(unix)'.dependencies]
+# openssl = "0.10.68"
 
 [dependencies.mongodb]
 version = "3.1.0"
