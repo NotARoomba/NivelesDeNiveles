@@ -99,7 +99,7 @@ pub async fn update_user(
         }
         if current_danger_level != before_danger_level {
             let configuration = create_configuration();
-            let notification = create_notification(current_danger_level, user.number.clone());
+            let notification = create_notification(&current_danger_level, user.number.clone());
             let res = onesignal_rust_api::apis::default_api::create_notification(
                 &configuration,
                 *notification

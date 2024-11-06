@@ -1,3 +1,4 @@
+use mongodb::bson::{ bson, doc, Bson };
 use serde::{ Deserialize, Serialize };
 use strum_macros::AsRefStr;
 
@@ -6,6 +7,15 @@ pub struct Location {
     pub coordinates: [f64; 2],
     #[serde(rename = "type")]
     pub location_type: String,
+}
+
+impl Into<Bson> for Location {
+    fn into(self) -> Bson {
+        bson!( {
+            "coordinates": self.coordinates.to_vec(),
+            "type": self.location_type,
+        })
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
@@ -47,11 +57,21 @@ pub struct Sensor {
     pub location: Location,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub enum DangerType {
     Fire,
     Flood,
     Landslide,
+}
+
+impl Into<Bson> for DangerType {
+    fn into(self) -> Bson {
+        match self {
+            DangerType::Fire => Bson::Int32(0),
+            DangerType::Flood => Bson::Int32(1),
+            DangerType::Landslide => Bson::Int32(2),
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Clone)]
@@ -60,15 +80,26 @@ pub enum DangerLevel {
     Risk,
     Danger,
 }
+impl Into<Bson> for DangerLevel {
+    fn into(self) -> Bson {
+        match self {
+            DangerLevel::Safe => Bson::Int32(0),
+            DangerLevel::Risk => Bson::Int32(1),
+            DangerLevel::Danger => Bson::Int32(2),
+        }
+    }
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Incident {
     #[serde(rename = "type")]
     pub incident_type: DangerType,
     pub level: DangerLevel,
+    #[serde(rename = "numberOfReports")]
     pub number_of_reports: i64,
     pub location: Location,
     pub timestamp: i64,
+    #[serde(rename = "beenNotified")]
     pub been_notified: bool,
     pub over: bool,
     pub range: i64,

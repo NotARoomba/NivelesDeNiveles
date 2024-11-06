@@ -210,12 +210,34 @@ export async function connectToDatabase(io: Server) {
             if (incident.level !== updatedSensor.status) {
               await incidentsCollection.updateOne(
                 {location: incident.location},
-                {$set: {level: updatedSensor.status, range: getRange(updatedSensor.status === DangerLevel.SAFE ? 0 : updatedSensor.status === DangerLevel.RISK ? 3 : 6), timestamp: Date.now(), numberOfReports: updatedSensor.status === DangerLevel.SAFE ? 0 : updatedSensor.status === DangerLevel.RISK ? 3 : 6}},
+                {
+                  $set: {
+                    level: updatedSensor.status,
+                    range: getRange(
+                      updatedSensor.status === DangerLevel.SAFE
+                        ? 0
+                        : updatedSensor.status === DangerLevel.RISK
+                        ? 3
+                        : 6,
+                    ),
+                    timestamp: Date.now(),
+                    numberOfReports:
+                      updatedSensor.status === DangerLevel.SAFE
+                        ? 0
+                        : updatedSensor.status === DangerLevel.RISK
+                        ? 3
+                        : 6,
+                  },
+                },
               );
             } else {
               await incidentsCollection.updateOne(
                 {location: incident.location},
-                {$inc: {numberOfReports: 1}, range: getRange(incident.numberOfReports+1), timestamp: Date.now()},
+                {
+                  $inc: {numberOfReports: 1},
+                  range: getRange(incident.numberOfReports + 1),
+                  timestamp: Date.now(),
+                },
               );
             }
           }
@@ -292,7 +314,7 @@ export async function connectToDatabase(io: Server) {
       if (
         next.operationType === 'update' &&
         next.updateDescription.updatedFields?.numberOfReports
-      ) { 
+      ) {
         console.log('UPDATED INCIDENT');
         let updatedIncident = next.fullDocument as Incident;
         let beforeIncident = next.fullDocumentBeforeChange as Incident;
@@ -321,29 +343,31 @@ export async function connectToDatabase(io: Server) {
           })
           .toArray()) as unknown as User[];
         // if (currentLevel !== DangerLevel.SAFE) {
-          for (const user of usersInZone) {
-            // console.log(user);
-            try {
-              await onesignal.createNotification(getNotification(currentLevel, user.number));
-              // console.log(response.body);
-            } catch (e) {
-              // console.log(e);
-              if (e instanceof OneSignal.HTTPError) {
-                // When status code of HTTP response is not 2xx, HTTPError is thrown.
-                console.log(e.statusCode);
-                console.log(e.body);
-              }
+        for (const user of usersInZone) {
+          // console.log(user);
+          try {
+            await onesignal.createNotification(
+              getNotification(currentLevel, user.number),
+            );
+            // console.log(response.body);
+          } catch (e) {
+            // console.log(e);
+            if (e instanceof OneSignal.HTTPError) {
+              // When status code of HTTP response is not 2xx, HTTPError is thrown.
+              console.log(e.statusCode);
+              console.log(e.body);
             }
           }
-          // need to check for all the users that once were in the danger zone to then notify them that they are now in a safe zone
-          console.log(
-            `Updated Incident Number: ${updatedIncident.numberOfReports}, Before Incident Number: 
+        }
+        // need to check for all the users that once were in the danger zone to then notify them that they are now in a safe zone
+        console.log(
+          `Updated Incident Number: ${updatedIncident.numberOfReports}, Before Incident Number: 
             ${beforeIncident.numberOfReports}
           `,
-          );
+        );
         // }
         if (updatedIncident.numberOfReports < beforeIncident.numberOfReports) {
-          console.log("FIRST IF")       
+          console.log('FIRST IF');
 
           const outerUsers = (await collections.users
             ?.find({
@@ -357,10 +381,15 @@ export async function connectToDatabase(io: Server) {
               },
             })
             .toArray()) as unknown as User[];
-          if (beforeIncident.level !== DangerLevel.SAFE && updatedIncident.level === DangerLevel.SAFE) {
+          if (
+            beforeIncident.level !== DangerLevel.SAFE &&
+            updatedIncident.level === DangerLevel.SAFE
+          ) {
             for (let user of outerUsers) {
               try {
-                await onesignal.createNotification(getNotification(DangerLevel.SAFE, user.number));
+                await onesignal.createNotification(
+                  getNotification(DangerLevel.SAFE, user.number),
+                );
               } catch (e) {
                 console.log(e);
                 if (e instanceof OneSignal.HTTPError) {
@@ -370,53 +399,56 @@ export async function connectToDatabase(io: Server) {
                 }
               }
             }
-          } else {   
-            console.log("SECOND IF")       
-          const innerUsers = (await collections.users
-            ?.find({
-              location: {
-                $geoWithin: {
-                  $centerSphere: [
-                    updatedIncident.location.coordinates,
-                    getRange(updatedIncident.numberOfReports) / 6378100,
-                  ],
+          } else {
+            console.log('SECOND IF');
+            const innerUsers = (await collections.users
+              ?.find({
+                location: {
+                  $geoWithin: {
+                    $centerSphere: [
+                      updatedIncident.location.coordinates,
+                      getRange(updatedIncident.numberOfReports) / 6378100,
+                    ],
+                  },
                 },
-              },
-            })
-            .toArray()) as unknown as User[];
-          let users = outerUsers.filter(u => !innerUsers.includes(u));
-          users = users.filter(
-            u => usersInZone.filter(uz => uz.number === u.number).length === 0,
-          );
-          // need to check if there are any users in that radius and then
-          for (let user of users) {
-            // console.log(user);
-            // notification.filters[0].radius = 5;
-            // notification.filters[0].lat = user.location.coordinates[1];
-            // notification.filters[0].long = user.location.coordinates[0];
-            try {
-              await onesignal.createNotification(getNotification(currentLevel, user.number));
-              // const otherUsers = (await collections.users
-              //   ?.find({
-              //     location: {
-              //       $geoWithin: {
-              //         $centerSphere: [user.location.coordinates, 5 / 6378100],
-              //       },
-              //     },
-              //   })
-              //   .toArray()) as unknown as User[];
-              // users = users.filter(u => !otherUsers.includes(u));
-              // console.log(response.body);
-            } catch (e) {
-              console.log(e);
-              if (e instanceof OneSignal.HTTPError) {
-                // When status code of HTTP response is not 2xx, HTTPError is thrown.
-                console.log(e.statusCode);
-                console.log(e.body);
+              })
+              .toArray()) as unknown as User[];
+            let users = outerUsers.filter(u => !innerUsers.includes(u));
+            users = users.filter(
+              u =>
+                usersInZone.filter(uz => uz.number === u.number).length === 0,
+            );
+            // need to check if there are any users in that radius and then
+            for (let user of users) {
+              // console.log(user);
+              // notification.filters[0].radius = 5;
+              // notification.filters[0].lat = user.location.coordinates[1];
+              // notification.filters[0].long = user.location.coordinates[0];
+              try {
+                await onesignal.createNotification(
+                  getNotification(currentLevel, user.number),
+                );
+                // const otherUsers = (await collections.users
+                //   ?.find({
+                //     location: {
+                //       $geoWithin: {
+                //         $centerSphere: [user.location.coordinates, 5 / 6378100],
+                //       },
+                //     },
+                //   })
+                //   .toArray()) as unknown as User[];
+                // users = users.filter(u => !otherUsers.includes(u));
+                // console.log(response.body);
+              } catch (e) {
+                console.log(e);
+                if (e instanceof OneSignal.HTTPError) {
+                  // When status code of HTTP response is not 2xx, HTTPError is thrown.
+                  console.log(e.statusCode);
+                  console.log(e.body);
+                }
               }
             }
           }
-        }
         }
         // check for merges of inidents
         let incidents = (await collections.incidents

@@ -1,10 +1,14 @@
 import express, {Request, Response} from 'express';
-import {collections, getNotification, onesignal} from '../services/database.service';
+import {
+  collections,
+  getNotification,
+  onesignal,
+} from '../services/database.service';
 import User from '../models/user';
 import STATUS_CODES from '../models/status';
 import haversine from 'haversine-distance';
 import Incident from '../models/incident';
-import { DangerLevel } from '../models/types';
+import {DangerLevel} from '../models/types';
 import * as OneSignal from 'onesignal-node';
 
 export const usersRouter = express.Router();
@@ -35,7 +39,9 @@ usersRouter.post('/', async (req: Request, res: Response) => {
             },
           ) < incident.range,
       );
-      const beforeUser = await collections.users?.findOne({number: data.number}) as unknown as User;
+      const beforeUser = (await collections.users?.findOne({
+        number: data.number,
+      })) as unknown as User;
       let beforeIncidents = incidents.filter(
         incident =>
           haversine(
@@ -59,7 +65,9 @@ usersRouter.post('/', async (req: Request, res: Response) => {
       }
       if (currentDangerlevel !== beforeDangerLevel) {
         try {
-          await onesignal.createNotification(getNotification(currentDangerlevel, data.number));
+          await onesignal.createNotification(
+            getNotification(currentDangerlevel, data.number),
+          );
           // console.log(response.body);
         } catch (e) {
           // console.log(e);

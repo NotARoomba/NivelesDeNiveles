@@ -21,7 +21,7 @@ async fn main() {
 
     // Initialize the database and wrap it in an Arc for shared access
     let collections = Arc::new(
-        utils::init_database().await.expect("Failed to initialize database")
+        utils::init_database(&io).await.expect("Failed to initialize database")
     );
 
     io.ns("/", {

@@ -21,6 +21,7 @@ tracing = "0.1.40"
 tracing-subscriber = "0.3.18"
 strum = "0.26.3"
 strum_macros = "0.26.4"
+chrono = "0.4.38"
 
 [target.'cfg(unix)'.dependencies]
 openssl = "0.10.68"
