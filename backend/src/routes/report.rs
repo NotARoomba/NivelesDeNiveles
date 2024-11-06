@@ -1,6 +1,12 @@
 use std::{ env, sync::Arc };
 
-use axum::{ extract, response::IntoResponse, routing::post, Json, Router };
+use axum::{
+    extract::{ self, DefaultBodyLimit },
+    response::IntoResponse,
+    routing::post,
+    Json,
+    Router,
+};
 use base64::{ prelude::BASE64_STANDARD, Engine };
 use futures::StreamExt;
 use mongodb::bson::doc;
@@ -91,6 +97,6 @@ pub fn get_routes(collections: Arc<Collections>) -> Router {
         "/",
         post({
             move |body| async move { send_report(body, &*collections).await }
-        })
+        }).layer(DefaultBodyLimit::disable())
     )
 }
