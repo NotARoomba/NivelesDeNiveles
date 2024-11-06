@@ -2,10 +2,11 @@ use axum::{ extract::{ self, Path }, response::IntoResponse, routing::{ get, pos
 use futures::StreamExt;
 use mongodb::bson::doc;
 use serde_json::json;
+use tracing::info;
 use std::sync::Arc;
 use crate::{
-    types::{ DangerLevel, User, StatusCodes },
-    utils::{ create_configuration, create_notification, Collections },
+    types::{ DangerLevel, StatusCodes, User },
+    utils::{ create_configuration, create_notification, send_notification, Collections },
 };
 
 pub async fn get_user(Path(number): Path<String>, collections: &Collections) -> impl IntoResponse {
@@ -21,6 +22,7 @@ pub async fn update_user(
     extract::Json(u): extract::Json<User>,
     collections: &Collections
 ) -> impl IntoResponse {
+    info!("Updating user: {:?}", u);
     if u.location.coordinates.len() != 2 {
         return Json(json!({"status": StatusCodes::InvalidData}));
     } else if u.number.len() == 0 {
@@ -91,15 +93,7 @@ pub async fn update_user(
         }
         if current_danger_level != before_danger_level {
             let configuration = create_configuration();
-            let notification = create_notification(&current_danger_level, user.number.clone());
-            let res = onesignal_rust_api::apis::default_api::create_notification(
-                &configuration,
-                *notification
-            ).await;
-            match res {
-                Ok(_) => (),
-                Err(e) => println!("Error sending notification: {:?}", e),
-            }
+            send_notification(&configuration, &user.number, &current_danger_level).await;
         }
     }
     let update_result = collections.users

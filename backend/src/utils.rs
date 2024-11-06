@@ -472,7 +472,7 @@ pub fn create_notification(level: &DangerLevel, number: String) -> Box<Notificat
     Box::new(notification)
 }
 
-async fn send_notification(
+pub async fn send_notification(
     configuration: &Box<Configuration>,
     number: &String,
     level: &DangerLevel
