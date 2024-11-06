@@ -1,4 +1,5 @@
 use serde::{ Deserialize, Serialize };
+use strum_macros::AsRefStr;
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct Location {
@@ -90,6 +91,18 @@ pub enum StatusCodes {
     MismatchedImage,
     NoConnection,
     InvalidData,
+}
+
+#[derive(Debug, Serialize, Deserialize, AsRefStr)]
+pub enum WebSocketEvents {
+    #[strum(serialize = "connect")]
+    Connect,
+    #[strum(serialize = "disconnenct")]
+    Disconnect,
+    #[strum(serialize = "request_location_data")]
+    RequestLocationData,
+    #[strum(serialize = "update_location_data")]
+    UpdateLocationData,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

@@ -1,6 +1,7 @@
 use models::notification::TargetChannelType;
 use models::StringMap;
 use mongodb::{ Client, Collection };
+use tracing::info;
 use std::env;
 use crate::types::{ DangerLevel, Incident, Report, Sensor, User };
 
@@ -39,7 +40,7 @@ pub async fn init_database() -> Result<Collections, String> {
         env::var("INCIDENT_COLLECTION").expect("INCIDENT_COLLECTION must be set").as_str()
     ) as Collection<Incident>;
 
-    println!("Connected to MongoDB!");
+    info!("Connected to MongoDB!");
     Ok(Collections { users, reports, sensors, incidents })
 }
 
