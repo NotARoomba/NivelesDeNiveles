@@ -1,5 +1,5 @@
 import {ScrollView, Text, View} from 'react-native';
-import Sensor from '../../backend/old/models/sensor';
+import Sensor from '../../backend/models/sensor';
 import {Localizations} from '../utils/Localizations';
 import {DangerLevel, DangerType} from '../utils/Types';
 

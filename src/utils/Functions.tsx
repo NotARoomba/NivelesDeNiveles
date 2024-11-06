@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CryptoJS from 'crypto-es';
 import Config from 'react-native-config';
-import STATUS_CODES from '../../backend/old/models/status';
+import STATUS_CODES from '../../backend/models/status';
 
 export const storeData = async (key: string, value: string) => {
   try {

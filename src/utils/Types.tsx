@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import Incident from '../../backend/old/models/incident';
-import Sensor from '../../backend/old/models/sensor';
+import Incident from '../../backend/models/incident';
+import Sensor from '../../backend/models/sensor';
 
 export enum DangerLevel {
   SAFE,
