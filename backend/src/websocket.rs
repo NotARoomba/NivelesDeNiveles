@@ -12,7 +12,7 @@ pub fn on_connect(socket: SocketRef, collections: Arc<Collections>) {
     info!("Client connected");
     socket.emit(WebSocketEvents::UpdateLocationData.as_ref(), &0).ok();
     socket.on(
-        WebSocketEvents::UpdateLocationData.as_ref(),
+        WebSocketEvents::RequestLocationData.as_ref(),
         move |Data::<String>(number), ack: AckSender| async move {
             info!(number = number.as_str(), "Received location data");
             let user = collections.users.find_one(doc! { "number": number }).await.unwrap();
