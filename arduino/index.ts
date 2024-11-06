@@ -3,7 +3,7 @@ import CryptoJS from 'crypto-js';
 import {ReadlineParser} from '@serialport/parser-readline';
 import {SerialPort, SerialPortOpenOptions} from 'serialport';
 import * as dotenv from 'ts-dotenv';
-import Sensor from '../backend/old/models/sensor';
+import Sensor from '../backend/models/sensor';
 
 const env = dotenv.load({
   API_URL: String,

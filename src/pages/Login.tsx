@@ -15,7 +15,7 @@ import {CountryPicker} from 'react-native-country-codes-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {OneSignal} from 'react-native-onesignal';
 import SplashScreen from 'react-native-splash-screen';
-import STATUS_CODES from '../../backend/old/models/status';
+import STATUS_CODES from '../../backend/models/status';
 import {callAPI, storeData} from '../utils/Functions';
 import {Localizations} from '../utils/Localizations';
 import {FunctionScreenProp, styles} from '../utils/Types';
