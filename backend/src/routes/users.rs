@@ -5,7 +5,7 @@ use serde::Deserialize;
 use serde_json::json;
 use std::sync::Arc;
 use crate::{
-    types::{ DangerLevel, User, ResponseBody, StatusCodes },
+    types::{ DangerLevel, User, StatusCodes },
     utils::{ create_configuration, create_notification, Collections },
 };
 
@@ -21,8 +21,8 @@ pub async fn get_user(
     // println!("Getting user with number: {:?}", params.number);
     let user = collections.users.find_one(doc! { "number": params.number }).await.unwrap_or(None);
     match user {
-        Some(user) => Json(ResponseBody::new(StatusCodes::Success, Some(user))),
-        None => Json(ResponseBody::<User>::new(StatusCodes::UserNotFound, None)),
+        Some(user) => Json(json!({"status": StatusCodes::Success, "user": user})),
+        None => Json(json!({"status": StatusCodes::UserNotFound})),
     }
 }
 

@@ -2,8 +2,9 @@ use std::sync::Arc;
 use axum::{ extract, response::IntoResponse, routing::get, Json, Router };
 use futures::StreamExt;
 use mongodb::bson::doc;
+use serde_json::json;
 
-use crate::{ types::{ Sensor, ResponseBody, StatusCodes }, utils::Collections };
+use crate::{ types::{ Sensor, StatusCodes }, utils::Collections };
 
 pub async fn get_sensor(collections: &Collections) -> impl IntoResponse {
     let sensors = collections.sensors.find(doc! {}).await.unwrap();
@@ -12,7 +13,7 @@ pub async fn get_sensor(collections: &Collections) -> impl IntoResponse {
         .into_iter()
         .map(|s| s.unwrap())
         .collect::<Vec<_>>();
-    Json(ResponseBody::<Vec<Sensor>>::new(StatusCodes::Success, Some(sensors)))
+    Json(json!({"status": StatusCodes::Success, "sensors": sensors}))
 }
 
 pub async fn update_sensor(
@@ -27,9 +28,9 @@ pub async fn update_sensor(
         )
         .upsert(true).await;
     if update_result.is_err() {
-        return Json(ResponseBody::<u8>::new(StatusCodes::GenericError, None));
+        return Json(json!({"status": StatusCodes::GenericError}));
     } else {
-        return Json(ResponseBody::<u8>::new(StatusCodes::Success, None));
+        return Json(json!({"status": StatusCodes::Success}));
     }
 }
 

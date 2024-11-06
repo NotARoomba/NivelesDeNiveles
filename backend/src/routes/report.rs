@@ -5,8 +5,9 @@ use base64::{ prelude::BASE64_STANDARD, Engine };
 use futures::StreamExt;
 use mongodb::bson::doc;
 use serde::{ Deserialize, Serialize };
+use serde_json::json;
 
-use crate::{ types::{ DangerType, Report, ResponseBody, StatusCodes }, utils::Collections };
+use crate::{ types::{ DangerType, Report, StatusCodes }, utils::Collections };
 
 #[derive(Debug, Deserialize, Serialize)]
 struct Prediction {
@@ -45,7 +46,7 @@ pub async fn send_report(
             );
         }
         if min_distance > 500.0 {
-            return Json(ResponseBody::<u8>::new(StatusCodes::AlreadyReported, None));
+            return Json(json!({"status": StatusCodes::AlreadyReported}));
         }
     }
     let base64_image = BASE64_STANDARD.decode(&report.image);
@@ -65,7 +66,7 @@ pub async fn send_report(
             .json().await
             .unwrap();
         if response.predictions.is_empty() {
-            return Json(ResponseBody::<u8>::new(StatusCodes::MismatchedImage, None));
+            return Json(json!({"status": StatusCodes::MismatchedImage}));
         }
         let prediction_avg =
             response.predictions
@@ -78,11 +79,11 @@ pub async fn send_report(
             &report.report_type
         );
         if prediction_avg < 0.7 {
-            return Json(ResponseBody::<u8>::new(StatusCodes::MismatchedImage, None));
+            return Json(json!({"status": StatusCodes::MismatchedImage}));
         }
     }
     collections.reports.insert_one(report).await.unwrap();
-    return Json(ResponseBody::<u8>::new(StatusCodes::Success, None));
+    return Json(json!({"status": StatusCodes::Success}));
 }
 
 pub fn get_routes(collections: Arc<Collections>) -> Router {

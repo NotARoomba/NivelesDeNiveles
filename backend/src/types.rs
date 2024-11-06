@@ -140,18 +140,3 @@ pub enum WebSocketEvents {
     #[strum(serialize = "update_location_data")]
     UpdateLocationData,
 }
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ResponseBody<T> {
-    pub status: u8,
-    pub data: Option<T>,
-}
-
-impl<T> ResponseBody<T> {
-    pub fn new(status: StatusCodes, data: Option<T>) -> ResponseBody<T> {
-        ResponseBody {
-            status: status as u8,
-            data,
-        }
-    }
-}

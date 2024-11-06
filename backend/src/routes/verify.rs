@@ -4,7 +4,7 @@ use axum::{ extract::Query, response::IntoResponse, routing::get, Json, Router }
 use serde::Deserialize;
 use serde_json::json;
 
-use crate::types::{ ResponseBody, StatusCodes };
+use crate::types::StatusCodes;
 
 #[derive(Debug, Deserialize)]
 pub struct GetParams {
@@ -70,20 +70,20 @@ pub async fn send(Query(params): Query<GetParams>) -> impl IntoResponse {
     if let Ok(response) = res {
         if let Ok(verification) = response.json::<SendResponse>().await {
             if verification.status == "pending" {
-                return Json(ResponseBody::<u8>::new(StatusCodes::Success, None));
+                return Json(json!({"status": StatusCodes::Success}));
             } else if !verification.lookup.valid {
-                return Json(ResponseBody::<u8>::new(StatusCodes::NumberNotExist, None));
+                return Json(json!({"status": StatusCodes::NumberNotExist}));
             }
         }
     } else if let Err(e) = res {
         let status = e.status().unwrap().as_u16();
         if status == 429 {
-            return Json(ResponseBody::<u8>::new(StatusCodes::TooManyAttempts, None));
+            return Json(json!({"status": StatusCodes::TooManyAttempts}));
         } else if status == 60200 {
-            return Json(ResponseBody::<u8>::new(StatusCodes::NumberNotExist, None));
+            return Json(json!({"status": StatusCodes::NumberNotExist}));
         }
     }
-    Json(ResponseBody::<u8>::new(StatusCodes::ErrorSendingCode, None))
+    Json(json!({"status": StatusCodes::ErrorSendingCode}))
 }
 
 pub async fn check(Json(body): Json<GetParams>) -> impl IntoResponse {
