@@ -98,7 +98,10 @@ pub async fn init_database(io: &SocketIo) -> Result<Collections, String> {
             }
         }
     ];
-    sensors
+
+    let configuration = create_configuration();
+
+    let _ = sensors
         .watch()
         .pipeline(pipeline)
         .full_document_before_change(FullDocumentBeforeChangeType::Required)
@@ -194,9 +197,8 @@ pub async fn init_database(io: &SocketIo) -> Result<Collections, String> {
                     }
                 }
             }
-        }).await;
-    let configuration = create_configuration();
-    reports
+        });
+    let _ = reports
         .watch().await
         .expect("Failed to watch collection")
         .for_each_concurrent(None, |change| async {
@@ -248,8 +250,8 @@ pub async fn init_database(io: &SocketIo) -> Result<Collections, String> {
                         .expect("Failed to update incident");
                 }
             }
-        }).await;
-    incidents
+        });
+    let _ = incidents
         .watch()
         .full_document(FullDocumentType::Required)
         .full_document_before_change(FullDocumentBeforeChangeType::Required).await
@@ -389,7 +391,7 @@ pub async fn init_database(io: &SocketIo) -> Result<Collections, String> {
                 }
             }
             io.emit(WebSocketEvents::UpdateLocationData, &0).ok();
-        }).await;
+        });
     info!("Connected to MongoDB!");
     Ok(Collections { users, reports, sensors, incidents })
 }
