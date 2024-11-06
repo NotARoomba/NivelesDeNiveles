@@ -105,7 +105,7 @@ pub struct Incident {
     pub range: i64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Deserialize, Clone, Copy)]
 pub enum StatusCodes {
     Success = 0,
     GenericError,
@@ -122,6 +122,11 @@ pub enum StatusCodes {
     MismatchedImage,
     NoConnection,
     InvalidData,
+}
+impl Serialize for StatusCodes {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: serde::Serializer {
+        serializer.serialize_u8(*self as u8)
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize, AsRefStr)]
