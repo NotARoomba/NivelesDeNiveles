@@ -1,9 +1,0 @@
-providers = ['rust']
-[phases.setup]
-nixPkgs = ['...', 'openssl']
-
-[phases.build]
-cmds = ['cargo build --release']
-
-[start]
-cmd = 'cargo run --release'
