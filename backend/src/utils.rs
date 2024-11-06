@@ -46,35 +46,48 @@ pub async fn init_database(io: &SocketIo) -> Result<Collections, String> {
     let incidents = info_db.collection(
         env::var("INCIDENT_COLLECTION").expect("INCIDENT_COLLECTION must be set").as_str()
     ) as Collection<Incident>;
+    if
+        incidents
+            .list_indexes().await
+            .expect("Failed to get the incidents indexes")
+            .count().await == 0
+    {
+        incidents
+            .create_index(
+                IndexModel::builder()
+                    .keys(doc! { "location": "2dsphere" })
+                    .build()
+            ).await
+            .expect("Failed to create the incident index");
+    }
+    if reports.list_indexes().await.expect("Failed to get the reports indexes").count().await == 0 {
+        reports
+            .create_index(
+                IndexModel::builder()
+                    .keys(doc! { "location": "2dsphere" })
+                    .build()
+            ).await
+            .expect("Failed to create the reports index");
+    }
 
-    incidents
-        .create_index(
-            IndexModel::builder()
-                .keys(doc! { "location": "2dsphere" })
-                .build()
-        ).await
-        .expect("Failed to create index");
-    reports
-        .create_index(
-            IndexModel::builder()
-                .keys(doc! { "location": "2dsphere" })
-                .build()
-        ).await
-        .expect("Failed to create index");
-    sensors
-        .create_index(
-            IndexModel::builder()
-                .keys(doc! { "location": "2dsphere" })
-                .build()
-        ).await
-        .expect("Failed to create index");
-    users
-        .create_index(
-            IndexModel::builder()
-                .keys(doc! { "location": "2dsphere" })
-                .build()
-        ).await
-        .expect("Failed to create index");
+    if sensors.list_indexes().await.expect("Failed to get the sensors indexes").count().await == 0 {
+        users
+            .create_index(
+                IndexModel::builder()
+                    .keys(doc! { "location": "2dsphere" })
+                    .build()
+            ).await
+            .expect("Failed to create the sensors index");
+    }
+    if users.list_indexes().await.expect("Failed to get the users indexes").count().await == 0 {
+        users
+            .create_index(
+                IndexModel::builder()
+                    .keys(doc! { "location": "2dsphere" })
+                    .build()
+            ).await
+            .expect("Failed to create the users index");
+    }
     let pipeline = vec![
         doc! {
             "$match": {
