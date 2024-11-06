@@ -1,4 +1,4 @@
-use axum::{ extract::{ self, Path }, response::IntoResponse, routing::get, Json, Router };
+use axum::{ extract::{ self, Path }, response::IntoResponse, routing::{ get, post }, Json, Router };
 use futures::StreamExt;
 use mongodb::bson::doc;
 use serde_json::json;
@@ -121,14 +121,19 @@ pub async fn update_user(
 }
 
 pub fn get_routes(collections: Arc<Collections>) -> Router {
-    Router::new().route(
-        "/",
-        get({
-            let collections = Arc::clone(&collections);
-            move |params| async move { get_user(params, &*collections).await }
-        }).post({
-            let collections = Arc::clone(&collections);
-            move |body| async move { update_user(body, &*collections).await }
-        })
-    )
+    Router::new()
+        .route(
+            "/",
+            post({
+                let collections = Arc::clone(&collections);
+                move |body| async move { update_user(body, &*collections).await }
+            })
+        )
+        .route(
+            "/:number",
+            get({
+                let collections = Arc::clone(&collections);
+                move |params| async move { get_user(params, &*collections).await }
+            })
+        )
 }
