@@ -1,7 +1,6 @@
-use axum::{ extract::{ self, Query }, response::IntoResponse, routing::get, Json, Router };
+use axum::{ extract::{ self, Path }, response::IntoResponse, routing::get, Json, Router };
 use futures::StreamExt;
 use mongodb::bson::doc;
-use serde::Deserialize;
 use serde_json::json;
 use std::sync::Arc;
 use crate::{
@@ -9,17 +8,9 @@ use crate::{
     utils::{ create_configuration, create_notification, Collections },
 };
 
-#[derive(Debug, Deserialize)]
-pub struct GetParams {
-    number: Option<String>,
-}
-
-pub async fn get_user(
-    Query(params): Query<GetParams>,
-    collections: &Collections
-) -> impl IntoResponse {
+pub async fn get_user(Path(number): Path<String>, collections: &Collections) -> impl IntoResponse {
     // println!("Getting user with number: {:?}", params.number);
-    let user = collections.users.find_one(doc! { "number": params.number }).await.unwrap_or(None);
+    let user = collections.users.find_one(doc! { "number": number }).await.unwrap_or(None);
     match user {
         Some(user) => Json(json!({"status": StatusCodes::Success, "user": user})),
         None => Json(json!({"status": StatusCodes::UserNotFound})),
