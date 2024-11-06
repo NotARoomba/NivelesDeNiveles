@@ -2,6 +2,7 @@ use std::env;
 
 use axum::{ extract::Query, response::IntoResponse, routing::get, Json, Router };
 use serde::Deserialize;
+use serde_json::json;
 
 use crate::types::{ ResponseBody, StatusCodes };
 
@@ -105,20 +106,20 @@ pub async fn check(Json(body): Json<GetParams>) -> impl IntoResponse {
     if let Ok(response) = res {
         if let Ok(verification) = response.json::<SendResponse>().await {
             if verification.status == "approved" {
-                return Json(ResponseBody::<u8>::new(StatusCodes::Success, None));
+                return Json(json!({"status": StatusCodes::Success}));
             } else {
-                return Json(ResponseBody::<u8>::new(StatusCodes::CodeDenied, None));
+                return Json(json!({"status": StatusCodes::CodeDenied}));
             }
         }
     } else if let Err(e) = res {
         let status = e.status().unwrap().as_u16();
         if status == 400 && status == 60200 {
-            return Json(ResponseBody::<u8>::new(StatusCodes::CodeDenied, None));
+            return Json(json!({"status": StatusCodes::CodeDenied}));
         } else if status == 404 && status == 20404 {
-            return Json(ResponseBody::<u8>::new(StatusCodes::CodeExpired, None));
+            return Json(json!({"status": StatusCodes::CodeExpired}));
         }
     }
-    Json(ResponseBody::<u8>::new(StatusCodes::CodeFailed, None))
+    Json(json!({"status": StatusCodes::CodeFailed}))
 }
 
 pub fn get_routes() -> Router {

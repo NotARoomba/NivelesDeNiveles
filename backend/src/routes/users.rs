@@ -2,6 +2,7 @@ use axum::{ extract::{ self, Query }, response::IntoResponse, routing::get, Json
 use futures::StreamExt;
 use mongodb::bson::doc;
 use serde::Deserialize;
+use serde_json::json;
 use std::sync::Arc;
 use crate::{
     types::{ DangerLevel, User, ResponseBody, StatusCodes },
@@ -30,9 +31,9 @@ pub async fn update_user(
     collections: &Collections
 ) -> impl IntoResponse {
     if u.location.coordinates.len() != 2 {
-        return Json(ResponseBody::<u8>::new(StatusCodes::InvalidData, None));
+        return Json(json!({"status": StatusCodes::InvalidData}));
     } else if u.number.len() == 0 {
-        return Json(ResponseBody::<u8>::new(StatusCodes::InvalidNumber, None));
+        return Json(json!({"status": StatusCodes::InvalidNumber}));
     }
     let user = u.clone();
     if user.location.coordinates.len() == 2 {
@@ -41,9 +42,9 @@ pub async fn update_user(
             .unwrap()
             .unwrap_or(User::default());
         if before_user == User::default() {
-            return Json(ResponseBody::<u8>::new(StatusCodes::UserNotFound, None));
+            return Json(json!({"status": StatusCodes::UserNotFound}));
         } else if before_user == user {
-            return Json(ResponseBody::<u8>::new(StatusCodes::Success, None));
+            return Json(json!({"status": StatusCodes::Success}));
         }
         let mut incidents = collections.incidents.find(doc! { "over": false }).await.unwrap();
         let current_incidents = incidents
@@ -120,10 +121,10 @@ pub async fn update_user(
     //     return Json(ResponseBody::<u8>::new(StatusCodes::GenericError, None));
     // });
     match update_result {
-        Ok(_) => Json(ResponseBody::<u8>::new(StatusCodes::Success, None)),
+        Ok(_) => Json(json!({"status": StatusCodes::Success})),
         Err(e) => {
             println!("Error updating user: {:?}", e);
-            return Json(ResponseBody::<u8>::new(StatusCodes::GenericError, None));
+            return Json(json!({"status": StatusCodes::GenericError}));
         }
     }
 }
