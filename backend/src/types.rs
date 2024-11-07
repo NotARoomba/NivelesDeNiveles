@@ -1,5 +1,5 @@
 use mongodb::bson::{ bson, doc, Bson };
-use serde::{ Deserialize, Serialize };
+use serde::{ Deserialize, Deserializer, Serialize };
 use strum_macros::AsRefStr;
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
@@ -39,8 +39,9 @@ impl Default for User {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Report {
     pub reporter: String,
-    #[serde(rename = "type")]
+    #[serde(rename = "type", deserialize_with = "deserialize_danger_type")]
     pub report_type: DangerType,
+    #[serde(deserialize_with = "deserialize_danger_level")]
     pub level: DangerLevel,
     pub timestamp: i64,
     pub image: String,
@@ -59,24 +60,42 @@ pub struct Sensor {
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub enum DangerType {
+    Flood = 0,
     Fire,
-    Flood,
     Landslide,
 }
 
 impl Into<Bson> for DangerType {
     fn into(self) -> Bson {
         match self {
-            DangerType::Fire => Bson::Int32(0),
-            DangerType::Flood => Bson::Int32(1),
+            DangerType::Flood => Bson::Int32(0),
+            DangerType::Fire => Bson::Int32(1),
             DangerType::Landslide => Bson::Int32(2),
         }
     }
 }
 
+impl From<i32> for DangerType {
+    fn from(value: i32) -> Self {
+        match value {
+            0 => DangerType::Flood,
+            1 => DangerType::Fire,
+            2 => DangerType::Landslide,
+            _ => DangerType::Fire,
+        }
+    }
+}
+
+fn deserialize_danger_type<'de, D>(deserializer: D) -> Result<DangerType, D::Error>
+    where D: Deserializer<'de>
+{
+    let value = i32::deserialize(deserializer)?;
+    Ok(DangerType::from(value))
+}
+
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Clone)]
 pub enum DangerLevel {
-    Safe,
+    Safe = 0,
     Risk,
     Danger,
 }
@@ -88,6 +107,24 @@ impl Into<Bson> for DangerLevel {
             DangerLevel::Danger => Bson::Int32(2),
         }
     }
+}
+
+impl From<i32> for DangerLevel {
+    fn from(value: i32) -> Self {
+        match value {
+            0 => DangerLevel::Safe,
+            1 => DangerLevel::Risk,
+            2 => DangerLevel::Danger,
+            _ => DangerLevel::Safe,
+        }
+    }
+}
+
+fn deserialize_danger_level<'de, D>(deserializer: D) -> Result<DangerLevel, D::Error>
+    where D: Deserializer<'de>
+{
+    let value = i32::deserialize(deserializer)?;
+    Ok(DangerLevel::from(value))
 }
 
 #[derive(Debug, Serialize, Deserialize)]
