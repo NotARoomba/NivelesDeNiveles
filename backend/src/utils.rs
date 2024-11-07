@@ -101,64 +101,65 @@ pub async fn init_database(io: &SocketIo) -> Result<Collections, String> {
 
     let configuration = create_configuration();
 
-    let _ = sensors
+    let mut sensors_stream = sensors
         .watch()
-        .pipeline(pipeline)
+        .pipeline(pipeline.clone())
         .full_document_before_change(FullDocumentBeforeChangeType::Required)
         .full_document(FullDocumentType::Required).await
-        .expect("Failed to watch collection")
-        .for_each_concurrent(None, |change| async {
-            let change = change.expect("Failed to get change");
-            if change.operation_type == OperationType::Update {
-                let updated_sensor = change.full_document
-                    .as_ref()
-                    .expect("Failed to get full document");
-                let before_sensor = change.full_document_before_change
-                    .as_ref()
-                    .expect("Failed to get full document before change");
-                if updated_sensor.status != before_sensor.status {
-                    let incidents_vec = incidents
-                        .find(doc! { "type": &updated_sensor.sensor_type, "over": false }).await
-                        .expect("Failed to find incidents");
-                    let incidents_vec: Vec<Incident> = incidents_vec
-                        .try_collect().await
-                        .expect("Error collecting incidents");
-                    let incidents_vec = incidents_vec
-                        .into_iter()
-                        .filter(|incident| {
-                            haversine::distance(
-                                haversine::Location {
-                                    latitude: updated_sensor.location.coordinates[1],
-                                    longitude: updated_sensor.location.coordinates[0],
-                                },
-                                haversine::Location {
-                                    latitude: incident.location.coordinates[1],
-                                    longitude: incident.location.coordinates[0],
-                                },
-                                haversine::Units::Kilometers
-                            ) < (incident.range as f64)
-                        })
-                        .collect::<Vec<_>>();
-                    if incidents_vec.len() == 0 {
+        .expect("Failed to watch collection");
+
+    while let Some(change) = sensors_stream.next().await.transpose().expect("Failed to get change") {
+        // let change = change.expect("Failed to get change");
+        if change.operation_type == OperationType::Update {
+            let updated_sensor = change.full_document
+                .as_ref()
+                .expect("Failed to get full document");
+            let before_sensor = change.full_document_before_change
+                .as_ref()
+                .expect("Failed to get full document before change");
+            if updated_sensor.status != before_sensor.status {
+                let incidents_vec = incidents
+                    .find(doc! { "type": &updated_sensor.sensor_type, "over": false }).await
+                    .expect("Failed to find incidents");
+                let incidents_vec: Vec<Incident> = incidents_vec
+                    .try_collect().await
+                    .expect("Error collecting incidents");
+                let incidents_vec = incidents_vec
+                    .into_iter()
+                    .filter(|incident| {
+                        haversine::distance(
+                            haversine::Location {
+                                latitude: updated_sensor.location.coordinates[1],
+                                longitude: updated_sensor.location.coordinates[0],
+                            },
+                            haversine::Location {
+                                latitude: incident.location.coordinates[1],
+                                longitude: incident.location.coordinates[0],
+                            },
+                            haversine::Units::Kilometers
+                        ) < (incident.range as f64)
+                    })
+                    .collect::<Vec<_>>();
+                if incidents_vec.len() == 0 {
+                    incidents
+                        .insert_one(Incident {
+                            incident_type: updated_sensor.sensor_type.clone(),
+                            level: DangerLevel::Safe,
+                            number_of_reports: 1,
+                            timestamp: chrono::Utc::now().timestamp(),
+                            been_notified: false,
+                            over: false,
+                            range: 3,
+                            location: updated_sensor.location.clone(),
+                        }).await
+                        .expect("Failed to insert incident");
+                }
+                for incident in incidents_vec {
+                    if incident.level != updated_sensor.status {
                         incidents
-                            .insert_one(Incident {
-                                incident_type: updated_sensor.sensor_type.clone(),
-                                level: DangerLevel::Safe,
-                                number_of_reports: 1,
-                                timestamp: chrono::Utc::now().timestamp(),
-                                been_notified: false,
-                                over: false,
-                                range: 3,
-                                location: updated_sensor.location.clone(),
-                            }).await
-                            .expect("Failed to insert incident");
-                    }
-                    for incident in incidents_vec {
-                        if incident.level != updated_sensor.status {
-                            incidents
-                                .update_one(
-                                    doc! { "location": incident.location },
-                                    doc! {
+                            .update_one(
+                                doc! { "location": incident.location },
+                                doc! {
                                     "$set": {
                                         "level": &updated_sensor.status,
                                         "range": if updated_sensor.status == DangerLevel::Safe {
@@ -178,220 +179,217 @@ pub async fn init_database(io: &SocketIo) -> Result<Collections, String> {
                                         }
                                     }
                                 }
-                                ).await
-                                .expect("Failed to update incident");
-                        } else {
-                            incidents
-                                .update_one(
-                                    doc! { "location": incident.location },
-                                    doc! {
+                            ).await
+                            .expect("Failed to update incident");
+                    } else {
+                        incidents
+                            .update_one(
+                                doc! { "location": incident.location },
+                                doc! {
                                     "$inc": { "number_of_reports": 1 },
                                     "$set": {
                                         "range": incident.number_of_reports + 1,
                                         "timestamp": chrono::Utc::now().timestamp()
                                     }
                                 }
-                                ).await
-                                .expect("Failed to update incident");
-                        }
+                            ).await
+                            .expect("Failed to update incident");
                     }
                 }
             }
-        });
-    let _ = reports
-        .watch().await
-        .expect("Failed to watch collection")
-        .for_each_concurrent(None, |change| async {
-            let change = change.expect("Failed to get change");
-            if change.operation_type == OperationType::Insert {
-                let report = change.full_document.as_ref().expect("Failed to get full document");
-                let incidents_vec = incidents
-                    .find(doc! { "type": &report.report_type, "over": false }).await
-                    .expect("Failed to find incidents");
-                let incidents_vec: Vec<Incident> = incidents_vec
-                    .try_collect().await
-                    .expect("Error collecting incidents");
-                let incidents_vec = incidents_vec
-                    .into_iter()
-                    .filter(|incident| {
-                        haversine::distance(
-                            haversine::Location {
-                                latitude: report.location.coordinates[1],
-                                longitude: report.location.coordinates[0],
-                            },
-                            haversine::Location {
-                                latitude: incident.location.coordinates[1],
-                                longitude: incident.location.coordinates[0],
-                            },
-                            haversine::Units::Kilometers
-                        ) < (incident.range as f64)
-                    })
-                    .collect::<Vec<_>>();
-                if incidents_vec.len() == 0 {
-                    incidents
-                        .insert_one(Incident {
-                            incident_type: report.report_type.clone(),
-                            level: DangerLevel::Safe,
-                            number_of_reports: 1,
-                            timestamp: chrono::Utc::now().timestamp(),
-                            been_notified: false,
-                            over: false,
-                            range: 3,
-                            location: report.location.clone(),
-                        }).await
-                        .expect("Failed to insert incident");
-                }
-                for incident in incidents_vec {
-                    incidents
-                        .update_one(
-                            doc! { "location": incident.location },
-                            doc! { "$inc": { "numberOfReports": 1 } }
-                        ).await
-                        .expect("Failed to update incident");
-                }
+        }
+    }
+    let mut reports_stream = reports.watch().await.expect("Failed to watch collection");
+    while let Some(change) = reports_stream.next().await.transpose().expect("Failed to get change") {
+        // let change = change.expect("Failed to get change");
+        if change.operation_type == OperationType::Insert {
+            let report = change.full_document.as_ref().expect("Failed to get full document");
+            let incidents_vec = incidents
+                .find(doc! { "type": &report.report_type, "over": false }).await
+                .expect("Failed to find incidents");
+            let incidents_vec: Vec<Incident> = incidents_vec
+                .try_collect().await
+                .expect("Error collecting incidents");
+            let incidents_vec = incidents_vec
+                .into_iter()
+                .filter(|incident| {
+                    haversine::distance(
+                        haversine::Location {
+                            latitude: report.location.coordinates[1],
+                            longitude: report.location.coordinates[0],
+                        },
+                        haversine::Location {
+                            latitude: incident.location.coordinates[1],
+                            longitude: incident.location.coordinates[0],
+                        },
+                        haversine::Units::Kilometers
+                    ) < (incident.range as f64)
+                })
+                .collect::<Vec<_>>();
+            if incidents_vec.len() == 0 {
+                incidents
+                    .insert_one(Incident {
+                        incident_type: report.report_type.clone(),
+                        level: DangerLevel::Safe,
+                        number_of_reports: 1,
+                        timestamp: chrono::Utc::now().timestamp(),
+                        been_notified: false,
+                        over: false,
+                        range: 3,
+                        location: report.location.clone(),
+                    }).await
+                    .expect("Failed to insert incident");
             }
-        });
-    let _ = incidents
-        .watch()
-        .full_document(FullDocumentType::Required)
-        .full_document_before_change(FullDocumentBeforeChangeType::Required).await
-        .expect("Failed to watch incidents")
-        .for_each_concurrent(None, |change| async {
-            let change = change.expect("Failed to get change");
-            if
-                change.operation_type == OperationType::Update &&
-                change.update_description
-                    .expect("No update description")
-                    .updated_fields.contains_key("numberOfReports")
-            {
-                info!("Updated Incident!");
-                let updated_incident = change.full_document.expect("No full document");
-                let before_incident = change.full_document_before_change.expect(
-                    "No before change document"
-                );
-                let current_level = get_level(updated_incident.number_of_reports);
-                let current_range = get_range(updated_incident.number_of_reports);
+            for incident in incidents_vec {
                 incidents
                     .update_one(
-                        doc! { "_id": change.document_key.expect("No document id") },
-                        doc! {"$set": {
+                        doc! { "location": incident.location },
+                        doc! { "$inc": { "numberOfReports": 1 } }
+                    ).await
+                    .expect("Failed to update incident");
+            }
+        }
+    }
+    let mut incidents_stream = incidents
+        .watch()
+        .pipeline(pipeline)
+        .full_document(FullDocumentType::Required)
+        .full_document_before_change(FullDocumentBeforeChangeType::Required).await
+        .expect("Failed to watch incidents");
+    while
+        let Some(change) = incidents_stream.next().await.transpose().expect("Failed to get change")
+    {
+        // let change = change.expect("Failed to get change");
+        if
+            change.operation_type == OperationType::Update &&
+            change.update_description
+                .expect("No update description")
+                .updated_fields.contains_key("numberOfReports")
+        {
+            info!("Updated Incident!");
+            let updated_incident = change.full_document.expect("No full document");
+            let before_incident = change.full_document_before_change.expect(
+                "No before change document"
+            );
+            let current_level = get_level(updated_incident.number_of_reports);
+            let current_range = get_range(updated_incident.number_of_reports);
+            incidents
+                .update_one(
+                    doc! { "_id": change.document_key.expect("No document id") },
+                    doc! {"$set": {
                         "range": current_range,
                         "level": &current_level
                     }}
-                    ).await
-                    .expect("Error updating range and level for incident");
-                let users_in_zone = users
+                ).await
+                .expect("Error updating range and level for incident");
+            let users_in_zone = users
+                .find(
+                    doc! { "location": {"$geoWithin": {"$centerSphere": [updated_incident.location.coordinates.to_vec(), current_range / EARTH_RADIUS]}} }
+                ).await
+                .expect("Error finding users");
+            let users_in_zone: Vec<User> = users_in_zone
+                .try_collect().await
+                .expect("Error collecting users");
+            for user in users_in_zone {
+                send_notification(&configuration, &user.number, &current_level).await;
+            }
+            if updated_incident.number_of_reports < before_incident.number_of_reports {
+                let outer_users = users
                     .find(
-                        doc! { "location": {"$geoWithin": {"$centerSphere": [updated_incident.location.coordinates.to_vec(), current_range / EARTH_RADIUS]}} }
+                        doc! { "location": {"$geoWithin": {"$centerSphere": [updated_incident.location.coordinates.to_vec(), get_range(before_incident.number_of_reports) / EARTH_RADIUS]}} }
                     ).await
-                    .expect("Error finding users");
-                let users_in_zone: Vec<User> = users_in_zone
+                    .expect("Failed to get outer users");
+                let outer_users: Vec<User> = outer_users
                     .try_collect().await
-                    .expect("Error collecting users");
-                for user in users_in_zone {
-                    send_notification(&configuration, &user.number, &current_level).await;
-                }
-                if updated_incident.number_of_reports < before_incident.number_of_reports {
-                    let outer_users = users
+                    .expect("Error collecting outer users");
+                if
+                    before_incident.level != DangerLevel::Safe &&
+                    updated_incident.level == DangerLevel::Safe
+                {
+                    for user in outer_users {
+                        send_notification(&configuration, &user.number, &current_level).await;
+                    }
+                } else {
+                    let inner_users = users
                         .find(
-                            doc! { "location": {"$geoWithin": {"$centerSphere": [updated_incident.location.coordinates.to_vec(), get_range(before_incident.number_of_reports) / EARTH_RADIUS]}} }
+                            doc! { "location": {"$geoWithin": {"$centerSphere": [updated_incident.location.coordinates.to_vec(), current_range / EARTH_RADIUS]}} }
                         ).await
-                        .expect("Failed to get outer users");
-                    let outer_users: Vec<User> = outer_users
+                        .expect("Failed to get inner users");
+                    let inner_users: Vec<User> = inner_users
                         .try_collect().await
-                        .expect("Error collecting outer users");
-                    if
-                        before_incident.level != DangerLevel::Safe &&
-                        updated_incident.level == DangerLevel::Safe
-                    {
-                        for user in outer_users {
-                            send_notification(&configuration, &user.number, &current_level).await;
-                        }
-                    } else {
-                        let inner_users = users
-                            .find(
-                                doc! { "location": {"$geoWithin": {"$centerSphere": [updated_incident.location.coordinates.to_vec(), current_range / EARTH_RADIUS]}} }
-                            ).await
-                            .expect("Failed to get inner users");
-                        let inner_users: Vec<User> = inner_users
-                            .try_collect().await
-                            .expect("Error collecting inner users");
-                        let safe_users = outer_users
-                            .into_iter()
-                            .filter(|u| !inner_users.contains(u));
-                        for user in safe_users {
-                            send_notification(&configuration, &user.number, &current_level).await;
-                        }
+                        .expect("Error collecting inner users");
+                    let safe_users = outer_users.into_iter().filter(|u| !inner_users.contains(u));
+                    for user in safe_users {
+                        send_notification(&configuration, &user.number, &current_level).await;
                     }
                 }
-                let current_incidents = incidents
-                    .find(doc! { "over": false }).await
-                    .expect("Error finding current incidents");
-                let current_incidents: Vec<Incident> = current_incidents
-                    .try_collect().await
-                    .expect("Error collecting incidents");
-                if current_incidents.len() > 1 {
-                    for i in 0..current_incidents.len() {
-                        for j in 0..current_incidents.len() {
-                            if i != j {
-                                if
-                                    current_incidents[i].incident_type ==
-                                        current_incidents[j].incident_type &&
-                                    haversine::distance(
-                                        haversine::Location {
-                                            latitude: current_incidents[i].location.coordinates[1],
-                                            longitude: current_incidents[i].location.coordinates[0],
-                                        },
-                                        haversine::Location {
-                                            latitude: current_incidents[j].location.coordinates[1],
-                                            longitude: current_incidents[j].location.coordinates[0],
-                                        },
-                                        haversine::Units::Kilometers
-                                    ) <=
-                                        (
-                                            (current_incidents[i].range +
-                                                current_incidents[j].range) as f64
-                                        )
-                                {
-                                    let new_center = [
-                                        (current_incidents[i].location.coordinates[0] +
-                                            current_incidents[j].location.coordinates[0]) /
-                                            2.0,
-                                        (current_incidents[i].location.coordinates[1] +
-                                            current_incidents[j].location.coordinates[1]) /
-                                            2.0,
-                                    ];
-                                    let new_incident = Incident {
-                                        incident_type: current_incidents[i].incident_type.clone(),
-                                        level: get_level(
-                                            current_incidents[i].number_of_reports +
-                                                current_incidents[j].number_of_reports
-                                        ),
-                                        number_of_reports: current_incidents[i].number_of_reports +
-                                        current_incidents[j].number_of_reports,
-                                        location: Location {
-                                            location_type: "Point".into(),
-                                            coordinates: new_center,
-                                        },
-                                        timestamp: chrono::Utc::now().timestamp(),
-                                        been_notified: false,
-                                        over: false,
-                                        range: current_incidents[i].range +
-                                        current_incidents[j].range,
-                                    };
-                                    incidents
-                                        .insert_one(new_incident).await
-                                        .expect("Error inserting merged incident");
-                                    io.emit(WebSocketEvents::UpdateLocationData, &0).ok();
-                                    return;
-                                }
+            }
+            let current_incidents = incidents
+                .find(doc! { "over": false }).await
+                .expect("Error finding current incidents");
+            let current_incidents: Vec<Incident> = current_incidents
+                .try_collect().await
+                .expect("Error collecting incidents");
+            if current_incidents.len() > 1 {
+                for i in 0..current_incidents.len() {
+                    for j in 0..current_incidents.len() {
+                        if i != j {
+                            if
+                                current_incidents[i].incident_type ==
+                                    current_incidents[j].incident_type &&
+                                haversine::distance(
+                                    haversine::Location {
+                                        latitude: current_incidents[i].location.coordinates[1],
+                                        longitude: current_incidents[i].location.coordinates[0],
+                                    },
+                                    haversine::Location {
+                                        latitude: current_incidents[j].location.coordinates[1],
+                                        longitude: current_incidents[j].location.coordinates[0],
+                                    },
+                                    haversine::Units::Kilometers
+                                ) <=
+                                    (
+                                        (current_incidents[i].range +
+                                            current_incidents[j].range) as f64
+                                    )
+                            {
+                                let new_center = [
+                                    (current_incidents[i].location.coordinates[0] +
+                                        current_incidents[j].location.coordinates[0]) /
+                                        2.0,
+                                    (current_incidents[i].location.coordinates[1] +
+                                        current_incidents[j].location.coordinates[1]) /
+                                        2.0,
+                                ];
+                                let new_incident = Incident {
+                                    incident_type: current_incidents[i].incident_type.clone(),
+                                    level: get_level(
+                                        current_incidents[i].number_of_reports +
+                                            current_incidents[j].number_of_reports
+                                    ),
+                                    number_of_reports: current_incidents[i].number_of_reports +
+                                    current_incidents[j].number_of_reports,
+                                    location: Location {
+                                        location_type: "Point".into(),
+                                        coordinates: new_center,
+                                    },
+                                    timestamp: chrono::Utc::now().timestamp(),
+                                    been_notified: false,
+                                    over: false,
+                                    range: current_incidents[i].range + current_incidents[j].range,
+                                };
+                                incidents
+                                    .insert_one(new_incident).await
+                                    .expect("Error inserting merged incident");
+                                io.emit(WebSocketEvents::UpdateLocationData, &0).ok();
                             }
                         }
                     }
                 }
             }
-            io.emit(WebSocketEvents::UpdateLocationData, &0).ok();
-        });
+        }
+        io.emit(WebSocketEvents::UpdateLocationData, &0).ok();
+    }
     info!("Connected to MongoDB!");
     Ok(Collections { users, reports, sensors, incidents })
 }
