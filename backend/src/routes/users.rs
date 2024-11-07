@@ -103,9 +103,6 @@ pub async fn update_user(
             doc! { "$set": {"location.coordinates": [user.location.coordinates[0], user.location.coordinates[1]], "location.type": user.location.location_type } }
         )
         .upsert(true).await;
-    // .map_err(|_| {
-    //     return Json(ResponseBody::<u8>::new(StatusCodes::GenericError, None));
-    // });
     match update_result {
         Ok(_) => Json(json!({"status": StatusCodes::Success})),
         Err(e) => {
@@ -118,7 +115,7 @@ pub async fn update_user(
 pub fn get_routes(collections: Arc<Collections>) -> Router {
     Router::new()
         .route(
-            "",
+            "/",
             post({
                 let collections = Arc::clone(&collections);
                 move |body| async move { update_user(body, &*collections).await }
