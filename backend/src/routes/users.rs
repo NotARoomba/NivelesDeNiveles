@@ -22,7 +22,6 @@ pub async fn update_user(
     extract::Json(u): extract::Json<User>,
     collections: &Collections
 ) -> impl IntoResponse {
-    info!("Updating user: {:?}", u);
     if u.location.coordinates.len() != 2 {
         return Json(json!({"status": StatusCodes::InvalidData}));
     } else if u.number.len() == 0 {

@@ -29,6 +29,7 @@ pub async fn send_report(
     extract::Json(body): extract::Json<Report>,
     collections: &Collections
 ) -> impl IntoResponse {
+    println!("Received report: {:#?}", &body);
     let report: Report = body.into();
     if
         let Ok(mut past_reports) = collections.reports.find(
