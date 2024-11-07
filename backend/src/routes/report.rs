@@ -102,7 +102,7 @@ pub async fn send_report(
 
 pub fn get_routes(collections: Arc<Collections>) -> Router {
     Router::new().route(
-        "/",
+        "",
         post({
             move |body| async move { send_report(body, &*collections).await }
         }).layer(DefaultBodyLimit::disable())
