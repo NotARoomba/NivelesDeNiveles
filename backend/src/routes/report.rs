@@ -12,7 +12,6 @@ use futures::StreamExt;
 use mongodb::bson::doc;
 use serde::{ Deserialize, Serialize };
 use serde_json::json;
-use tracing::info;
 
 use crate::{ types::{ DangerType, Report, StatusCodes }, utils::Collections };
 
@@ -30,7 +29,6 @@ pub async fn send_report(
     extract::Json(body): extract::Json<Report>,
     collections: &Collections
 ) -> impl IntoResponse {
-    info!("Received report: {:#?}", &body);
     let report: Report = body.into();
     if
         let Ok(mut past_reports) = collections.reports.find(
