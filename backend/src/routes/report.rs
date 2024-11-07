@@ -88,7 +88,7 @@ pub async fn send_report(
             if prediction_avg < 0.7 {
                 return Json(json!({"status": StatusCodes::MismatchedImage}));
             } else {
-                collections.reports.insert_one(report).await.unwrap();
+                collections.reports.insert_one(report).await.expect("Error inserting report");
                 return Json(json!({"status": StatusCodes::Success}));
             }
         } else {
