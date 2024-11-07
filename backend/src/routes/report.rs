@@ -29,6 +29,7 @@ pub async fn send_report(
     extract::Json(body): extract::Json<Report>,
     collections: &Collections
 ) -> impl IntoResponse {
+    println!("Received report: {:#?}", &body);
     let report: Report = body.into();
     if
         let Ok(mut past_reports) = collections.reports.find(
@@ -101,7 +102,7 @@ pub async fn send_report(
 
 pub fn get_routes(collections: Arc<Collections>) -> Router {
     Router::new().route(
-        "/",
+        "",
         post({
             move |body| async move { send_report(body, &*collections).await }
         }).layer(DefaultBodyLimit::disable())

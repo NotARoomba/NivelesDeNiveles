@@ -2,15 +2,17 @@ use axum::{ extract::{ self, Path }, response::IntoResponse, routing::{ get, pos
 use futures::StreamExt;
 use mongodb::bson::doc;
 use serde_json::json;
-use tracing::info;
 use std::sync::Arc;
 use crate::{
     types::{ DangerLevel, StatusCodes, User },
-    utils::{ create_configuration, create_notification, send_notification, Collections },
+    utils::{ create_configuration, send_notification, Collections },
 };
 
 pub async fn get_user(Path(number): Path<String>, collections: &Collections) -> impl IntoResponse {
     // println!("Getting user with number: {:?}", params.number);
+    if number.len() == 0 {
+        return Json(json!({"status": StatusCodes::InvalidNumber}));
+    }
     let user = collections.users.find_one(doc! { "number": number }).await.unwrap_or(None);
     match user {
         Some(user) => Json(json!({"status": StatusCodes::Success, "user": user})),
@@ -22,7 +24,6 @@ pub async fn update_user(
     extract::Json(u): extract::Json<User>,
     collections: &Collections
 ) -> impl IntoResponse {
-    info!("Updating user: {:?}", u);
     if u.location.coordinates.len() != 2 {
         return Json(json!({"status": StatusCodes::InvalidData}));
     } else if u.number.len() == 0 {
@@ -117,7 +118,7 @@ pub async fn update_user(
 pub fn get_routes(collections: Arc<Collections>) -> Router {
     Router::new()
         .route(
-            "/",
+            "",
             post({
                 let collections = Arc::clone(&collections);
                 move |body| async move { update_user(body, &*collections).await }
