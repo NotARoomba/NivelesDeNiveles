@@ -1,10 +1,12 @@
-use axum::{ routing::get, Router };
+use axum::{ extract::Request, routing::get, Router, ServiceExt };
 use dotenv::dotenv;
 use socketioxide::SocketIo;
+use tower::Layer;
 use tracing::info;
 use std::{ env, sync::Arc };
 use tokio::net::TcpListener;
 use tracing_subscriber::FmtSubscriber;
+use tower_http::normalize_path::NormalizePathLayer;
 
 mod utils;
 mod routes;
@@ -41,7 +43,7 @@ async fn main() {
         .nest("/report", routes::report::get_routes(Arc::clone(&collections)))
         .layer(layer);
 
-    // Retrieve the PORT environment variable or default to 3000
+    let app = NormalizePathLayer::trim_trailing_slash().layer(app);
 
     let port = env::var("PORT").unwrap_or_else(|_| "3000".to_string());
     info!("Server running on port {}", port);
@@ -50,5 +52,7 @@ async fn main() {
     let listener = TcpListener::bind(format!("0.0.0.0:{}", port)).await.expect(
         "Failed to bind to port"
     );
-    axum::serve(listener, app).await.expect("Server error");
+    axum::serve(listener, ServiceExt::<Request>::into_make_service(app)).await.expect(
+        "Server error"
+    );
 }

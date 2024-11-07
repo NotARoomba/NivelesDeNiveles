@@ -23,6 +23,8 @@ strum = "0.26.3"
 strum_macros = "0.26.4"
 chrono = "0.4.38"
 openssl = {version = "0.10.68", features = ["vendored"]}
+tower-http = {version = "0.6.1", features = ['normalize-path']}
+tower = "0.5.1"
 
 [dependencies.mongodb]
 version = "3.1.0"
